@@ -33,7 +33,11 @@ static int cmd_c(char *args) {
 }
 
 static int cmd_si(char *args) {
-	cpu_exec(1);
+	char *arg = strtok(NULL, " ");
+	if(arg == NULL)	cpu_exec(1);
+	else {
+		cpu_exec(atoi(arg));
+	}
 	return 0;
 }
 
