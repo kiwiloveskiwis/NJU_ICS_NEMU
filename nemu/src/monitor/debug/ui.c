@@ -41,6 +41,13 @@ static int cmd_si(char *args) {
 	return 0;
 }
 
+static int cmd_info(char *args) {
+	char *arg = strtok(NULL, " ");
+	if(arg == NULL) printf("\"info\" must be followed by the name of an info command.\n");
+	else if (strcmp(arg, "r") == 0) ;
+	else printf("Undefined info command:'%s'.\n", arg); 
+	return 0;
+}
 static int cmd_q(char *args) {
 	return -1;
 }
@@ -56,6 +63,7 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Execute one machine instruction", cmd_si},
+	{ "info", "Print information", cmd_info}, 
 	/* TODO: Add more commands */
 
 };
