@@ -53,12 +53,13 @@ static int cmd_info(char *args) {
 	else printf("Undefined info command:'%s'.\n", arg); 
 	return 0;
 }
+int addr;
 int * value;
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, " ");
 	int length = atoi(arg1);
-	int addr = 0x100000;
+	addr = 0x100000;
 	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
