@@ -42,9 +42,14 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
+	int i;
 	char *arg = strtok(NULL, " ");
 	if(arg == NULL) printf("\"info\" must be followed by the name of an info command.\n");
-	else if (strcmp(arg, "r") == 0) ;
+	else if (strcmp(arg, "r") == 0) {
+		for(i = R_EAX; i < R_EDI; i++) {
+			printf("%s\t%d", regsl[i], cpu.gpr[i]._32);	
+		}
+	}
 	else printf("Undefined info command:'%s'.\n", arg); 
 	return 0;
 }
