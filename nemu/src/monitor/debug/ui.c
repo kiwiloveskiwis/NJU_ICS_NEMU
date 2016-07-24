@@ -47,7 +47,7 @@ static int cmd_info(char *args) {
 	if(arg == NULL) printf("\"info\" must be followed by the name of an info command.\n");
 	else if (strcmp(arg, "r") == 0) {
 		for(i = R_EAX; i < R_EDI; i++) {
-			printf("%s\t%d \n", regsl[i], cpu.gpr[i]._32);	
+			printf("%s\tx\t%d \n", regsl[i], cpu.gpr[i]._32);	
 		}
 	}
 	else printf("Undefined info command:'%s'.\n", arg); 
