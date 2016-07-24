@@ -62,7 +62,7 @@ static int cmd_x(char *args) {
 	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
-		int * value = (int *)addr;
+		short * value = (short *)addr;
 		printf("0x%.4x\t%d\n", addr, *value);
 		addr += 4;
 	}
