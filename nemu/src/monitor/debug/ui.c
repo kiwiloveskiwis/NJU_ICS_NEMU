@@ -53,7 +53,7 @@ static int cmd_info(char *args) {
 	else printf("Undefined info command:'%s'.\n", arg); 
 	return 0;
 }
-
+int * value;
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, " ");
@@ -62,8 +62,8 @@ static int cmd_x(char *args) {
 	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
-		//int * value = (int *)addr;
-		printf("0x%.4x\t%d\n", addr, *(int *)addr);
+		value = (int *)addr;
+		printf("0x%.4x\t%d\n", addr, *value);
 		addr += 4;
 	}
 	return 0;
