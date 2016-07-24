@@ -47,10 +47,25 @@ static int cmd_info(char *args) {
 	if(arg == NULL) printf("\"info\" must be followed by the name of an info command.\n");
 	else if (strcmp(arg, "r") == 0) {
 		for(i = R_EAX; i < R_EDI; i++) {
-			printf("%s\t%x\t%d \n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);	
+			printf("%s\t0x%x\t%d \n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);	
 		}
 	}
 	else printf("Undefined info command:'%s'.\n", arg); 
+	return 0;
+}
+
+static int cmd_x(char *args) {
+	char *arg1 = strtok(NULL, " ");
+	char *arg2 = strtok(NULL, " ");
+	int length = atoi(arg1);
+	int addr;
+	sscanf(arg2, "%x", &addr); 
+	int i = 0;
+	for(i = 0; i < length; i++){
+		int * value = (int *)addr;
+		printf("%.4x\t%x", addr, *value);
+		addr += 4;
+	}
 	return 0;
 }
 static int cmd_q(char *args) {
@@ -69,6 +84,7 @@ static struct {
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Execute one machine instruction", cmd_si},
 	{ "info", "Print information", cmd_info}, 
+	{ "x", "Examine memory: x LENGTH ADDRESS.", cmd_x},
 	/* TODO: Add more commands */
 
 };
