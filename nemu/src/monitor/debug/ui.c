@@ -69,7 +69,8 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
 	bool succ = true;
 	bool *success = &succ;
-	int ans = expr(args, success);
+	int ans = expr(args, success); //TODO success == false?
+	if(!succ) Log("cmd_p failed!");
 	printf("%s:\t0x%x\t%d\n", args, ans, ans);
 	return 0;
 }
@@ -81,6 +82,9 @@ static int cmd_q(char *args) {
 static int cmd_w(char *args) {
 	WP * newwp = new_wp();
 	newwp->str = args;
+	bool succ = true;
+	bool* success = &succ;
+	newwp->value = expr(newwp->str, success); 
 	Log("Hardware watchpoint %d: %s",newwp->NO, args);
 	return 0;
 }
