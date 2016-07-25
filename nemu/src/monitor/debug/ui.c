@@ -69,9 +69,8 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
 	bool succ = true;
 	bool *success = &succ;
-	char *arg = strtok(NULL, " ");
-	int ans = expr(arg, success);
-	printf("%s:\t%d\n", arg, ans);
+	int ans = expr(args, success);
+	printf("%s:\t%d\n", args, ans);
 	return 0;
 }
 
