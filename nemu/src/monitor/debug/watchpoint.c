@@ -52,9 +52,7 @@ bool checkWP() {
 		uint32_t currVal = expr(tourwp->str, &succ);
 		if(currVal != tourwp->value) {
 			change = true;
-			printf("Hardware watchpoint %d: %s\n \
-					Old value = %x\n \
-					New value = %x\n", tourwp->NO, tourwp->str, tourwp->value, currVal);
+			printf("Hardware watchpoint %d: %s\nOld value = %x\nNew value = %x\n", tourwp->NO, tourwp->str, tourwp->value, currVal);
 			tourwp->value = currVal;	
 		}	
 		tourwp = tourwp->next;
