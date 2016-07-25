@@ -5,6 +5,7 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
 	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR
@@ -43,6 +44,8 @@ static struct rule {
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
 
 static regex_t re[NR_REGEX];
+uint32_t eval(uint32_t p, uint32_t q);
+bool checkParen(uint32_t p, uint32_t q);
 
 /* Rules are used for many times.
  * Therefore we compile them only once before any usage.
@@ -77,6 +80,7 @@ static bool make_token(char *e) {
 	nr_token = 0;
 
 	while(e[position] != '\0') {
+		if(nr_token >= 32) Log("Exceed max token size!");
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i ++) {
 			if(regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
@@ -108,16 +112,17 @@ static bool make_token(char *e) {
 								  memcpy(tokens[nr_token].str, substr_start + 1, substr_len - 1 );
 								  nr_token++;
 								  break;
+					case '*' : //TODO : identify pointers!
 					case '(' :
 					case ')' :
 					case '+' :  
 					case '-' :
-					case '*' :
 					case '/' :
 					case EQ	 :
 					case NEQ :
 					case AND :
 					case OR  :
+					case NOT :
 								  tokens[nr_token].type = rules[i].token_type;
 								  nr_token++;
 								  break;
@@ -146,7 +151,32 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
-	panic("please implement me");
+	return eval(0, nr_token - 1);
 	return 0;
 }
 
+uint32_t eval(uint32_t p, uint32_t q) {
+	if (p > q) {
+		Log("p > q!");
+		assert(0);
+	}
+	if (p == q) return atoi(tokens[p].str);
+	if (checkParen(p, q)) return eval(p + 1, q - 1);
+	else return 0;
+	
+
+
+}
+bool checkParen(uint32_t p, uint32_t q) {
+	if (tokens[p].type != '(' || tokens[q].type != ')') return false;
+	int i = 0;
+	int check = 0;
+	for (i = p + 1; i < q; i++) {
+		if (tokens[i].type == '(') check++;
+		if (tokens[i].type == ')') check--;
+		if (check < 0) return false;
+	}
+	if (check != 0) Log("Mismatch parentheses!");
+	return true;
+}
+			
