@@ -218,6 +218,7 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 		if(check != 0) continue;
 #define EQUAL(name) tokens[i].type == name
 		if(EQUAL('*') || EQUAL('+') || EQUAL('-') || EQUAL('/')){
+			if (tokens[min].type > 256) break;
 			switch (tokens[i].type) {
 				case '-' :
 				case '+' : min = i; break;
@@ -227,6 +228,11 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 						   break;
 				default : break;
 			}
+		}
+		else if (EQUAL(EQ) || EQUAL(NEQ) || EQUAL(AND) || EQUAL(NEQ)) {
+			if (tokens[min].type > 256) break; // the first of these is the dominant token
+			min = i;
+			break;
 		}
 #undef EQUAL
 	}
