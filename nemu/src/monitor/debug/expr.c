@@ -159,7 +159,6 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-
 	/* TODO: Insert codes to evaluate the expression. */
 	return eval(0, nr_token - 1);
 	return 0;
@@ -189,6 +188,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 			default  : Log("Type Not Found!");
 		}
 	}
+	Log(" p < q ");
 	if (checkParen(p, q)) return eval(p + 1, q - 1);
 	uint32_t domin = getDomin(p, q);	
 	uint32_t left = eval(p, domin - 1);
