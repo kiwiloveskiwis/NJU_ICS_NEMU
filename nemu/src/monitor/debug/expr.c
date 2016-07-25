@@ -174,8 +174,8 @@ uint32_t eval(uint32_t p, uint32_t q) {
 		int temp = 0;
 		char * tempstr = tokens[p].str;
 		switch (tokens[p].type) {
-			case HEX : return atoi(tokens[p].str);
-			case DEC : 
+			case DEC : return atoi(tokens[p].str);
+			case HEX : 
 					   sscanf(tempstr, "%x", &temp);
 					   return temp;
 			case REG :
