@@ -165,7 +165,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(uint32_t p, uint32_t q) {
-	Log("p == %d,q == %d",p, q);
+	//Log("p == %d,q == %d",p, q);
 	if (p > q) {
 		Log("p > q!");
 		assert(0);
@@ -173,7 +173,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 	else if (p == q) {
 		int temp = 0;
 		char * tempstr = tokens[p].str;
-		switch (tokens[nr_token].type) {
+		switch (tokens[p].type) {
 			case HEX : return atoi(tokens[p].str);
 			case DEC : 
 					   sscanf(tempstr, "%x", &temp);
@@ -187,7 +187,9 @@ uint32_t eval(uint32_t p, uint32_t q) {
 					   printf("%s " ,tempstr);
 					   break;
 			default  : Log("Type Not Found!");
+					   break;
 		}
+		Log("%s, Type Not Found!", tempstr);
 	}
 	else if (checkParen(p, q)) return eval(p + 1, q - 1);
 	else {
