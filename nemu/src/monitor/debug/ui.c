@@ -80,7 +80,9 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_w(char *args) {
+	Log("1");
 	WP * newwp = new_wp();
+	Log("2");
 	strcpy(newwp->str, args);
 	// Log("new wp's str is %s", newwp->str);
 	bool succ = true;
