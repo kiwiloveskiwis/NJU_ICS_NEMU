@@ -11,7 +11,9 @@ void init_wp_pool() {
 	for(i = 0; i < NR_WP; i ++) {
 		wp_pool[i].NO = i;
 		wp_pool[i].next = &wp_pool[i + 1];
+		if (i > 0) wp_pool[i].prev = &wp_pool[i - 1];
 	}
+	wp_pool[0].prev = NULL;
 	wp_pool[NR_WP - 1].next = NULL;
 
 	head = NULL;
@@ -19,6 +21,10 @@ void init_wp_pool() {
 }
 
 WP* new_wp(){
+	if (free_ == NULL) {
+		Log("No more free space for watchpoints available!");
+		return NULL;
+	}
 	WP* temp = free_;
 	free_ = free_->next;
 	temp->next = head;
@@ -26,6 +32,13 @@ WP* new_wp(){
 	return temp;
 }
 void free_wp(WP *wp) {
+	if (wp == NULL) {
+		Log("The watchpoint to be freed is NULL!");
+		return;
+	}
+	
+	wp->next = free_;
+	free_ = wp;
 
 }
 /* TODO: Implement the functionality of watchpoint */
