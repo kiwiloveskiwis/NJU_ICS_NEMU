@@ -82,7 +82,7 @@ static int cmd_q(char *args) {
 static int cmd_w(char *args) {
 	WP * newwp = new_wp();
 	Log("2");
-	strcpy(newwp->str, args);
+	//strcpy(newwp->str, args);
 	// Log("new wp's str is %s", newwp->str);
 
 	Log("3");
