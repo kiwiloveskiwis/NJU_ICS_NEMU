@@ -201,7 +201,10 @@ uint32_t eval(uint32_t p, uint32_t q) {
 			case '/' : return left / right;
 			case '+' : return left + right;
 			case '-' : return left - right;
-
+			case NEQ : return left != right; 
+			case EQ  : return left == right;
+			case AND : return left && right;
+			case OR  : return left || right;
 		}
 	}
 	return 0;
