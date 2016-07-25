@@ -1,4 +1,5 @@
 #include "monitor/monitor.h"
+#include "monitor/watchpoint.h"
 #include "cpu/helper.h"
 #include <setjmp.h>
 
@@ -12,6 +13,7 @@
 int nemu_state = STOP;
 
 int exec(swaddr_t);
+extern bool checkWP();
 
 char assembly[80];
 char asm_buf[128];
@@ -74,6 +76,8 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* TODO: check watchpoints here. */
 
+		bool change = checkWP();
+		if(change) nemu_state = STOP;
 
 		if(nemu_state != RUNNING) { return; }
 
