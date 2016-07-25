@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR
+	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR
 
 	/* TODO: Add more token types */
 
@@ -96,6 +96,8 @@ static bool make_token(char *e) {
 				 * to record the token in the array ``tokens''. For certain 
 				 * types of tokens, some extra actions should be performed.
 				 */
+#define PTYPE tokens[nr_token - 1].type
+				bool unary = (PTYPE == '+') || (PTYPE == '-') || (PTYPE == '*') || (PTYPE == '/' ) || (PTYPE == '(');
 				switch(rules[i].token_type) {
 					case NOTYPE : break;	
 					case HEX : 
@@ -114,7 +116,9 @@ static bool make_token(char *e) {
 								  memcpy(tokens[nr_token].str, substr_start + 1, substr_len - 1 );
 								  nr_token++;
 								  break;
-					case '*' : //TODO : identify pointers!
+					case '*' : 
+								  if(unary) tokens[nr_token].type = PTR;
+								  //TODO : identify pointers!
 					case '(' :
 					case ')' :
 					case '+' :  
@@ -128,8 +132,6 @@ static bool make_token(char *e) {
 								  tokens[nr_token].type = rules[i].token_type;
 								  nr_token++;
 								  break;
-
-
 					default: panic("please implement me");
 				}
 				break;
