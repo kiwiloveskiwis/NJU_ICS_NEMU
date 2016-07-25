@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC
+	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG
 
 	/* TODO: Add more token types */
 
@@ -27,8 +27,11 @@ static struct rule {
 	{"\\-", '-'},
 	{"\\*", '*'},
 	{"\\/", '/'},
-	{"==", EQ},						// equal
+	{"\\$\\w", REG},
+   	{"==", EQ},						// equal
 	{"!=", NEQ},	
+	{"&&", AND},
+	{"||",NOT},
 	{"0x[0-9]+", HEX},
 	{"[0-9]+", DEC}
 	
@@ -86,19 +89,23 @@ static bool make_token(char *e) {
 				switch(rules[i].token_type) {
 					case NOTYPE : break;	
 					case HEX : 
-								  tokens[nr_token].type = rules[i].token_type;
-								  if (substr_len < 32)
-									  memcpy(tokens[nr_token].str, substr_start, substr_len);
-								  else Log("Element exceeds max length!");
-								  nr_token++;
-								  break;
 					case DEC :
 								  tokens[nr_token].type = rules[i].token_type;
 								  if (substr_len < 32)
 									  memcpy(tokens[nr_token].str, substr_start, substr_len);
-								  else Log("Element exceeds max length!");
+								  else {
+									  Log("Element exceeds max length!");
+									  return false;
+								  }
 								  nr_token++;
 								  break;
+					case REG : 
+								  tokens[nr_token].type = rules[i].token_type;
+								  memcpy(tokens[nr_token].str, substr_start + 1, substr_len - 1 );
+								  
+								  
+
+								
 					
 
 
