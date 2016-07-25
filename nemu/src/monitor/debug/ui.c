@@ -81,12 +81,15 @@ static int cmd_q(char *args) {
 
 static int cmd_w(char *args) {
 	WP * newwp = new_wp();
-	newwp->str = args;
+	strcpy(newwp->str, args);
 	// Log("new wp's str is %s", newwp->str);
 	bool succ = true;
 	newwp->value = expr(newwp->str, &succ); 
 	if(succ) Log("Hardware watchpoint %d: %s",newwp->NO, args);
-	else Log("Unable to set watchpoint! Invalid expression.");
+	else {
+		Log("Unable to set watchpoint! Invalid expression.");
+		free_wp(newwp);
+	}
 	return 0;
 }
 
