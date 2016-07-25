@@ -132,7 +132,7 @@ static bool make_token(char *e) {
 		}
 	}
 	
-		Log("Now the nr_token is %d", nr_token);	
+	Log("Now the nr_token is %d", nr_token);	
 	return true; 
 }
 
