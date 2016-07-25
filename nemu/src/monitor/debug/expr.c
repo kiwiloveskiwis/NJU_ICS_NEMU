@@ -187,7 +187,8 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 		if(check != 0) continue;
 		if(tokens[i].type == '(')check++;
 	}
-	return 0;
+	assert(i < q && i > p);
+	return i;
 	
 
 }
