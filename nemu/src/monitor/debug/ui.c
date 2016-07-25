@@ -84,7 +84,6 @@ static int cmd_q(char *args) {
 static int cmd_w(char *args) {
 	WP * newwp = new_wp();
 	strcpy(newwp->str, args);
-	// Log("new wp's str is %s", newwp->str);
 	bool succ = true;
 	newwp->value = expr(newwp->str, &succ); 
 	if(succ) Log("Hardware watchpoint %d: %s",newwp->NO, args);
@@ -92,6 +91,13 @@ static int cmd_w(char *args) {
 		Log("Unable to set watchpoint! Invalid expression.");
 		free_wp(newwp);
 	}
+	return 0;
+}
+static int cmd_d (char *args) {
+	int idx = atoi(args);
+	bool succ = deleWP(idx);
+	if (succ) Log("Watchpoint %d deleted!", idx);
+	else Log("Watchpoint to be deleted Not Found!");
 	return 0;
 }
 
@@ -106,10 +112,11 @@ static struct {
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
 	{ "si", "Execute one machine instruction", cmd_si},
-	{ "info", "Print information", cmd_info}, 
+	{ "info", "Print information(r/w)", cmd_info}, 
 	{ "x", "Examine memory: x LENGTH ADDRESS.", cmd_x},
 	{ "p", "Print value of expression EXP.", cmd_p},
-	{ "w", "Set a watchpoint for an expression.", cmd_w},
+	{ "w", "Set a watchpoint for an expression EXP.", cmd_w},
+	{ "d", "Delete a given watchpoint with its NO", cmd_d},
 	/* TODO: Add more commands */
 
 };

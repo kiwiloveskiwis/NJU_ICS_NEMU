@@ -52,7 +52,7 @@ bool checkWP() {
 		uint32_t currVal = expr(tourwp->str, &succ);
 		if(currVal != tourwp->value) {
 			change = true;
-			printf("Hardware watchpoint %d: %s\nOld value = %x\nNew value = %x\n", tourwp->NO, tourwp->str, tourwp->value, currVal);
+			printf("Hardware watchpoint %d: %s\nOld value = 0x%x\nNew value = 0x%x\n", tourwp->NO, tourwp->str, tourwp->value, currVal);
 			tourwp->value = currVal;	
 		}	
 		tourwp = tourwp->next;
@@ -63,9 +63,21 @@ bool checkWP() {
 void dispWP(){
 	WP* tourwp = head;
 	while(tourwp != NULL) {
-		printf("Hardware watchpoint %d:%s\t value = %x\n", tourwp->NO, tourwp->str, tourwp->value);
+		printf("Hardware watchpoint %d:%s\t value = 0x%x\n", tourwp->NO, tourwp->str, tourwp->value);
 		tourwp = tourwp->next;
 	}	
+}
+
+bool deleWP(int idx) {
+	WP* tourwp = head;		
+	while(tourwp != NULL) {
+		if(tourwp->NO == idx) {
+			free_wp(tourwp);
+			return true;
+		}
+	tourwp = tourwp->next;
+	}
+	return false;
 }
 // TODO: implement cmd_w & (p w) in ui.c
 
