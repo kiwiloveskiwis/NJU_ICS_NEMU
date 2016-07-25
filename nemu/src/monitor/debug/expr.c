@@ -183,6 +183,8 @@ uint32_t eval(uint32_t p, uint32_t q) {
 						   if(!strcmp(tempstr, regsl[temp])) return cpu.gpr[temp]._32;
 						   if(!strcmp(tempstr, "eip")) return cpu.eip;
 					   }
+					   Log("REG Not Found!");
+					   break;
 			default  : Log("Type Not Found!");
 		}
 	}
