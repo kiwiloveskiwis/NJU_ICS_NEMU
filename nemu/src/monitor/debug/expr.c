@@ -232,7 +232,7 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 				default : break;
 			}
 		}
-		else if (EQUAL(EQ) || EQUAL(NEQ) || EQUAL(AND) || EQUAL(NEQ)) {
+		else if (EQUAL(EQ) || EQUAL(OR) || EQUAL(AND) || EQUAL(NEQ)) {
 			if (min != p && tokens[min].type > 256) break; // the first of these is the dominant token
 			min = i;
 			break;
