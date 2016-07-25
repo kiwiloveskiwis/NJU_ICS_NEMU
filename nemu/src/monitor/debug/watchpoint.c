@@ -40,6 +40,7 @@ void free_wp(WP *wp) {
 		return;
 	}
 	if(wp->prev != NULL) wp->prev->next = wp->next; // Not head
+	else head = wp->next;
 	if(wp->next != NULL) wp->next->prev = wp->prev; // Not tail	
 	wp->next = free_;
 	free_ = wp;
