@@ -89,9 +89,10 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-			/*	Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", \
-						i, rules[i].regex, position, substr_len, substr_len, substr_start);
-						*/
+				/*	
+					Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", \
+					i, rules[i].regex, position, substr_len, substr_len, substr_start);
+					*/
 				position += substr_len;
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
@@ -100,6 +101,7 @@ static bool make_token(char *e) {
 #define PTYPE tokens[nr_token - 1].type
 				bool unary = nr_token == 0 || (PTYPE == '+') || (PTYPE == '-') || (PTYPE == '*') || (PTYPE == '/' ) \
 							 || (PTYPE == NEG) || (PTYPE == PTR) || (PTYPE == NOT) || (PTYPE == '(');
+#undef PTYPE
 				switch(rules[i].token_type) {
 					case NOTYPE : break;	
 					case HEX : 
