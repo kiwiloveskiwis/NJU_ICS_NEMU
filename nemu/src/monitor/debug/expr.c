@@ -182,13 +182,28 @@ uint32_t eval(uint32_t p, uint32_t q) {
 uint32_t getDomin (uint32_t p, uint32_t q) {
 	int check = 0;
 	int i = p+1;
+	int min = p;
 	
 	for(;i < q; i++) {
-		if(check != 0) continue;
 		if(tokens[i].type == '(')check++;
+		if(tokens[i].type == ')')check--;
+		if(check != 0) continue;
+#define EQUAL(name) tokens[i].type == name
+		if(EQUAL('*') || EQUAL('+') || EQUAL('-') || EQUAL('/')){
+			switch (tokens[i].type) {
+				case '-' :
+				case '+' : min = i; break;
+				case '*' : 
+				case '/' : 
+						   if ( min == p || tokens[min].type == '*' || tokens[min].type == '/') min = i;
+						   break;
+				default : break;
+			}
+		}
+#undef EQUAL
 	}
-	assert(i < q && i > p);
-	return i;
+	assert(min < q && min > p);
+	return min;
 	
 
 }
