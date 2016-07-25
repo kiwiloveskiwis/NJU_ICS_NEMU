@@ -47,24 +47,23 @@ static int cmd_info(char *args) {
 	if(arg == NULL) printf("\"info\" must be followed by the name of an info command.\n");
 	else if (strcmp(arg, "r") == 0) {
 		for(i = R_EAX; i < R_EDI; i++) {
-			printf("%s\t0x%x\t%d \n", regsl[i], cpu.gpr[i]._32, cpu.gpr[i]._32);	
+			printf("%s\t0x%x \n", regsl[i], cpu.gpr[i]._32);	
 		}
+		printf("eip\t0x%x\t \n", cpu.eip);
 	}
 	else printf("Undefined info command:'%s'.\n", arg); 
 	return 0;
 }
-int addr = 0x100000;
-int * value;
+
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " ");
-	//char *arg2 = strtok(NULL, " ");
+	char *arg2 = strtok(NULL, " ");
 	int length = atoi(arg1);
-	//sscanf(arg2, "%x", &addr); 
+	int addr;
+	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
-		value = (int *)addr;
-		printf("0x%.4x\t%d\n", addr, *value);
-		addr += 4;
+		printf("%08x\n", swaddr_read(addr + 4 * i, 4 ));
 	}
 	return 0;
 }
