@@ -64,8 +64,8 @@ void dispWP(){
 	WP* tourwp = head;
 	while(tourwp != NULL) {
 		printf("Hardware watchpoint %d:%s\t value = %x\n", tourwp->NO, tourwp->str, tourwp->value);
+		tourwp = tourwp->next;
 	}	
-	tourwp = tourwp->next;
 }
 // TODO: implement cmd_w & (p w) in ui.c
 
