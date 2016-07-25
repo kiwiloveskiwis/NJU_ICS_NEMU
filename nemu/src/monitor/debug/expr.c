@@ -157,24 +157,20 @@ uint32_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(uint32_t p, uint32_t q) {
-	int i;
 	if (p > q) {
 		Log("p > q!");
 		assert(0);
 	}
-	assert(atoi("123") == 123 );
 	if (p == q) return atoi(tokens[p].str);
 	if (checkParen(p, q)) return eval(p + 1, q - 1);
-	for(i = p; i <= q; i++) {
-		uint32_t domin = getDomin(p, q);	
-		uint32_t left = eval(p, domin - 1);
-		uint32_t right = eval(domin + 1, q);
-		switch (tokens[domin].type) {
-			case '*' : return left * right; 
-			case '/' : return left / right;
-			case '+' : return left + right;
-			case '-' : return left - right;
-		}
+	uint32_t domin = getDomin(p, q);	
+	uint32_t left = eval(p, domin - 1);
+	uint32_t right = eval(domin + 1, q);
+	switch (tokens[domin].type) {
+		case '*' : return left * right; 
+		case '/' : return left / right;
+		case '+' : return left + right;
+		case '-' : return left - right;
 
 	}
 	return 0;
