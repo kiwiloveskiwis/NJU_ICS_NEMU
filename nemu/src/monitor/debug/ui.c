@@ -35,9 +35,7 @@ static int cmd_c(char *args) {
 static int cmd_si(char *args) {
 	char *arg = strtok(NULL, " ");
 	if(arg == NULL)	cpu_exec(1);
-	else {
-		cpu_exec(atoi(arg));
-	}
+	else cpu_exec(atoi(arg));
 	return 0;
 }
 
@@ -46,7 +44,7 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if(arg == NULL) printf("\"info\" must be followed by the name of an info command.\n");
 	else if (strcmp(arg, "r") == 0) {
-		for(i = R_EAX; i < R_EDI; i++) {
+		for(i = R_EAX; i <= R_EDI; i++) {
 			printf("%s\t0x%x \n", regsl[i], cpu.gpr[i]._32);	
 		}
 		printf("eip\t0x%x\t \n", cpu.eip);
@@ -61,13 +59,22 @@ static int cmd_x(char *args) {
 	int length = atoi(arg1);
 	int addr;
 	sscanf(arg2, "%x", &addr); 
-	//addr = strtol(arg2,NULL,16)
 	int i = 0;
 	for(i = 0; i < length; i++){
 		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4 ));
 	}
 	return 0;
 }
+
+static int cmd_p(char *args) {
+	bool succ = true;
+	bool *success = &succ;
+	char *arg = strtok(NULL, " ");
+	int ans = expr(arg, success);
+	printf("%s:\t%d", arg, ans);
+	return 0;
+}
+
 static int cmd_q(char *args) {
 	return -1;
 }
@@ -85,6 +92,7 @@ static struct {
 	{ "si", "Execute one machine instruction", cmd_si},
 	{ "info", "Print information", cmd_info}, 
 	{ "x", "Examine memory: x LENGTH ADDRESS.", cmd_x},
+	{ "p", "Print value of expression EXP.", cmd_p},
 	/* TODO: Add more commands */
 
 };
