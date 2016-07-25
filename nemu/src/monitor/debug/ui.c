@@ -80,6 +80,7 @@ static int cmd_q(char *args) {
 
 static int cmd_w(char *args) {
 	WP * newwp = new_wp();
+	Log("123");
 	Log("Hardware watchpoint %d: %s",newwp->NO, args);
 	return 0;
 
