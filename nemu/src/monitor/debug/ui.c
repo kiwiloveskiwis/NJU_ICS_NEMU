@@ -61,6 +61,7 @@ static int cmd_x(char *args) {
 	int length = atoi(arg1);
 	int addr;
 	sscanf(arg2, "%x", &addr); 
+	assert(addr == strtol(arg2,NULL,16));
 	int i = 0;
 	for(i = 0; i < length; i++){
 		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4 ));
