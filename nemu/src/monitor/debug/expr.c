@@ -170,7 +170,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 		Log("p > q!");
 		assert(0);
 	}
-	if (p == q) {
+	else if (p == q) {
 		int temp = 0;
 		char * tempstr = tokens[p].str;
 		switch (tokens[nr_token].type) {
@@ -189,17 +189,18 @@ uint32_t eval(uint32_t p, uint32_t q) {
 			default  : Log("Type Not Found!");
 		}
 	}
-	Log(" p < q ");
-	if (checkParen(p, q)) return eval(p + 1, q - 1);
-	uint32_t domin = getDomin(p, q);	
-	uint32_t left = eval(p, domin - 1);
-	uint32_t right = eval(domin + 1, q);
-	switch (tokens[domin].type) {
-		case '*' : return left * right; 
-		case '/' : return left / right;
-		case '+' : return left + right;
-		case '-' : return left - right;
+	else if (checkParen(p, q)) return eval(p + 1, q - 1);
+	else {
+		uint32_t domin = getDomin(p, q);	
+		uint32_t left = eval(p, domin - 1);
+		uint32_t right = eval(domin + 1, q);
+		switch (tokens[domin].type) {
+			case '*' : return left * right; 
+			case '/' : return left / right;
+			case '+' : return left + right;
+			case '-' : return left - right;
 
+		}
 	}
 	return 0;
 }
