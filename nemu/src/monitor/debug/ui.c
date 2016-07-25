@@ -81,11 +81,8 @@ static int cmd_q(char *args) {
 
 static int cmd_w(char *args) {
 	WP * newwp = new_wp();
-	Log("2");
-	//strcpy(newwp->str, args);
+	newwp->str = args;
 	// Log("new wp's str is %s", newwp->str);
-
-	Log("3");
 	bool succ = true;
 	newwp->value = expr(newwp->str, &succ); 
 	if(succ) Log("Hardware watchpoint %d: %s",newwp->NO, args);
