@@ -26,9 +26,11 @@ WP* new_wp(){
 		return NULL;
 	}
 	WP* temp = free_;
-	free_ = free_->next;
+	free_ = free_->next; // free_.prev is unchanged (not necessary)
 	temp->next = head;
+	head->prev = temp;
 	head = temp;	 // the last watch point is set to be the head
+	head->prev = NULL;
 	return temp;
 }
 void free_wp(WP *wp) {
@@ -36,7 +38,8 @@ void free_wp(WP *wp) {
 		Log("The watchpoint to be freed is NULL!");
 		return;
 	}
-	
+	if(wp->prev != NULL) wp->prev->next = wp->next; // Not head
+	if(wp->next != NULL) wp->next->prev = wp->prev; // Not tail	
 	wp->next = free_;
 	free_ = wp;
 

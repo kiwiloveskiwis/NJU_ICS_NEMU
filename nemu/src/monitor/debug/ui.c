@@ -78,6 +78,13 @@ static int cmd_q(char *args) {
 	return -1;
 }
 
+static int cmd_w(char *args) {
+	WP * newwp = new_wp();
+	Log("Hardware watchpoint %d: %s",newwp->NO, args);
+	return 0;
+
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -92,6 +99,7 @@ static struct {
 	{ "info", "Print information", cmd_info}, 
 	{ "x", "Examine memory: x LENGTH ADDRESS.", cmd_x},
 	{ "p", "Print value of expression EXP.", cmd_p},
+	{ "w", "Set a watchpoint for an expression.", cmd_w},
 	/* TODO: Add more commands */
 
 };
