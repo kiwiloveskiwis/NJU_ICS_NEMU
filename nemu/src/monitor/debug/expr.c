@@ -82,7 +82,8 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 
-				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
+				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", \
+						i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
@@ -104,6 +105,7 @@ static bool make_token(char *e) {
 					case REG : 
 								  tokens[nr_token].type = rules[i].token_type;
 								  memcpy(tokens[nr_token].str, substr_start + 1, substr_len - 1 );
+								  nr_token++;
 								  break;
 					case '(' :
 					case ')' :
@@ -113,16 +115,16 @@ static bool make_token(char *e) {
 					case '/' :
 					case EQ	 :
 					case NEQ :
-									  tokens[nr_token].type = rules[i].token_type;
-									  nr_token++;
-									  break;
+								  tokens[nr_token].type = rules[i].token_type;
+								  nr_token++;
+								  break;
 
 
 					default: panic("please implement me");
 				}
-
 				break;
 			}
+		Log("Now the nr_token is %d", nr_token);	
 		}
 
 		if(i == NR_REGEX) {
