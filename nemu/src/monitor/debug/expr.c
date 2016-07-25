@@ -45,6 +45,7 @@ static struct rule {
 
 static regex_t re[NR_REGEX];
 uint32_t eval(uint32_t p, uint32_t q);
+uint32_t getDomin(uint32_t p, uint32_t q);
 bool checkParen(uint32_t p, uint32_t q);
 
 /* Rules are used for many times.
@@ -156,15 +157,38 @@ uint32_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(uint32_t p, uint32_t q) {
+	int i;
 	if (p > q) {
 		Log("p > q!");
 		assert(0);
 	}
 	if (p == q) return atoi(tokens[p].str);
 	if (checkParen(p, q)) return eval(p + 1, q - 1);
-	else return 0;
-	
+	for(i = p; i <= q; i++) {
+		uint32_t domin = getDomin(p, q);	
+		uint32_t left = eval(p, domin - 1);
+		uint32_t right = eval(domin + 1, q);
+		switch (tokens[domin].type) {
+			case '*' : return left * right; 
+			case '/' : return left / right;
+			case '+' : return left + right;
+			case '-' : return left - right;
+		}
 
+	}
+	return 0;
+}
+
+uint32_t getDomin (uint32_t p, uint32_t q) {
+	int check = 0;
+	int i = p+1;
+	
+	for(;i < q; i++) {
+		if(check != 0) continue;
+		if(tokens[i].type == '(')check++;
+	}
+	return 0;
+	
 
 }
 bool checkParen(uint32_t p, uint32_t q) {
