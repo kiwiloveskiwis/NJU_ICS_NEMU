@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM
+	NOTYPE = 256, EQ, NUM, NEQ
 
 	/* TODO: Add more token types */
 
@@ -28,6 +28,7 @@ static struct rule {
 	{"\\*", '*'},
 	{"\\/", '/'},
 	{"==", EQ},						// equal
+	{"!=", NEQ},	
 	{"[0-9]+\\.?[0-9]*", NUM}
 	
 };
@@ -77,6 +78,7 @@ static bool make_token(char *e) {
 
 				Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s", i, rules[i].regex, position, substr_len, substr_len, substr_start);
 				position += substr_len;
+				
 
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
 				 * to record the token in the array ``tokens''. For certain 
@@ -84,6 +86,11 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case NOTYPE : break;	
+
+					case '+' : 
+					
+					
 					default: panic("please implement me");
 				}
 
