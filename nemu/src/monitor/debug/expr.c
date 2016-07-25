@@ -80,8 +80,7 @@ static bool make_token(char *e) {
 	regmatch_t pmatch;
 	nr_token = 0;
 	for (i = 0; i < 32; i++)
-		tokens[i].str[i] = '\0';
-
+		memset(tokens[i].str, '\0', 32);
 	while(e[position] != '\0') {
 		if(nr_token >= 32) Log("Exceed max token size!");
 		/* Try all rules one by one. */
