@@ -34,7 +34,7 @@ static struct rule {
 	{"!=", NEQ},	
 	{"&&", AND},
 	{"\\|{2}",NOT},
-	{"0x[0-9]+", HEX},
+	{"0x[0-9a-fA-F]+", HEX},
 	{"[0-9]+", DEC}
 	
 };
