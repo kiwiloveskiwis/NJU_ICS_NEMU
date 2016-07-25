@@ -18,6 +18,17 @@ void init_wp_pool() {
 	free_ = wp_pool;
 }
 
+WP* new_wp(){
+	WP* temp = free_;
+	free_ = free_->next;
+	temp->next = head;
+	head = temp;	 // the last watch point is set to be the head
+	return temp;
+}
+void free_wp(WP *wp) {
+
+}
 /* TODO: Implement the functionality of watchpoint */
+// TODO: implement cmd_w & (p w) in ui.c
 
 

@@ -159,7 +159,6 @@ uint32_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-	/* TODO: Insert codes to evaluate the expression. */
 	return eval(0, nr_token - 1);
 	return 0;
 }
@@ -194,7 +193,6 @@ uint32_t eval(uint32_t p, uint32_t q) {
 	else if (checkParen(p, q)) return eval(p + 1, q - 1);
 	else {
 		uint32_t domin = getDomin(p, q);	
-		// TODO : domin == p 
 		if (domin == p) switch (tokens[domin].type) {
 			case NOT : return !eval(p + 1, q);
 			case NEG : return -eval(p + 1, q);
@@ -245,6 +243,7 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 		}
 #undef EQUAL
 	}
+	// if min == p then domin must be an unary operator
 	return min;
 }
 
