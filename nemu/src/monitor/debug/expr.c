@@ -194,6 +194,12 @@ uint32_t eval(uint32_t p, uint32_t q) {
 	else if (checkParen(p, q)) return eval(p + 1, q - 1);
 	else {
 		uint32_t domin = getDomin(p, q);	
+		// TODO : domin == p 
+		if (domin == p) switch (tokens[domin].type) {
+			case NOT : return !eval(p + 1, q);
+			case NEG : return -eval(p + 1, q);
+			case PTR : return swaddr_read(eval(p + 1, q), 4);
+		}
 		uint32_t left = eval(p, domin - 1);
 		uint32_t right = eval(domin + 1, q);
 		switch (tokens[domin].type) {
@@ -231,7 +237,7 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 						   break;
 				default : break;
 			}
-		}
+		} // EQ NEQ OR AND are prior domins
 		else if (EQUAL(EQ) || EQUAL(OR) || EQUAL(AND) || EQUAL(NEQ)) {
 			if (min != p && tokens[min].type > 256) break; // the first of these is the dominant token
 			min = i;
@@ -239,11 +245,9 @@ uint32_t getDomin (uint32_t p, uint32_t q) {
 		}
 #undef EQUAL
 	}
-	assert(min < q && min > p);
 	return min;
-	
-
 }
+
 bool checkParen(uint32_t p, uint32_t q) {
 	if (tokens[p].type != '(' || tokens[q].type != ')') return false;
 	int i = 0;
