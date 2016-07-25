@@ -70,7 +70,7 @@ static int cmd_p(char *args) {
 	bool succ = true;
 	bool *success = &succ;
 	int ans = expr(args, success);
-	printf("%s:\t%d\n", args, ans);
+	printf("%s:\t0x%x\t%d\n", args, ans, ans);
 	return 0;
 }
 
