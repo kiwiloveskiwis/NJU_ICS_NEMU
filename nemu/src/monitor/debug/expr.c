@@ -98,7 +98,7 @@ static bool make_token(char *e) {
 				 */
 #define PTYPE tokens[nr_token - 1].type
 				bool unary = nr_token == 0 || (PTYPE == '+') || (PTYPE == '-') || (PTYPE == '*') || (PTYPE == '/' ) \
-							 || (PTYPE == '(');
+							 || (PTYPE == NEG) || (PTYPE == PTR) || (PTYPE == NOT) || (PTYPE == '(');
 				switch(rules[i].token_type) {
 					case NOTYPE : break;	
 					case HEX : 
