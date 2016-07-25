@@ -165,6 +165,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(uint32_t p, uint32_t q) {
+	Log("p == %d,q == %d",p, q);
 	if (p > q) {
 		Log("p > q!");
 		assert(0);
