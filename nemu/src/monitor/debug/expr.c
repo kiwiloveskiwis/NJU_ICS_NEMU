@@ -162,6 +162,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 		Log("p > q!");
 		assert(0);
 	}
+	assert(atoi("123") == 123 );
 	if (p == q) return atoi(tokens[p].str);
 	if (checkParen(p, q)) return eval(p + 1, q - 1);
 	for(i = p; i <= q; i++) {
