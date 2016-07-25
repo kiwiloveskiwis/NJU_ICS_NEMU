@@ -49,6 +49,7 @@ bool checkWP() {
 	WP* tourwp = head;
 	while(tourwp != NULL) {
 		bool succ = true;
+		Log("No err!");
 		uint32_t currVal = expr(tourwp->str, &succ);
 		Log("No err!");
 		if(currVal != tourwp->value) {
