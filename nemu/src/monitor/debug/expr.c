@@ -184,6 +184,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 						   if(!strcmp(tempstr, "eip")) return cpu.eip;
 					   }
 					   Log("REG Not Found!");
+					   printf("%s " ,tempstr);
 					   break;
 			default  : Log("Type Not Found!");
 		}
