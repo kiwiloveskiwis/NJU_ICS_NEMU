@@ -71,7 +71,7 @@ static int cmd_p(char *args) {
 	bool *success = &succ;
 	char *arg = strtok(NULL, " ");
 	int ans = expr(arg, success);
-	printf("%s:\t%d", arg, ans);
+	printf("%s:\t%d\n", arg, ans);
 	return 0;
 }
 
