@@ -27,6 +27,7 @@ WP* new_wp(){
 	}
 	WP* temp = free_;
 	free_ = free_->next; // free_.prev is unchanged (not necessary)
+	Log("hrer!!");
 	temp->next = head;
 	head->prev = temp;
 	head = temp;	 // the last watch point is set to be the head
