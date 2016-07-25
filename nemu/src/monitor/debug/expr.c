@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR
+	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR, NEG
 
 	/* TODO: Add more token types */
 
@@ -97,7 +97,8 @@ static bool make_token(char *e) {
 				 * types of tokens, some extra actions should be performed.
 				 */
 #define PTYPE tokens[nr_token - 1].type
-				bool unary = (PTYPE == '+') || (PTYPE == '-') || (PTYPE == '*') || (PTYPE == '/' ) || (PTYPE == '(');
+				bool unary = nr_token == 0 || (PTYPE == '+') || (PTYPE == '-') || (PTYPE == '*') || (PTYPE == '/' ) \
+							 || (PTYPE == '(');
 				switch(rules[i].token_type) {
 					case NOTYPE : break;	
 					case HEX : 
@@ -117,20 +118,25 @@ static bool make_token(char *e) {
 								  nr_token++;
 								  break;
 					case '*' : 
-								  if(unary) tokens[nr_token].type = PTR;
-								  //TODO : identify pointers!
+								  if(unary) {
+									  tokens[nr_token++].type = PTR;
+									  break;
+								  }
+					case '-' :
+								  if(unary) {
+									  tokens[nr_token++].type = NEG;
+									  break;
+								  }
 					case '(' :
 					case ')' :
 					case '+' :  
-					case '-' :
 					case '/' :
 					case EQ	 :
 					case NEQ :
 					case AND :
 					case OR  :
 					case NOT :
-								  tokens[nr_token].type = rules[i].token_type;
-								  nr_token++;
+								  tokens[nr_token++].type = rules[i].token_type;
 								  break;
 					default: panic("please implement me");
 				}
@@ -164,7 +170,22 @@ uint32_t eval(uint32_t p, uint32_t q) {
 		Log("p > q!");
 		assert(0);
 	}
-	if (p == q) return atoi(tokens[p].str);
+	if (p == q) {
+		int temp = 0;
+		char * tempstr = tokens[p].str;
+		switch (tokens[nr_token].type) {
+			case HEX : return atoi(tokens[p].str);
+			case DEC : 
+					   sscanf(tempstr, "%x", &temp);
+					   return temp;
+			case REG :
+					   for(temp = R_EAX; temp <= R_EDI; temp++) {
+						   if(!strcmp(tempstr, regsl[temp])) return cpu.gpr[temp]._32;
+						   if(!strcmp(tempstr, "eip")) return cpu.eip;
+					   }
+			default  : Log("Type Not Found!");
+		}
+	}
 	if (checkParen(p, q)) return eval(p + 1, q - 1);
 	uint32_t domin = getDomin(p, q);	
 	uint32_t left = eval(p, domin - 1);
