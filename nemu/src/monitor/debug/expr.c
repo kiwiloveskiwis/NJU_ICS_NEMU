@@ -28,6 +28,8 @@ static struct rule {
 	{"\\*", '*'},
 	{"\\/", '/'},
 	{"\\$\\w+", REG},
+	{"\\(", '('},
+	{"\\)", ')'},
    	{"==", EQ},						// equal
 	{"!=", NEQ},	
 	{"&&", AND},
@@ -102,14 +104,9 @@ static bool make_token(char *e) {
 					case REG : 
 								  tokens[nr_token].type = rules[i].token_type;
 								  memcpy(tokens[nr_token].str, substr_start + 1, substr_len - 1 );
-								  
-								  
-
-								
-					
-
-
-
+								  break;
+					case '(' :
+					case ')' :
 					case '+' :  
 					case '-' :
 					case '*' :
