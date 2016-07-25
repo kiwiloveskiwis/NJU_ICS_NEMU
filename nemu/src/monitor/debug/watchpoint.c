@@ -50,6 +50,7 @@ bool checkWP() {
 	while(tourwp != NULL) {
 		bool succ = true;
 		uint32_t currVal = expr(tourwp->str, &succ);
+		Log("No err!");
 		if(currVal != tourwp->value) {
 			change = true;
 			printf("Hardware watchpoint %d: %s\n \
@@ -61,6 +62,7 @@ bool checkWP() {
 	}	
 	return change;
 }
+
 /* TODO: Implement the functionality of watchpoint */
 // TODO: implement cmd_w & (p w) in ui.c
 
