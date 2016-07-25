@@ -124,7 +124,6 @@ static bool make_token(char *e) {
 				}
 				break;
 			}
-		Log("Now the nr_token is %d", nr_token);	
 		}
 
 		if(i == NR_REGEX) {
@@ -132,7 +131,8 @@ static bool make_token(char *e) {
 			return false;
 		}
 	}
-
+	
+		Log("Now the nr_token is %d", nr_token);	
 	return true; 
 }
 
