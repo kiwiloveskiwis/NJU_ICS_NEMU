@@ -6,17 +6,19 @@ static void do_execute(){
 		DATA_TYPE inc_adr = op_src->val ;
 		cpu.eip += inc_adr;
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1;
+		// TODO : right way?
 		print_asm("jmp $0x%x", cpu.eip + DATA_BYTE + 1);
 	} else {
-		// jmp_rm_v, mod==3
-		if(DATA_BYTE == 2) cpu.eip = (op_src->val & 0x0000ffff) - DATA_BYTE;
-		else cpu.eip = op_src->val - DATA_BYTE;
+		if(DATA_BYTE == 2) cpu.eip = (op_src->val & 0x0000ffff) - DATA_BYTE - 1;
+		else cpu.eip = op_src->val - DATA_BYTE - 1;
+		// Check jmp !
+		print_asm("jmp $0x%x", cpu.eip + DATA_BYTE + 1);
 	}
 }
 
 make_instr_helper(i)
 #if DATA_BYTE == 2 || DATA_BYTE == 4
-make_instr_helper(rm)
+make_instr_helper(i2rm)
 #endif
 
 
