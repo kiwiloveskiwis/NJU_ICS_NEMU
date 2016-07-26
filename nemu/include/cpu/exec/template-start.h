@@ -36,4 +36,4 @@
 #define update_PZS(result) int eventest = result & 0xff, count = 0; \
 			 do{ count += eventest & 1; } while(eventest >> 1);  \
 			if(!(count % 2)) cpu.PF = 1; cpu.ZF = (result == 0); \
-			cpu.SF = result >> 31;
+			cpu.SF = MSB(result);
