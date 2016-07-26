@@ -3,7 +3,7 @@
 #define jcc_condition(condition) static void do_execute() {\
 	if(condition) { cpu.eip += (DATA_TYPE) op_src->val;\
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
-		print_asm_template1(); } }\
+		print_asm("%s $0x%x","instr", cpu.eip + DATA_BYTE + 1); }}\
 	make_instr_helper(i)
 
 #define instr ja
