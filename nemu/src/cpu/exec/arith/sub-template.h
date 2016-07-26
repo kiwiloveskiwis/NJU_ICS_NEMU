@@ -6,7 +6,10 @@ static void do_execute() {
 	DATA_TYPE result = op_dest->val - op_src->val;
 	OPERAND_W(op_dest, result);
 
-	// update EFLAGS
+	// TODO : update EFLAGS
+	// CF!, PF! , ZF! , SF! , IF , DF , OF!
+	// OF, SF, ZF, AF, PF, and CF are affected by SUB
+	cpu.CF = (((long long)op_dest->val - (long long)op_src->val ) >> 32) & 1;
 	print_asm_template2();
 }
 
@@ -20,7 +23,7 @@ make_instr_helper(si2rm)
 
 /*	make_helper(concat(decode_si2rm_, SUFFIX)) {
 		int len = decode_rm_internal(eip, op_dest, op_src2);	
-		len += decode_si_b(eip + len);
+		len += decode_si_b(eip + len); // len += DATABYTE
 		return len;
 	}
 */
