@@ -18,6 +18,7 @@
 #include "arith/test.h"
 #include "arith/cmp.h"
 #include "arith/add.h"
+#include "arith/adc.h"
 
 
 
