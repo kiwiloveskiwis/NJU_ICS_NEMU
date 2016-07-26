@@ -52,7 +52,7 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/mov
+USERPROG := obj/testcase/mov-c
 ENTRY := $(USERPROG)
 
 entry: $(ENTRY)
@@ -72,3 +72,7 @@ test: $(nemu_BIN) $(testcase_BIN) entry
 
 submit: clean
 	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
+
+count : 
+	git diff --stat aff947dcbfa4d21c6ae8285dcfeac0dbdfb61929 
+	# PA1  3269ac1175e562a701aee7e01d2ff099ba6d9cdb	
