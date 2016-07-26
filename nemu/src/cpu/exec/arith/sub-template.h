@@ -18,4 +18,10 @@ make_instr_helper(rm2r)
 make_instr_helper(si2rm)
 #endif
 
+/*	make_helper(concat(decode_si2rm_, SUFFIX)) {
+		int len = decode_rm_internal(eip, op_dest, op_src2);	
+		len += decode_si_b(eip + len);
+		return len;
+	}
+*/
 #include "cpu/exec/template-end.h"
