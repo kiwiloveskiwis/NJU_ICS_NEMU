@@ -6,7 +6,7 @@ static void do_execute() {
 	DATA_TYPE result = op_dest->val - op_src->val;
 	OPERAND_W(op_dest, result);
 
-	// TODO : update EFLAGS
+	// TODO : check EFLAGS
 	// CF!, PF! , ZF! , SF! , IF , DF , OF!
 	// OF, SF, ZF, AF, PF, and CF are affected by SUB
 	cpu.CF = (((long long)op_dest->val - (long long)op_src->val ) >> 32) & 1;
