@@ -5,7 +5,7 @@
 	if(condition) { int shift = 32 - 8 * DATA_BYTE;\
 		cpu.eip += ((int)op_src->val << shift) >> shift; \
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
-		print_asm("%s $0x%x",str(instr), cpu.eip + DATA_BYTE + 1); }}\
+		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); }}\
 	make_instr_helper(i)
 
 #define instr ja
