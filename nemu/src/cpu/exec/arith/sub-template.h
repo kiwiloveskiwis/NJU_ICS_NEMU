@@ -14,6 +14,7 @@ static void do_execute() {
 	cpu.OF = (MSB(op_dest->val) ^ MSB(op_src->val)) && (MSB(op_src->val) == MSB(result));
 	Log("happened!?");
 	update_PZS(result)
+	Log("okay");
 	
 	print_asm_template2();
 }
