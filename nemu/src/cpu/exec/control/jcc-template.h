@@ -3,7 +3,7 @@
 #define STR(x) #x
 #define jcc_condition(condition) static void do_execute() {\
 	if(condition) { int shift = 32 - 8 * DATA_BYTE;\
-		cpu.eip += (op_src->val << shift) >> shift; \
+		cpu.eip += ((int)op_src->val << shift) >> shift; \
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
 		print_asm("%s $0x%x",STR(instr), cpu.eip + DATA_BYTE + 1); }}\
 	make_instr_helper(i)
