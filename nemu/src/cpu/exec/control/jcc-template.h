@@ -5,7 +5,7 @@
 		DATA_TYPE inc_adr = op_src->val ;\
 		cpu.eip += inc_adr; \
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
-		print_asm("%s $0x%x","aa", cpu.eip + DATA_BYTE + 1); }}\
+		print_asm("instr $0x%x", cpu.eip + DATA_BYTE + 1); }}\
 	make_instr_helper(i)
 
 #define instr ja
