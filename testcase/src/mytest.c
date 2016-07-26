@@ -10,10 +10,10 @@ int main() {
 	A[3] = 3;
 
 	b = A[3];
-	A[4] = b - A[1];
+	A[4] = b - A[1] + A[3];
 
 	nemu_assert(A[3] == 3);
-	nemu_assert(A[4] == 4);
+	nemu_assert(A[4] == 7);
 	nemu_assert(b == 3);
 
 	HIT_GOOD_TRAP;
