@@ -33,6 +33,7 @@
 #define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
-#define update_PF(result) int eventest = result & 0xff, count = 0; \
-			 do{ count += eventest & 1; } while(eventest >> 1); \
-			if(!(count % 2)) cpu.PF = 1;
+#define update_PZS(result) int eventest = result & 0xff, count = 0; \
+			 do{ count += eventest & 1; } while(eventest >> 1);  \
+			if(!(count % 2)) cpu.PF = 1; cpu.ZF = (result == 0); \
+			cpu.SF = result >> 31;
