@@ -9,7 +9,7 @@ static void do_execute() {
 	// TODO : check EFLAGS
 	// CF!, PF! , ZF! , SF! , IF , DF , OF!
 	// OF, SF, ZF, AF, PF, and CF are affected by SUB
-	cpu.CF = (((long long)op_dest->val - (long long)op_src->val ) >> 32) & 1;
+	cpu.CF = ((unsigned int)op_dest->val < (unsigned int)op_src->val ); 
 	cpu.OF = (MSB(op_dest->val) ^ MSB(op_src->val)) && (MSB(op_src->val) == MSB(result));
 	update_PZS(result)
 	
