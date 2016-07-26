@@ -1,7 +1,7 @@
 #include "cpu/exec/template-start.h"
 
 #define jcc_condition(condition) static void do_execute() {\
-	if(condition) { DATA_TYPE inc_adr = op_src->val ;\
+	if(condition) { int inc_adr = op_src->val ;\
 		cpu.eip += inc_adr; \
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
 		print_asm("%s $0x%x","aa", cpu.eip + DATA_BYTE + 1); }}\
