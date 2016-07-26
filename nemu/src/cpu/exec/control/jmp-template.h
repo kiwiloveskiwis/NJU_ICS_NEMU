@@ -7,7 +7,7 @@ static void do_execute(){
 		cpu.eip += inc_adr;
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1;
 		// TODO : right way?
-		print_asm("jmp $0x%x", cpu.eip + DATA_BYTE + 1);
+		print_asm("jmp\t$0x%x", cpu.eip + DATA_BYTE + 1);
 	} else {
 		if(DATA_BYTE == 2) cpu.eip = (op_src->val & 0x0000ffff) - DATA_BYTE - 1;
 		else cpu.eip = op_src->val - DATA_BYTE - 1;
