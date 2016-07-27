@@ -20,6 +20,13 @@ make_helper(concat(decode_i_, SUFFIX)) {
 #endif
 	return DATA_BYTE;
 }
+make_helper(concat(decode_m_, SUFFIX)) {
+	op_src->type = OP_TYPE_MEM;
+	op_src->addr = instr_fetch(eip, DATA_BYTE);
+	op_src->val = swaddr_read(op_src->addr, DATA_BYTE);
+
+	return DATA_BYTE;
+}
 
 #if DATA_BYTE == 1 || DATA_BYTE == 4
 /* sign immediate */

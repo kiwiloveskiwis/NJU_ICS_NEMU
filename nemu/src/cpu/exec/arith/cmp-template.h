@@ -7,7 +7,6 @@ static void do_execute() {
 	cpu.CF = (((long long)op_dest->val - (long long)op_src->val ) >> 32) & 1;
 	cpu.OF = (MSB(op_dest->val) ^ MSB(op_src->val)) && (MSB(op_src->val) == MSB(result));
 	update_PZS(result)
-
 	print_asm_template2();
 }
 

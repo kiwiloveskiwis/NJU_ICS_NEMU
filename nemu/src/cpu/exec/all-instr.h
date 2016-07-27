@@ -3,6 +3,7 @@
 #include "data-mov/mov.h"
 #include "data-mov/xchg.h"
 #include "data-mov/push.h"
+#include "data-mov/pop.h"
 
 #include "control/call.h"
 #include "control/jcc.h"
