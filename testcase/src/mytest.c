@@ -1,28 +1,28 @@
 #include "trap.h"
+#include <string.h>
 
+char *s[] = {
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab",
+	"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+	", World!\n",
+	"Hello, World!\n",
+	"#####"
+};
+
+char str1[] = "Hello";
+char str[20];
 
 int main() {
-	int n = 28, sum, i, k = 0;
-	for(n = 28; n < 29; n ++) {
-		sum = 0;
-		for(i = 1; i < n; i ++) {
-			if(n % i == 0) {
-				sum += i;
-			}
-		}
+	nemu_assert(strcmp(s[0], s[2]) == 0);
+	nemu_assert(strcmp(s[0], s[1]) == -1);
+	nemu_assert(strcmp(s[0] + 1, s[1] + 1) == -1);
+	nemu_assert(strcmp(s[0] + 2, s[1] + 2) == -1);
+	nemu_assert(strcmp(s[0] + 3, s[1] + 3) == -1);
 
-		if(sum == n) {
-			nemu_assert(n == 28);
-			k ++;
-		}
-	}
 
-	nemu_assert(k == 1);
 
 	HIT_GOOD_TRAP;
-
 	return 0;
 }
-
-
 
