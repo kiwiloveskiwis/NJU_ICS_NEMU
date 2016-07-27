@@ -1,20 +1,22 @@
 #include "trap.h"
 
-int A[10];
-int b;
+
+int cube(int n) {
+	return n * n * n;
+}
 
 int main() {
-	A[0] = -2;
-	A[1] = -1;
-	A[2] = 2;
-	A[3] = 3;
-	char c = 0xff;
-	b = A[3];
-	A[4] = b - A[1] + A[3] + A[0] + b - c;
+	int n, n2, n1, n0;
+	for(n = 100; n < 0x100; n ++) {
+		n2 = n / 100;
+		n1 = (n / 10) % 10;
+		n0 = n % 10;
 
-	nemu_assert(A[3] == 3);
-	nemu_assert(A[4] == 9);
-	nemu_assert(b == 3);
+		if(n == cube(n2) + cube(n1) + cube(n0)) {
+			nemu_assert(n == 153);
+		}
+	}
+
 
 	HIT_GOOD_TRAP;
 
