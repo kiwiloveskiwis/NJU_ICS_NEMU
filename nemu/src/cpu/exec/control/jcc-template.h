@@ -11,7 +11,6 @@
 		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); } \
 	return len + 1;}
 
-jcc_condition(ja, !cpu.CF && !cpu.ZF)
 
 jcc_condition(jae, !cpu.CF)
  
@@ -45,5 +44,7 @@ jcc_condition(jge, cpu.SF == cpu.OF)
  
 jcc_condition(jcxz, !cpu.ecx)
 
+
+jcc_condition(ja, !cpu.CF && !cpu.ZF)
 #include "cpu/exec/template-end.h"
 
