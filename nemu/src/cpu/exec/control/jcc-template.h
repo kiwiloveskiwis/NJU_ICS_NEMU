@@ -11,16 +11,7 @@
 	return len + 1;}
 
 #define instr ja
-make_helper(concat3(instr, _i_, SUFFIX)) { 
-	int len = concat(decode_i_, SUFFIX)(eip + 1); 
-	if(!cpu.CF && !cpu.ZF) { 
-		int shift = 32 - 8 * DATA_BYTE;
-		cpu.eip += ((int)op_src->val << shift) >> shift; 
-		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; 
-		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); 
-	}
-	return len + 1;	// "1" for opcode
-}
+jcc_condition(!cpu.CF && !cpu.ZF)
 #undef instr
 
 #define instr jae
