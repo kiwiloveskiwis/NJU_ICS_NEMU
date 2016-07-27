@@ -12,7 +12,7 @@ make_instr_helper(rm2r)
 
 #define instr movsb
 static void do_execute(){
-	int shift = DATA_BYTE - 8;
+	int shift = DATA_BYTE * 4 - 8;
 	DATA_TYPE result = op_src->val & 0xff;
 	result = ((result << shift) >> shift);
 	OPERAND_W(op_dest, result);
