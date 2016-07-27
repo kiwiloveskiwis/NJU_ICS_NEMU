@@ -1,13 +1,20 @@
 #include "cpu/exec/template-start.h"
 
-#define instr movzx
-
-//   1001c9:	0f b6 45 0c				movzbl 0xc(%ebp),%eax	string.c
-//   8048841:	0f b6 c0				movzbl %al,%eax
+#define instr movzw
 static void do_execute(){
-
-	OPERAND_W(op_dest, op_src->val);
+	int result = (int)op_src->val;
+	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
 make_instr_helper(rm2r) 
+#undef instr
+
+#define instr movzb
+static void do_execute(){
+	DATA_TYPE result = (DATA_TYPE)op_src->val;
+	OPERAND_W(op_dest, result);
+	print_asm_template2();
+}
+make_instr_helper(rm2r) 
+#undef instr
 #include "cpu/exec/template-end.h"
