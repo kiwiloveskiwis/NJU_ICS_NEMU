@@ -88,6 +88,7 @@ static int cmd_w(char *args) {
 	strcpy(newwp->str, args);
 	bool succ = true;
 	newwp->value = expr(newwp->str, &succ); 
+	printf("New watchpoint %d:\t value = 0x%x\n", newwp->NO, newwp->value);
 	if(succ) Log("Hardware watchpoint %d: %s",newwp->NO, args);
 	else {
 		Log("Unable to set watchpoint! Invalid expression.");
