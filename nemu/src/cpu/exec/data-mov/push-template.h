@@ -2,7 +2,7 @@
 
 #define instr push
 
-//  10014b:	ff 71 fc				pushl  -0x4(%ecx)	(push_m_v)
+//  10014b:	ff 71 fc				pushl  -0x4(%ecx)	(push_rm_v)
 //  100070:	55						push   %ebp			(push_r_v) passed
 //  100158:	6a 63					push   $0x63		(push_i_b)
 //  10015c:	68 80 12 10 00			push   $0x101280	(push_i_v)

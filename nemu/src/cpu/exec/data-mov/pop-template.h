@@ -4,13 +4,13 @@
 
 static void do_execute() {
 	DATA_TYPE top_of_stack = swaddr_read(cpu.esp, DATA_BYTE);
-	swaddr_write(op_src->addr, DATA_BYTE, top_of_stack);
+	OPERAND_W(op_dest, top_of_stack);
 	cpu.esp += DATA_BYTE;
 	print_asm_template1();
 }
 
 	make_instr_helper(r)
-	make_instr_helper(m)
+	make_instr_helper(rm)
 
 #include "cpu/exec/template-end.h"
 
