@@ -9,6 +9,7 @@
 #include "control/jcc.h"
 #include "control/jmp.h"
 #include "control/ret.h"
+#include "control/leave.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
