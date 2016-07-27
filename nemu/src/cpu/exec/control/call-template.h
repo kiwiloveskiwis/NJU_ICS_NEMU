@@ -4,8 +4,9 @@
 
 static void do_execute(){
 	 DATA_TYPE inc_adr = op_src->val ;
-	 cpu.eip += inc_adr;
 	 cpu.esp -= DATA_BYTE;
+	 swaddr_write(cpu.esp, DATA_BYTE, cpu.eip + DATA_BYTE + 1);
+	 cpu.eip += inc_adr;
 	 print_asm("call\t0x%x", cpu.eip + 1 + DATA_BYTE);
 }
 
