@@ -4,7 +4,7 @@
 
 
 int main() {
-	nemu_assert((strcat("a","b"), "ab") == 0);
+	nemu_assert(strcmp(strcat("a","b"), "ab") == 0);
 
 //passed
 
