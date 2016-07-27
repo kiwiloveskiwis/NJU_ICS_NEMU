@@ -7,6 +7,7 @@
 #include "control/call.h"
 #include "control/jcc.h"
 #include "control/jmp.h"
+#include "control/ret.h"
 
 #include "arith/dec.h"
 #include "arith/inc.h"
