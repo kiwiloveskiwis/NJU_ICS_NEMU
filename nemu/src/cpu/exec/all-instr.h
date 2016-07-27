@@ -27,6 +27,7 @@
 #include "arith/cmp.h"
 #include "arith/add.h"
 #include "arith/adc.h"
+#include "arith/cld.h"
 
 
 
