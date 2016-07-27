@@ -10,8 +10,8 @@ static void do_execute(){
 		print_asm("jmp\t$0x%x", cpu.eip + DATA_BYTE + 1);
 	} else { //reg or mem
 		int off;
-		if(op_src->type == OP_TYPE_REG) off = 3;
-		else off = 2;
+		if(op_src->type == OP_TYPE_REG) off = 2;
+		else off = 3;
 		cpu.eip = op_src->val - off;
 		print_asm("jmp $0x%x", cpu.eip + off);
 	}
