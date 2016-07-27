@@ -6,7 +6,7 @@ static void do_execute() {
 	int32_t a = reg_w(R_EAX);
 	int32_t b = op_src->val;
 	REG(R_EAX) = a / b;
-	if(a % b != 0) REG(R_EDX) = a % b;
+	REG(R_EDX) = a % b;
 
 	print_asm_template1();
 }
