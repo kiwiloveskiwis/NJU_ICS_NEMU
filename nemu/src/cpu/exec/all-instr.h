@@ -43,6 +43,7 @@
 #include "string/rep.h"
 #include "string/stos.h"
 #include "string/cmps.h"
+#include "string/movs.h"
 
 #include "misc/misc.h"
 
