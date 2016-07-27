@@ -11,7 +11,6 @@ int main() {
 		n2 = n / 100;
 		n1 = (n / 10) % 10;
 		n0 = n % 10;
-		nemu_assert(n==100);
 		if(n == cube(n2) + cube(n1) + cube(n0)) {
 			nemu_assert(n == 153);
 		}
