@@ -11,7 +11,7 @@ make_helper(concat3(instr, _, SUFFIX)) {
 		cpu.gpr[R_SI]._16 += inc;
 		cpu.gpr[R_DI]._16 += inc;
 	}
-	else {
+	else if (DATA_BYTE == 4) {
 		src = MEM_R(cpu.gpr[R_ESI]._32);
 		MEM_W(cpu.gpr[R_DI]._32, src);
 		cpu.gpr[R_SI]._32 += inc;
