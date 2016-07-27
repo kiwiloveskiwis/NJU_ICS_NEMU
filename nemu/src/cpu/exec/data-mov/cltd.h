@@ -9,6 +9,7 @@ make_helper(cltd) {
 	}else if(op_src->size == 32) {
 		cpu.edx = (cpu.eax < 0) ? 0xffffffff : 0;
 	}
+	print_asm("cltd");
 	return 1;
 
 }
