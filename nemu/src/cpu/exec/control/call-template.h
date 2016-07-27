@@ -5,7 +5,8 @@
 static void do_execute(){
 	 DATA_TYPE inc_adr = op_src->val ;
 	 cpu.eip += inc_adr;
-	 print_asm_template1();
+	 cpu.esp -= DATA_BYTE;
+	 print_asm("call %x", cpu.eip + 1 + DATA_BYTE);
 }
 
 make_instr_helper(i)
