@@ -13,6 +13,7 @@ static void do_execute(){
 		else cpu.eip = op_src->val - DATA_BYTE - 1;
 		// Check jmp !
 		print_asm("jmp $0x%x", cpu.eip + DATA_BYTE + 1);
+		if(op_src->type == OP_TYPE_REG) cpu.eip += 3;// check it!
 	}
 }
 
