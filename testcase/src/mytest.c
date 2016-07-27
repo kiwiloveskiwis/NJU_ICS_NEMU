@@ -14,6 +14,8 @@ char str1[] = "Hello";
 char str[20];
 
 int main() {
+	nemu_assert((strcat("a","b"), "ab") == 0);
+
 	nemu_assert(strcmp(s[0], s[2]) == 0);
 	nemu_assert(strcmp(s[0], s[1]) == -1);
 	nemu_assert(strcmp(s[0] + 1, s[1] + 1) == -1);
@@ -21,7 +23,6 @@ int main() {
 	nemu_assert(strcmp(s[0] + 3, s[1] + 3) == -1);
 	nemu_assert(strcmp( strcpy(str, str1), "Hello") == 0);
 //passed
-	nemu_assert((strcat("a","b"), "ab") == 0);
 
 	HIT_GOOD_TRAP;
 	return 0;
