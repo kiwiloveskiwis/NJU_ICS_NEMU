@@ -5,7 +5,7 @@ make_helper(concat3(instr, _, SUFFIX)) {
 	int inc;
 	DATA_TYPE src, dest;
 	inc = cpu.DF ? -DATA_BYTE : DATA_BYTE;
-	if(DATA_BYTE != 32) { // 8 or 16
+	if(DATA_BYTE != 4) { // 8 or 16
 		src = MEM_R(cpu.gpr[R_SI]._16);
 	   	dest = MEM_R(cpu.gpr[R_DI]._16);
 		cpu.gpr[R_SI]._16 += inc;
