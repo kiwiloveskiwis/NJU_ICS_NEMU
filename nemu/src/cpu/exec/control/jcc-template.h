@@ -7,10 +7,11 @@
 	int len = concat(decode_i_, SUFFIX)(eip + 1); \
 	if(condition) {  int shift = 32 - 8 * DATA_BYTE; \
 		cpu.eip += ((int)op_src->val << shift) >> shift; \
-		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
-		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); } \
+		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1;} \
+		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1);  \
 	return len + 1;}
 
+jcc_condition(ja, !cpu.CF && !cpu.ZF)
 
 jcc_condition(jae, !cpu.CF)
  
@@ -44,7 +45,5 @@ jcc_condition(jge, cpu.SF == cpu.OF)
  
 jcc_condition(jcxz, !cpu.ecx)
 
-
-jcc_condition(ja, !cpu.CF && !cpu.ZF)
 #include "cpu/exec/template-end.h"
 
