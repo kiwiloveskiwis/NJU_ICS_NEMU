@@ -48,6 +48,7 @@ static int cmd_info(char *args) {
 			printf("%s\t0x%x \n", regsl[i], cpu.gpr[i]._32);	
 		}
 		printf("eip\t0x%x\t \n", cpu.eip);
+		printf("CF\t%d\tPF\t%d\nZF\t%d\tSF\t%d\n",cpu.CF, cpu.PF, cpu.ZF, cpu.SF);
 	} else if (!strcmp(arg, "w")) {
 		dispWP();
 	}
