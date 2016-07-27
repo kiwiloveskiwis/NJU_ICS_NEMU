@@ -31,7 +31,6 @@ WP* new_wp(){
 	if(head != NULL) head->prev = temp;
 	head = temp;	 // the last watch point is set to be the head
 	head->prev = NULL;
-	printf("New watchpoint %d:\t value = 0x%x\n", temp->NO, temp->value);
 	return temp;
 }
 void free_wp(WP *wp) {
