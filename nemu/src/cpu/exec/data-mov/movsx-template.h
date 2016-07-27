@@ -14,7 +14,8 @@ make_instr_helper(rm2r)
 static void do_execute(){
 	int shift = 24;
 	DATA_TYPE result = op_src->val & 0xff;
-	result = ((result << shift) >> shift);
+	result <<= shift;
+	result >>= shift;
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
