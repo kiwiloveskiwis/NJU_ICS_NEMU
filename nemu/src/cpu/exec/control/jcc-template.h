@@ -1,8 +1,9 @@
 #include "cpu/exec/template-start.h"
 
 // WATCH OUT!!! do_execute() can't be redefined
+// Problem : Why cmpl $0xc,0x8(%ebp) ???
 #define STR(x) #x
-#define jcc_condition(condition) make_helper(concat3(instr, _i_, SUFFIX)) { \
+#define jcc_condition(instr, condition) make_helper(concat3(instr, _i_, SUFFIX)) { \
 	int len = concat(decode_i_, SUFFIX)(eip + 1); \
 	if(condition) {  int shift = 32 - 8 * DATA_BYTE; \
 		cpu.eip += ((int)op_src->val << shift) >> shift; \
@@ -10,73 +11,39 @@
 		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); } \
 	return len + 1;}
 
-#define instr ja
-jcc_condition(!cpu.CF && !cpu.ZF)
-#undef instr
+jcc_condition(ja, !cpu.CF && !cpu.ZF)
 
-#define instr jae
-jcc_condition(!cpu.CF)
-#undef instr
+jcc_condition(jae, !cpu.CF)
  
-#define instr jb
-jcc_condition(cpu.CF)
-#undef instr
+jcc_condition(jb, cpu.CF)
  
-#define instr jbe
-jcc_condition(cpu.CF || cpu.ZF)
-#undef instr
+jcc_condition(jbe, cpu.CF || cpu.ZF)
  
-#define instr je
-jcc_condition(cpu.ZF)
-#undef instr
+jcc_condition(je, cpu.ZF)
 
-#define instr jo
-jcc_condition(cpu.OF)
-#undef instr
+jcc_condition(jo, cpu.OF)
  
-#define instr jno
-jcc_condition(!cpu.OF)
-#undef instr
+jcc_condition(jno, !cpu.OF)
  
-#define instr jne
-jcc_condition(!cpu.ZF)
-#undef instr
+jcc_condition(jne, !cpu.ZF)
  
-#define instr js
-jcc_condition(cpu.SF)
-#undef instr
+jcc_condition(js, cpu.SF)
  
-#define instr jns
-jcc_condition(!cpu.SF)
-#undef instr
+jcc_condition(jns, !cpu.SF)
  
-#define instr jp
-jcc_condition(cpu.PF)
-#undef instr
+jcc_condition(jp, cpu.PF)
  
-#define instr jnp
-jcc_condition(!cpu.PF)
-#undef instr
+jcc_condition(jnp, !cpu.PF)
  
-#define instr jl
-jcc_condition(cpu.SF != cpu.OF)
-#undef instr
+jcc_condition(jl, cpu.SF != cpu.OF)
  
-#define instr jle
-jcc_condition((cpu.SF != cpu.OF) || cpu.ZF)
-#undef instr
+jcc_condition(jle, (cpu.SF != cpu.OF) || cpu.ZF)
  
-#define instr jg
-jcc_condition(!cpu.ZF && cpu.SF == cpu.OF)
-#undef instr
+jcc_condition(jg, !cpu.ZF && cpu.SF == cpu.OF)
  
-#define instr jge
-jcc_condition(cpu.SF == cpu.OF)
-#undef instr
+jcc_condition(jge, cpu.SF == cpu.OF)
  
-#define instr jcxz
-jcc_condition(!cpu.ecx)
-#undef instr
+jcc_condition(jcxz, !cpu.ecx)
 
 #include "cpu/exec/template-end.h"
 
