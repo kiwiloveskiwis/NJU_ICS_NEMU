@@ -5,10 +5,11 @@
 #define STR(x) #x
 #define jcc_condition(instr, condition) make_helper(concat3(instr, _i_, SUFFIX)) { \
 	int len = concat(decode_i_, SUFFIX)(eip + 1); \
-	if(condition) {  int shift = 32 - 8 * DATA_BYTE; \
-		cpu.eip += ((int)op_src->val << shift) >> shift; \
-		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1;} \
-		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1);  \
+	int shift = 32 - 8 * DATA_BYTE; \
+	int new_eip = cpu.eip + (((int)op_src->val << shift) >> shift); \
+	if(DATA_BYTE == 2) new_eip = ((new_eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
+	if(condition) cpu.eip = new_eip;\
+	print_asm("%s\t$0x%x",str(instr), new_eip + DATA_BYTE + 1);  \
 	return len + 1;}
 
 jcc_condition(ja, !cpu.CF && !cpu.ZF)
