@@ -17,6 +17,7 @@ make_helper(concat3(instr, _, SUFFIX)) {
 		cpu.gpr[R_SI]._32 += inc;
 		cpu.gpr[R_DI]._32 += inc;
 	}
+	print_asm("movs %%ds:(%%esi),%%es:(%%edi)");
 	return 1;
 }
 #include "cpu/exec/template-end.h"
