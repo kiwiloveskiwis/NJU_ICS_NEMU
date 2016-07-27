@@ -1,15 +1,16 @@
 #include "cpu/exec/template-start.h"
 
+// WATCH OUT!!! do_execute() can't be redefined
 #define STR(x) #x
-#define jcc_condition(condition) static void do_execute() {\
-	if(condition) { int shift = 32 - 8 * DATA_BYTE;\
+#define jcc_condition(condition) make_helper(concat3(instr, _i_, SUFFIX)) { \
+	int len = concat(decode_i_, SUFFIX)(eip + 1); \
+	if(condition) {  int shift = 32 - 8 * DATA_BYTE; \
 		cpu.eip += ((int)op_src->val << shift) >> shift; \
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1; \
-		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); }}\
-	make_instr_helper(i)
+		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); } \
+	return len + 1;}
 
 #define instr ja
-// WATCH OUT!!! do_execute() can't be redefined
 make_helper(concat3(instr, _i_, SUFFIX)) { 
 	int len = concat(decode_i_, SUFFIX)(eip + 1); 
 	if(!cpu.CF && !cpu.ZF) { 
@@ -19,7 +20,6 @@ make_helper(concat3(instr, _i_, SUFFIX)) {
 		print_asm("%s\t$0x%x",str(instr), cpu.eip + DATA_BYTE + 1); 
 	}
 	return len + 1;	// "1" for opcode
-
 }
 #undef instr
 
