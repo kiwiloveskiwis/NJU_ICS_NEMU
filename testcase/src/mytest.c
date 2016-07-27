@@ -1,31 +1,32 @@
 #include "trap.h"
 
-#define N 20
-
-struct dummy {
-	int pad1[N];
-	char pad2[N];
-} d;
-
-struct dummy fun(struct dummy a) {
-	return a;
-}
-
+int A[10];
+int b;
+char C[10];
 int main() {
-	int i;
-	for(i = 0; i < N; i ++) {
-		d.pad1[i] = i + 128;
-		d.pad2[i] = i;
-	}
+	A[0] = 0;
+	A[1] = 1;
+	A[2] = 2;
+	A[3] = 3;
+	A[4] = 4;
 
-	struct dummy t = fun(d);
-
-	for(i = 0; i < N; i ++) {
-		nemu_assert(t.pad1[i] == i + 128);
-		nemu_assert(t.pad2[i] == i);
-	}
-
-	nemu_assert(i == N);
+	b = A[3];
+	A[5] = b;
+	C[0] = 'a';
+	nemu_assert(C[0] == 'a');
+	C[1] = C[0];
+	nemu_assert(C[1] == 'a');
+	A[0] = (int)C[0];
+	nemu_assert(A[0] == 'a');
+	C[1] = 0x80;
+	A[0] = (int)C[1];
+	nemu_assert(A[1] == 1);
+	nemu_assert(A[2] == 2);
+	nemu_assert(A[3] == 3);
+	nemu_assert(A[4] == 4);
+	nemu_assert(b == 3);
+	nemu_assert(A[5] == 3);
+	nemu_assert(C[1] == 0xffffff80);
 
 	HIT_GOOD_TRAP;
 
