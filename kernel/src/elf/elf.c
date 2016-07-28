@@ -38,6 +38,7 @@ uint32_t loader() {
 	int i = 0;
 	ph = (Elf32_Phdr *) elf + elf->e_phoff;
 	for(; i < elf->e_phnum; i++, ph++) {
+		assert(0);
 		/* Scan the program header table, load each segment into memory */
 		/*  Like this:
 		 * Program Headers:
