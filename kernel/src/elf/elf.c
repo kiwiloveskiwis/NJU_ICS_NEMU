@@ -38,7 +38,6 @@ uint32_t loader() {
 	int i = 0;
 	ph = (Elf32_Phdr *) elf + elf->e_phoff;
 	for(; i < elf->e_phnum; i++, ph++) {
-		assert(0);
 		/* Scan the program header table, load each segment into memory */
 		/*  Like this:
 		 * Program Headers:
@@ -48,7 +47,7 @@ uint32_t loader() {
 		 *   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10  
 		 */
 		if(ph->p_type == PT_LOAD) {
-			assert( i < 10);
+		assert(0);
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
