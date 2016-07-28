@@ -47,7 +47,7 @@ uint32_t loader() {
 		 *   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10  
 		 */
 		if(ph->p_type == PT_LOAD) {
-
+			assert( i < 10);
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
