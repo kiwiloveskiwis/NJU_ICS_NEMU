@@ -1,12 +1,9 @@
 #include "trap.h"
 
-int A[10];
-int b;
-char C[10];
 int main() {
-	C[1] = 0x80;
-	A[0] = (int)C[1];
-	nemu_assert(A[0] == 0xffffff80);
+	long long a = -1364082006;
+	long long ans = 1860719719092984036LL;
+	nemu_assert(a * a == ans);
 
 	HIT_GOOD_TRAP;
 
