@@ -19,6 +19,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	int sign = 1 * (a < 0) * (b < 0);
 	a = Fabs(a);
 	b = Fabs(b);
+	nemu_assert( b != 0);
 	FLOAT result = a / b;
 	int i = 0;
 	for (i = 0; i < 16; i++) {
