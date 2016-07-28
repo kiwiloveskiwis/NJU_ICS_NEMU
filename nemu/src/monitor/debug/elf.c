@@ -23,7 +23,7 @@ void printsh() {
 	int i = 0;
 	for (; i < nr_symtab_entry; i ++) {
 		Log("%s", strtab + symtab[i].st_name);
-		Log("%s", strtab + symtab[i].st_value);
+		Log("%x",  symtab[i].st_value);
 	}
 }
 
