@@ -7,10 +7,15 @@
 //  100158:	6a 63					push   $0x63		(push_i_b)
 //  10015c:	68 80 12 10 00			push   $0x101280	(push_i_v)
 static void do_execute() {
-
-	if(DATA_BYTE == 1) cpu.esp -= 4;
-	else cpu.esp -= DATA_BYTE;
-	swaddr_write(cpu.esp, DATA_BYTE, op_src->val);
+	if(DATA_BYTE == 1) {
+		cpu.esp -= 4;
+		swaddr_write(cpu.esp, 4, (int32_t) op_src->val);		
+	}
+	// WATCH OUT!
+	else {
+		cpu.esp -= DATA_BYTE;
+		swaddr_write(cpu.esp, DATA_BYTE, op_src->val);
+	}
 	print_asm_template1();
 }
 
