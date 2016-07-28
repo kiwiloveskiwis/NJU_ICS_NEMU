@@ -36,7 +36,7 @@ uint32_t loader() {
 
 	/* Load each program segment */
 	int i = 0;
-	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff);
+	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff); // NOT elf + elf->e_phoff!!!
 	for(; i < elf->e_phnum; i++, ph++) {
 		/* Scan the program header table, load each segment into memory */
 		/*  Like this:
@@ -47,7 +47,6 @@ uint32_t loader() {
 		 *   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10  
 		 */
 		if(ph->p_type == PT_LOAD) {
-		assert(0);
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
