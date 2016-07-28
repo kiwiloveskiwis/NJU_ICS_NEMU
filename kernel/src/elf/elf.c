@@ -29,16 +29,12 @@ uint32_t loader() {
 #endif
 
 	elf = (void*)buf;
-
-	nemu_assert(0);
 	/* TODO: fix the magic number with the correct one */
-	char magic[4] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
-	const uint32_t elf_magic = *magic;
+	const uint32_t elf_magic = 0x464c457f; // all the same for exec in testcases
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
-	panic("please implement me");
 	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {

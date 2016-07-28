@@ -37,8 +37,10 @@ static int cmd_bt(char *args) {
 
 #define readoff(off) swaddr_read(current_ebp + off, 4)
 	while(current_ebp) {
-		printf("#%d\t 0x%x\t ", index++, readoff(4));
-		printf("Stored: %x %x %x %x \n", readoff(8), readoff(12), readoff(16), readoff(20));
+		if(current_ebp + 20 < 0x8000000) {
+			printf("#%d\t 0x%x\t ", index++, readoff(4));
+			printf("Stored: %x %x %x %x \n", readoff(8), readoff(12), readoff(16), readoff(20));
+		}
 		current_ebp = swaddr_read(current_ebp, 4);
 		if(index >= 10) {
 			Log("BackTrace overflow!");
