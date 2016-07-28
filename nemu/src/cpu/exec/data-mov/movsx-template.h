@@ -15,7 +15,7 @@ static void do_execute(){
 	int shift = 32 - DATA_BYTE * 8;
 	DATA_TYPE result = op_src->val & 0xff;
 	result = ((result << shift) >> shift);
-	Log("%x", result);
+	Log("%x" str(DATA_TYPE), result );
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
