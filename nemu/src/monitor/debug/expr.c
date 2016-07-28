@@ -8,7 +8,7 @@
 #include <stdlib.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR, NEG
+	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR, NEG, VAR
 
 	/* TODO: Add more token types */
 
@@ -37,6 +37,7 @@ static struct rule {
 	{"&&", AND},
 	{"\\|{2}",OR},
 	{"0x[0-9a-fA-F]+", HEX},
+	{"[a-zA-z_][_a-zA-z0-9]+", VAR},
 	{"[0-9]+", DEC}
 	
 };
@@ -115,6 +116,11 @@ static bool make_token(char *e) {
 								  }
 								  nr_token++;
 								  break;
+					case VAR :	
+								  tokens[nr_token].type = rules[i].token_type;
+								  memcpy(tokens[nr_token].str, substr_start, substr_len - 1 );
+								  nr_token++;
+								  break;
 					case REG : 
 								  tokens[nr_token].type = rules[i].token_type;
 								  memcpy(tokens[nr_token].str, substr_start + 1, substr_len - 1 );
@@ -180,6 +186,8 @@ uint32_t eval(uint32_t p, uint32_t q) {
 			case HEX : 
 					   sscanf(tempstr, "%x", &temp);
 					   return temp;
+			case VAR : panic("implement meee!");
+						
 			case REG :
 					   for(temp = R_EAX; temp <= R_EDI; temp++) {
 						   if(!strcmp(tempstr, regsl[temp])) return cpu.gpr[temp]._32;

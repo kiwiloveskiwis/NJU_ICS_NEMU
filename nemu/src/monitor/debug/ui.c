@@ -1,5 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/expr.h"
+#include "common.h"
+
 #include "monitor/watchpoint.h"
 #include "nemu.h"
 
@@ -8,6 +10,7 @@
 #include <readline/history.h>
 
 void cpu_exec(uint32_t);
+void printsh();
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
 char* rl_gets() {
@@ -150,6 +153,7 @@ static int cmd_help(char *args) {
 }
 
 void ui_mainloop() {
+	printsh();
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);

@@ -52,7 +52,7 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := obj/testcase/integral
+USERPROG := obj/testcase/add
 ENTRY := $(USERPROG)
 
 entry: $(ENTRY)
@@ -62,6 +62,9 @@ run: $(nemu_BIN) $(USERPROG) entry
 	$(call git_commit, "run")
 	$(nemu_BIN) $(USERPROG)
 
+r: $(nemu_BIN) $(USERPROG) entry
+	$(nemu_BIN) $(USERPROG)
+	
 gdb: $(nemu_BIN) $(USERPROG) entry
 	$(call git_commit, "gdb")
 	gdb -s $(nemu_BIN) --args $(nemu_BIN) $(USERPROG)
