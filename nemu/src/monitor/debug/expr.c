@@ -120,6 +120,7 @@ static bool make_token(char *e) {
 								  nr_token++;
 								  break;
 					case VAR :	
+								  sprintf(tokens[nr_token].str, "%.*s", substr_len, substr_start);
 								  tokens[nr_token].type = rules[i].token_type;
 								  memcpy(tokens[nr_token].str, substr_start, substr_len - 1 );
 								  nr_token++;

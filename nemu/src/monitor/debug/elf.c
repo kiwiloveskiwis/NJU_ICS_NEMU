@@ -25,7 +25,7 @@ uint32_t find_var_addr(char * name, bool *succ) {
 void printsh() {
 	int i = 0;
 	for (; i < nr_symtab_entry; i ++) {
-		Log("%s\t0x%x", strtab + symtab[i].st_name, symtab[i].st_value);
+		Log("%s\t\t0x%x", strtab + symtab[i].st_name, symtab[i].st_value);
 	}
 }
 
