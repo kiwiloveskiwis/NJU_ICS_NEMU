@@ -16,6 +16,7 @@ static make_helper(_2byte_esc);
 		m.val = instr_fetch(eip + 1, 1); \
 		return concat(opcode_table_, name) [m.opcode](eip); \
 	}
+
 //When using a group, read next byte as the ModR/M byte	
 /* 0x80 */
 make_group(group1_b,
@@ -195,10 +196,10 @@ helper_fun _2byte_opcode_table [256] = {
 /* 0x84 */	je_i_v, jne_i_v, jbe_i_v, ja_i_v,
 /* 0x88 */	js_i_v, jns_i_v, jp_i_v, jnp_i_v,
 /* 0x8c */	jl_i_v, jge_i_v, jle_i_v, jg_i_v, 
-/* 0x90 */	inv, inv, inv, inv,
-/* 0x94 */	inv, inv, inv, inv,
-/* 0x98 */	inv, inv, inv, inv, 
-/* 0x9c */	inv, inv, inv, inv, 
+/* 0x90 */	seto_b, setno_b, setb_b, setae_b,
+/* 0x94 */	sete_b, setne_b, setbe_b, seta_b,
+/* 0x98 */	sets_b, setns_b, setp_b, setnp_b, 
+/* 0x9c */	setl_b, setge_b, setle_b, setg_b, 
 /* 0xa0 */	inv, inv, inv, inv, 
 /* 0xa4 */	inv, inv, inv, inv,
 /* 0xa8 */	inv, inv, inv, inv,

@@ -1,23 +1,34 @@
 #include "FLOAT.h"
 
+typedef union{ // little-endian!!
+	struct{
+		uint32_t frac   :   23 ;
+		uint32_t exp    :   8 ;
+		uint32_t sign   :   1 ;
+
+	};
+}myfloat;
+
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	nemu_assert(0);
-	return 0;
+	return (long long) a * b >> 16;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-	nemu_assert(0);
-	return 0;
+	long long result = a << 16 / b;
+	return (FLOAT) result;
 }
 
 FLOAT f2F(float a) {
-	nemu_assert(0);
-	return 0;
+	myfloat a = * (myfloat *) &s;
+	int exp = (a.exp == 0) ? -(0x7f - 1) : a.exp - 0x7f;	
+	unsigned significand = a.exp == 0 ? a.frac : a.frac + (1 << 23);
+	FLOAT x = ((significand << exp) >> 23) << 16;
+	x &= 0x7fffffff;
+	return a.sign? -x : x;
 }
 
 FLOAT Fabs(FLOAT a) {
-	nemu_assert(0);
-	return 0;
+	return (a >= 0) ? a: -a;
 }
 
 FLOAT sqrt(FLOAT x) {
@@ -43,4 +54,5 @@ FLOAT pow(FLOAT x, FLOAT y) {
 
 	return t;
 }
+
 
