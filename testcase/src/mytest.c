@@ -13,7 +13,7 @@ long long ans[] = { 1860719719092984036LL, -1579188499418773362LL, 2758992986934
 
 int main() {
 	long long b = 1860719719092984036LL;
-	nemu_assert(mul(a[0], a[0]) == b);
+	nemu_assert(mul(-1364082006, -1364082006) == b);
 //	nemu_assert(mul(a[0], a[0]) == ans[0]);
 	
 	HIT_GOOD_TRAP;
