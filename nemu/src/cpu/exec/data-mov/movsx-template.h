@@ -18,6 +18,8 @@ static void do_execute(){
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
+#if instr == movsb
 make_instr_helper(rm2r) 
+#endif
 #undef instr
 #include "cpu/exec/template-end.h"
