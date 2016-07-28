@@ -19,7 +19,16 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	int sign = (a < 0) ^ (b < 0);
 	a = Fabs(a);
 	b = Fabs(b);
-	int result = a / b;
+	FLOAT result = a / b;
+	int i = 0;
+	for (i = 0; i < 16; i++) {
+		a <<= 1;
+		result <<= 1;
+		if (a >= b) {
+			a -= b;
+			result++;
+		}
+	}
 	return sign * result;
 }
 
