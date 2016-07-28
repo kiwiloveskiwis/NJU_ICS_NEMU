@@ -77,7 +77,7 @@ void init_cond() {
 	/* Write some test data to the video memory. */
 	video_mapping_write_test();
 #endif
-
+	asm volatile("jmp *%0" : : "r"(init_cond));
 	/* Load the program. */
 	uint32_t eip = loader();
 	
