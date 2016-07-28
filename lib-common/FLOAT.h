@@ -14,8 +14,7 @@ static inline FLOAT int2F(int a) {
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int b) {
-	int c = a * b;
-	return c;
+	return a * b;
 }
 
 static inline FLOAT F_div_int(FLOAT a, int b) {
