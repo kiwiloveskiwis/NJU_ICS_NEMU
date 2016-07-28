@@ -23,8 +23,7 @@ uint32_t find_var_addr(char * name) {
 void printsh() {
 	int i = 0;
 	for (; i < nr_symtab_entry; i ++) {
-		Log("%s", strtab + symtab[i].st_name);
-		Log("%x",  symtab[i].st_value);
+		Log("%s\t0x%x", strtab + symtab[i].st_name, symtab[i].st_value);
 	}
 }
 
