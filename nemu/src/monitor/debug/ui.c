@@ -33,9 +33,9 @@ char* rl_gets() {
 static int cmd_bt(char *args) {
 	int index = 0;
 	int current_ebp = cpu.ebp;
-	printf("%d\t 0x%x (current eip)", index++, cpu.eip);
+	printf("%d\t 0x%x (current eip)\n", index++, cpu.eip);
 	while(current_ebp) {
-		printf("%d\t 0x%x ", index++, swaddr_read(cpu.ebp + 4, 4));
+		printf("%d\t 0x%x \n", index++, swaddr_read(cpu.ebp + 4, 4));
 		current_ebp = swaddr_read(cpu.ebp, 4);
 	}	
 
