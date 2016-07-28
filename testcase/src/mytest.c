@@ -17,10 +17,6 @@ int main() {
 		
 
 		nemu_assert(mul(a[0], a[0]) == ans[0]);
-			nemu_assert(mul(a[0], a[1]) == ans[1]);
-				nemu_assert(mul(a[0], a[2]) == ans[2]);
-					nemu_assert(mul(a[0], a[3]) == ans[3]);
-						nemu_assert(mul(a[1], a[1]) == ans[4]);
 							
 						/* nemu_assert(loop == NR_DATA * (NR_DATA + 1) / 2);
 						 * */
