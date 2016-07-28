@@ -1,5 +1,7 @@
 #include "FLOAT.h"
 
+typedef unsigned int uint32_t;
+
 typedef union{ // little-endian!!
 	struct{
 		uint32_t frac   :   23 ;
@@ -18,7 +20,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	return (FLOAT) result;
 }
 
-FLOAT f2F(float a) {
+FLOAT f2F(float s) {
 	myfloat a = * (myfloat *) &s;
 	int exp = (a.exp == 0) ? -(0x7f - 1) : a.exp - 0x7f;	
 	unsigned significand = a.exp == 0 ? a.frac : a.frac + (1 << 23);
