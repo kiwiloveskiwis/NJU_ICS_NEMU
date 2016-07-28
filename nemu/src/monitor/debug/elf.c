@@ -9,14 +9,21 @@ static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
 void printsh();
 
-void find_var_addr(char * name) {
-	return ;
+uint32_t find_var_addr(char * name) {
+	int i = 0;
+	for (; i < nr_symtab_entry; i ++) {
+		if(!strcmp(name, strtab + symtab[i].st_name)){
+			return symtab[i].st_value;
+		}
+	}
+	return 0;
 }
 
 void printsh() {
 	int i = 0;
 	for (; i < nr_symtab_entry; i ++) {
 		Log("%s", strtab + symtab[i].st_name);
+		Log("%s", strtab + symtab[i].st_value);
 	}
 }
 
