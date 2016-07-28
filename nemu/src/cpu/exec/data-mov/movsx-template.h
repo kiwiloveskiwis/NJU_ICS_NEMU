@@ -13,7 +13,7 @@ make_instr_helper(rm2r)
 #define instr movsb
 static void do_execute(){
 	DATA_TYPE result = op_src->val & 0xff;
-	if(result >> 31) result |= 0xffffff00;
+	if(result >> 7) result |= 0xffffff00;
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
