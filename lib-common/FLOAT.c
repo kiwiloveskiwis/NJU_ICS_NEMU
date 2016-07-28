@@ -20,13 +20,16 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 	return (FLOAT) result;
 }
 
-FLOAT f2F(float s) {
-	myfloat a = * (myfloat *) &s;
-	int exp = (a.exp == 0) ? -(0x7f - 1) : a.exp - 0x7f;	
-	unsigned significand = a.exp == 0 ? a.frac : a.frac + (1 << 23);
-	FLOAT x = ((significand << exp) >> 23) << 16;
-	x &= 0x7fffffff;
-	return a.sign? -x : x;
+FLOAT f2F(float a) {
+	uint32_t af = *(uint32_t *)&a;
+	uint32_t sign = af >> 31;
+	int exp = (af >> 23) & 0xff;
+	uint32_t sig = af & 0x7fffff;
+	if (exp != 0) sig += 1 << 23;
+	exp -= 150;
+	if (exp < -16) sig >>= -16 - exp;
+	if (exp > -16) sig <<= exp + 16;
+	return sign == 0 ? sig : -sig;
 }
 
 FLOAT Fabs(FLOAT a) {
