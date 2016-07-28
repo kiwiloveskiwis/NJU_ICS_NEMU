@@ -59,7 +59,7 @@ entry: $(ENTRY)
 	objcopy -S -O binary $(ENTRY) entry
 
 run: $(nemu_BIN) $(USERPROG) entry
-	$(call git_commit, "run")
+	$(call git_commit, "PA2 period 3 finished :D")
 	$(nemu_BIN) $(USERPROG)
 
 	

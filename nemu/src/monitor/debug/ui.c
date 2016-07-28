@@ -34,6 +34,7 @@ static int cmd_bt(char *args) {
 	int index = 0;
 	int current_ebp = cpu.ebp;
 	printf("#%d\t 0x%x (current eip) \n", index++, cpu.eip);
+
 #define readoff(off) swaddr_read(current_ebp + off, 4)
 	while(current_ebp) {
 		printf("#%d\t 0x%x\t ", index++, readoff(4));
