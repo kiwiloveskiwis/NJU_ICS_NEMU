@@ -30,6 +30,17 @@ char* rl_gets() {
 
 	return line_read;
 }
+static int cmd_bt(char *args) {
+	int index = 0;
+	int current_ebp = cpu.ebp;
+	printf("%d\t 0x%x (current eip)", index++, cpu.eip);
+	while(current_ebp) {
+		printf("%d\t 0x%x ", index++, swaddr_read(cpu.ebp + 4, 4));
+		current_ebp = swaddr_read(cpu.ebp, 4);
+	}	
+
+	return 0;
+}	
 
 static int cmd_c(char *args) {
 	cpu_exec(-1);
@@ -116,10 +127,11 @@ static struct {
 	int (*handler) (char *);
 } cmd_table [] = {
 	{ "help", "Display informations about all supported commands", cmd_help },
+	{ "info", "Print information(r/w)", cmd_info}, 
+	{ "si", "Execute one machine instruction", cmd_si},
+	{ "bt", "Print backtrace of all stack frames", cmd_bt},
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-	{ "si", "Execute one machine instruction", cmd_si},
-	{ "info", "Print information(r/w)", cmd_info}, 
 	{ "x", "Examine memory: x LENGTH ADDRESS.", cmd_x},
 	{ "p", "Print value of expression EXP.", cmd_p},
 	{ "w", "Set a watchpoint for an expression EXP.", cmd_w},
