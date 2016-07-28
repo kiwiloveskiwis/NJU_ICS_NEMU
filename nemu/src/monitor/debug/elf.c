@@ -16,7 +16,7 @@ void find_var_addr(char * name) {
 void printsh() {
 	int i = 0;
 	for (; i < nr_symtab_entry; i ++) {
-		Log("%c", symtab[i].st_name);
+		Log("%s", strtab + symtab[i].st_name);
 	}
 }
 
