@@ -8,15 +8,17 @@ static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
 void printsh();
-uint32_t find_var_addr(char * name);
+uint32_t find_var_addr(char * name, bool *succ);
 
-uint32_t find_var_addr(char * name) {
+uint32_t find_var_addr(char * name, bool *succ) {
 	int i = 0;
 	for (; i < nr_symtab_entry; i ++) {
-		if(!strcmp(name, strtab + symtab[i].st_name)){
+		if(!strcmp(name, strtab + symtab[i].st_name)){ // strtab = base addr
+			*succ = true;
 			return symtab[i].st_value;
 		}
 	}
+	*succ = false;
 	return 0;
 }
 

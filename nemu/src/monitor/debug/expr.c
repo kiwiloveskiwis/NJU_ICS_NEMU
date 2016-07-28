@@ -8,7 +8,8 @@
 #include <regex.h>
 #include <stdlib.h>
 
-extern uint32_t find_var_addr(char * name);
+extern uint32_t find_var_addr(char * name, bool* succ);
+
 enum {
 	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR, NEG, VAR
 
@@ -183,13 +184,16 @@ uint32_t eval(uint32_t p, uint32_t q) {
 	else if (p == q) {
 		int temp = 0;
 		char * tempstr = tokens[p].str;
+		bool succ;
 		switch (tokens[p].type) {
 			case DEC : return atoi(tokens[p].str);
 			case HEX : 
 					   sscanf(tempstr, "%x", &temp);
 					   return temp;
-			case VAR : 
-					   return find_var_addr(tempstr);
+			case VAR :	succ = true; 
+						uint32_t addr = find_var_addr(tempstr, &succ);
+						if (!succ) Log("Varable Not Found!");
+						return addr;
 			case REG :
 					   for(temp = R_EAX; temp <= R_EDI; temp++) {
 						   if(!strcmp(tempstr, regsl[temp])) return cpu.gpr[temp]._32;
