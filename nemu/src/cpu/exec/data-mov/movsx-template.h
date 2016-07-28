@@ -14,12 +14,11 @@ make_instr_helper(rm2r)
 static void do_execute(){
 	int shift = 32 - DATA_BYTE * 8;
 	DATA_TYPE result = op_src->val & 0xff;
+	Log("%d", result);
 	result = ((result << shift) >> shift);
 	OPERAND_W(op_dest, result);
 	print_asm_template2();
 }
-#if instr == movsb
 make_instr_helper(rm2r) 
-#endif
 #undef instr
 #include "cpu/exec/template-end.h"
