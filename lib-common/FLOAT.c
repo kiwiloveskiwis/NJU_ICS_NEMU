@@ -12,12 +12,15 @@ typedef union{ // little-endian!!
 }myfloat;
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	return (unsigned long long) a * b >> 16;
+	return (unsigned long long) (a * b ) >> 16;
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-	unsigned long long result = a << 16 / b;
-	return (FLOAT) result;
+	int sign = (a < 0) ^ (b < 0);
+	a = Fabs(a);
+	b = Fabs(b);
+	int result = a / b;
+	return sign * result;
 }
 
 FLOAT f2F(float s) {
