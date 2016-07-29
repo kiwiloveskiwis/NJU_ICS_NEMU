@@ -55,7 +55,7 @@ uint32_t loader() {
 			//	n=n<(ph->p_filesz-data_loaded)?n:ph->p_filesz-data_loaded;
 				if((ph->p_filesz-data_loaded)<n)
 					n=ph->p_filesz-data_loaded;
-				ide_read((void *)(pagebuf+offset),ELF_OFFSET_IN_DISK+ph->p_offset+data_loaded,n);
+				ramdisk_read((void *)(pagebuf+offset),ELF_OFFSET_IN_DISK+ph->p_offset+data_loaded,n);
 				memcpy((void *)addr,pagebuf,4096);
 				va+=4096;
 				data_loaded+=n;
