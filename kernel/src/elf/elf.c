@@ -21,7 +21,7 @@ uint32_t loader() {
 	Elf32_Phdr *ph = NULL;
 
 	uint8_t buf[4096];
-	uint8_t pagebuf[4096];
+
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
@@ -29,46 +29,31 @@ uint32_t loader() {
 #endif
 
 	elf = (void*)buf;
-
 	/* TODO: fix the magic number with the correct one */
-	const uint32_t elf_magic = 0x464c457f;
+	const uint32_t elf_magic = 0x464c457f; // all the same for exec in testcases
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
 
 	/* Load each program segment */
-	//panic("please implement me");
-	unsigned i;
-	for(i=0;i<elf->e_phnum;i++ ) {
+	int i = 0;
+	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff); 
+	for(; i < elf->e_phnum; i++, ph++) {
 		/* Scan the program header table, load each segment into memory */
-		ph=(void *)buf+elf->e_phoff+elf->e_phentsize*i;
+			mm_malloc(ph->p_vaddr, ph->p_memsz);
 		if(ph->p_type == PT_LOAD) {
-			uint32_t va=ph->p_vaddr;
-			uint32_t data_loaded=0;
-			while(va<(ph->p_vaddr+ph->p_memsz))
-			{
-				uint32_t offset=va&0xfff;
-				va=va&0xfffff000;
-				uint32_t addr=mm_malloc(va,4096);
-				memset(pagebuf,0,4096);
-
-				uint32_t n=4096-offset;
-			//	n=n<(ph->p_filesz-data_loaded)?n:ph->p_filesz-data_loaded;
-				if((ph->p_filesz-data_loaded)<n)
-					n=ph->p_filesz-data_loaded;
-				ramdisk_read((void *)(pagebuf+offset),ELF_OFFSET_IN_DISK+ph->p_offset+data_loaded,n);
-				memcpy((void *)addr,pagebuf,4096);
-				va+=4096;
-				data_loaded+=n;
-			}
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
-		//memcpy((void *)ph->p_vaddr,(void *)ph->p_offset,ph->p_filesz);	 
+			 
+			set_bp();
+			ramdisk_read((uint8_t *)ph->p_vaddr, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);  
+			
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
-			 */ 
+			 */
+			memset((void *)(ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
-		//memset((void *)(ph->p_vaddr+ph->p_filesz),0,ph->p_memsz-ph->p_filesz);
+
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
 			extern uint32_t brk;
@@ -92,4 +77,3 @@ uint32_t loader() {
 
 	return entry;
 }
-
