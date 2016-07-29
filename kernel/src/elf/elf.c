@@ -34,33 +34,40 @@ uint32_t loader() {
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
 
-	uint32_t ph_size = elf->e_phentsize*elf->e_phnum;
-	ph=(void *) elf + elf->e_phoff;
-
-	while (ph != ((void*)elf + (elf->e_phoff+ph_size))) {
+	/* Load each program segment */
+	int i = 0;
+	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff); // NOT elf + elf->e_phoff!!!
+	for(; i < elf->e_phnum; i++, ph++) {
 		/* Scan the program header table, load each segment into memory */
+		/*  Like this:
+		 * Program Headers:
+		 *   Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+		 *   LOAD           0x001000 0x00100000 0x00100000 0x00118 0x00118 R E 0x1000
+		 *   LOAD           0x001140 0x00101140 0x00101140 0x00140 0x00140 RW  0x1000
+		 *   GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RWE 0x10  
+		 */
 		if(ph->p_type == PT_LOAD) {
-			uint32_t addr = mm_malloc(ph->p_vaddr, ph->p_memsz);
-			uint8_t *p = (void*)addr;
-			uint8_t *q = (void*)elf+ph->p_offset;
-			int i;
-			for (i = 0;i < ph->p_filesz;i++)
-				p[i] = q[i];
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
+			mm_malloc(ph->p_vaddr, ph->p_memsz);
+			 
+			set_bp();
+			ramdisk_read((uint8_t *)ph->p_vaddr, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);  
 			
-			for (;i < ph->p_memsz;i++)
-				p[i] = 0;
 			/* TODO: zero the memory region 
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
+			memset((void *)(ph->p_vaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
+
+#ifdef IA32_PAGE
+			/* Record the program break for future use. */
 			extern uint32_t brk;
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(brk < new_brk) { brk = new_brk; }
+#endif
 		}
-		ph++;
 	}
 
 	volatile uint32_t entry = elf->e_entry;
