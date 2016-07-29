@@ -39,11 +39,11 @@ uint32_t loader() {
 	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff); 
 	for(; i < elf->e_phnum; i++, ph++) {
 		/* Scan the program header table, load each segment into memory */
-			mm_malloc(ph->p_vaddr, ph->p_memsz);
 		if(ph->p_type == PT_LOAD) {
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
+			mm_malloc(ph->p_vaddr, ph->p_memsz);
 			 
 			set_bp();
 			ramdisk_read((uint8_t *)ph->p_vaddr, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);  
