@@ -29,7 +29,7 @@ void init() {
 	/* After paging is enabled, transform %esp to virtual address. */
 	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
 #endif
-	set_bp();
+
 	/* Jump to init_cond() to continue initialization. */
 	asm volatile("jmp *%0" : : "r"(init_cond));
 
@@ -97,6 +97,7 @@ void init_cond() {
 	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
+	set_bp();
 	/* Keep the `bt' command happy. */
 	asm volatile("movl $0, %ebp");
 	asm volatile("subl $16, %esp");
