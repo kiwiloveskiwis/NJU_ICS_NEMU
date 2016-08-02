@@ -1,6 +1,13 @@
 #include "cpu/exec/helper.h"
 #include "cpu/decode/modrm.h"
-
+make_helper(nop2) {
+	print_asm("skip");
+	return 2;
+}
+make_helper(nop6) {
+	print_asm("skip");
+	return 6;
+}
 make_helper(nop) {
 	print_asm("nop");
 	return 1;
