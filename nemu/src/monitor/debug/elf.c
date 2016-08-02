@@ -47,7 +47,7 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	/* Check ELF header */
 	//assert(memcmp(elf->e_ident, magic, 4) == 0);		// magic number
-	assert(elf->e_ident[EI_CLASS] == ELFCLASS32);		// 32-bit architecture
+	//assert(elf->e_ident[EI_CLASS] == ELFCLASS32);		// 32-bit architecture
 	assert(elf->e_ident[EI_DATA] == ELFDATA2LSB);		// littel-endianG1
 	assert(elf->e_ident[EI_VERSION] == EV_CURRENT);		// current version
 	assert(elf->e_ident[EI_OSABI] == ELFOSABI_SYSV || 	// UNIX System V ABI
