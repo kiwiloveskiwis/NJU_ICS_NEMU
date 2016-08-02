@@ -13,8 +13,8 @@ make_instr_helper(i)
 #if DATA_BYTE == 2 || DATA_BYTE == 4
 make_helper(concat5(instr,_,rm,_,SUFFIX))
 {
-	int len=concat4(decode_,rm,_,SUFFIX)(eip+1);
-	cpu.eip=op_src->val-len-1;
+	int len = concat4(decode_,rm,_,SUFFIX)(eip+1);
+	cpu.eip = op_src->val - len - 1;
 	print_asm_template1();
 	return len+1;
 }
