@@ -52,6 +52,7 @@ uint32_t loader() {
 			memset((void *)(ph->p_vaddr + ph->p_filesz), 0, (ph->p_memsz - ph->p_filesz));
 
 
+			set_bp();
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
@@ -60,7 +61,6 @@ uint32_t loader() {
 			if(brk < new_brk) { brk = new_brk; }
 #endif
 		}
-			set_bp();
 	}
 
 	volatile uint32_t entry = elf->e_entry;
