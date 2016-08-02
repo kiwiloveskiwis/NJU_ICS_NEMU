@@ -7,6 +7,7 @@
 #include "data-mov/cltd.h"
 #include "data-mov/movsx.h"
 #include "data-mov/movzx.h"
+#include "data-mov/cmovcc.h"
 
 #include "control/call.h"
 #include "control/jcc.h"
