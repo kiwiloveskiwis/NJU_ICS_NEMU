@@ -5,8 +5,6 @@
 
 typedef int (*helper_fun)(swaddr_t);
 static make_helper(_2byte_esc);
-extern make_helper(nop2);
-extern make_helper(nop3or6);
 #define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7) \
 	static helper_fun concat(opcode_table_, name) [8] = { \
 	/* 0x00 */	item0, item1, item2, item3, \
@@ -82,7 +80,7 @@ make_group(group4,
 /* 0xff */
 make_group(group5,
 	inc_rm_v, dec_rm_v, call_rm_v, inv, 
-	jmp_rm_v, inv, push_rm_v, nop2)// TODO : still so rude!
+	jmp_rm_v, inv, push_rm_v, inv)
 
 make_group(group6,
 	inv, inv, inv, inv, 
@@ -148,8 +146,8 @@ helper_fun opcode_table [256] = {
 /* 0xcc */	int3, inv, inv, inv,
 /* 0xd0 */	group2_1_b, group2_1_v, group2_cl_b, group2_cl_v,
 /* 0xd4 */	inv, inv, nemu_trap, inv,
-/* 0xd8 */	inv, nop2, inv, inv,
-/* 0xdc */	inv, nop3or6, inv, inv,
+/* 0xd8 */	inv, inv, inv, inv,
+/* 0xdc */	inv, inv, inv, inv,
 /* 0xe0 */	inv, inv, inv, jcxz_i_b,
 /* 0xe4 */	inv, inv, inv, inv,
 /* 0xe8 */	call_i_v, jmp_i_v, inv, jmp_i_b,
