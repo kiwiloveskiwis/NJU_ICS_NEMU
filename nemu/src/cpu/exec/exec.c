@@ -5,7 +5,7 @@
 
 typedef int (*helper_fun)(swaddr_t);
 static make_helper(_2byte_esc);
-extern make_helper(nop3);
+extern make_helper(nop2);
 extern make_helper(nop3or6);
 #define make_group(name, item0, item1, item2, item3, item4, item5, item6, item7) \
 	static helper_fun concat(opcode_table_, name) [8] = { \
@@ -82,7 +82,7 @@ make_group(group4,
 /* 0xff */
 make_group(group5,
 	inc_rm_v, dec_rm_v, call_rm_v, inv, 
-	jmp_rm_v, inv, push_rm_v, inv)
+	jmp_rm_v, inv, push_rm_v, nop)// TODO : still so rude!
 
 make_group(group6,
 	inv, inv, inv, inv, 
