@@ -2,7 +2,7 @@
 
 #define instr jmp
 static void do_execute(){
-		int inc_adr = op_src->val ;
+		DATA_TYPE inc_adr = op_src->val ;
 		cpu.eip += inc_adr;
 		if(DATA_BYTE == 2) cpu.eip = ((cpu.eip + DATA_BYTE + 1) & 0x0000ffff) - DATA_BYTE - 1;
 		// TODO : right way?
