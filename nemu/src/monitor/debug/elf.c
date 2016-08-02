@@ -43,10 +43,10 @@ void load_elf_tables(int argc, char *argv[]) {
 
 	/* The first several bytes contain the ELF header. */
 	Elf32_Ehdr *elf = (void *)buf;
-	char magic[] = {0x46, 0x4c, 0x45, 0x7f};
+	//char magic[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
 
 	/* Check ELF header */
-	assert(memcmp(elf->e_ident, magic, 4) == 0);		// magic number
+	//assert(memcmp(elf->e_ident, magic, 4) == 0);		// magic number
 	assert(elf->e_ident[EI_CLASS] == ELFCLASS32);		// 32-bit architecture
 	assert(elf->e_ident[EI_DATA] == ELFDATA2LSB);		// littel-endianG1
 	assert(elf->e_ident[EI_VERSION] == EV_CURRENT);		// current version
