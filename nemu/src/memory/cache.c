@@ -81,17 +81,16 @@ static void block_read(hwaddr_t addr, void *data) {
 
 
 uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
-	Log("reading cache...");
+	Log("cache reading %x", addr);
 	uint32_t offset = addr & CACHE_MASK;  // 0 	~ 111111
 	uint8_t temp[2 * BLOCK_SIZE];
-	Log("%x", addr);
 	block_read(addr, temp);
 	if(offset + len > BLOCK_SIZE) {
 		block_read(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
 	}
 
-	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 	Log("reading Done.");
+	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
 
 

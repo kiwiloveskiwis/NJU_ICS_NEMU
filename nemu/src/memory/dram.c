@@ -97,10 +97,10 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 }
 
 uint32_t dram_read(hwaddr_t addr, size_t len) {
+	Log("dram reading %x", addr);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	
-	Log("%x", addr);
 	ddr3_read(addr, temp);
 	if(offset + len > BURST_LEN) {
 		/* data cross the burst boundary */
