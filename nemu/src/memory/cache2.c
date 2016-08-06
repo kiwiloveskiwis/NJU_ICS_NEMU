@@ -39,14 +39,14 @@ typedef union {
 	};
 }Cache_Addr_2;
 
-Cache_Block_2 caches[NR_SET][NR_WAY];
+Cache_Block_2 caches2[NR_SET][NR_WAY];
 
 
 void init_cache_2() {
 	int i = 0, j = 0;
 	for(; i < NR_SET; i++) 
 		for(; j < NR_WAY; j++) 
-			caches[i][j].valid = false;
+			caches2[i][j].valid = false;
 }
 
 bool print_cache_2(hwaddr_t addr) {
@@ -55,13 +55,13 @@ bool print_cache_2(hwaddr_t addr) {
 	uint32_t set = caddr.setidx;
 	int i = 0;
 	for(i = 0; i < NR_WAY; i++) {
-		if (caches[set][i].tag == caddr.tag ) {
+		if (caches2[set][i].tag == caddr.tag ) {
 			int j;
 			printf("ADDR %x :", caddr.value);
 			for(j = 0; j < CACHE_LEN; j++) {
 				if(j && j % 16 == 0) printf("\nADDR %x :", caddr.value + j);
 				else if(j && j % 4 == 0) printf(" ");
-				printf("%02hhX", *(caches[set][i].content + j));
+				printf("%02hhX", *(caches2[set][i].content + j));
 			}
 			printf("\n");
 			return true;
@@ -77,20 +77,20 @@ static void block_read(hwaddr_t addr, void *data) {
 	// uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
 	for(i = 0; i < NR_WAY; i++) {
-		if (caches[set][i].valid && caches[set][i].tag == caddr.tag ) {
-			memcpy(data, caches[set][i].content, BLOCK_SIZE);// found
+		if (caches2[set][i].valid && caches2[set][i].tag == caddr.tag ) {
+			memcpy(data, caches2[set][i].content, BLOCK_SIZE);// found
 			return;
 		}
 	}
 	for(i = 0; i < NR_WAY;i++) {
-		if(!caches[set][i].valid) break;
+		if(!caches2[set][i].valid) break;
 	}
 	if(i >= NR_WAY) {	// no empty slots
 		srand(time(0));
 		i = rand() % NR_WAY;
 	}
-	caches[set][i].valid = true;
-	caches[set][i].tag = caddr.tag;
+	caches2[set][i].valid = true;
+	caches2[set][i].tag = caddr.tag;
 
 	// LOADING DATA
 	int j;
@@ -98,8 +98,8 @@ static void block_read(hwaddr_t addr, void *data) {
 	for(j = 0; j < (BLOCK_SIZE >> 2); j++) {
 		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
 	}
-	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
-	memcpy(data, caches[set][i].content , BLOCK_SIZE);
+	memcpy(caches2[set][i].content, loading_temp, BLOCK_SIZE);
+	memcpy(data, caches2[set][i].content , BLOCK_SIZE);
 }
 
 uint32_t cache_read_2(hwaddr_t addr, size_t len) { // len is handled in memory.c
@@ -124,8 +124,8 @@ static void block_write(hwaddr_t addr, void *data, uint8_t *mask) {
 
 	int i = 0;
 	for(;i < NR_WAY;i++) {
-		if(caches[set][i].valid && caches[set][i].tag == tag){
-			memcpy_with_mask(caches[set][i].content, data, BLOCK_SIZE, mask);
+		if(caches2[set][i].valid && caches2[set][i].tag == tag){
+			memcpy_with_mask(caches2[set][i].content, data, BLOCK_SIZE, mask);
 			return;
 		}
 	}
