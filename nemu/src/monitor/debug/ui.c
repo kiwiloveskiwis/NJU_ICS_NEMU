@@ -97,7 +97,7 @@ static int cmd_x(char *args) {
 		return 0;
 	}
 	int length = atoi(arg1);
-	int addr;
+	unsigned addr;
 	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
