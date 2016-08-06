@@ -73,7 +73,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	//uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
 	for(i = 0; i < NR_WAY; i++) {
-		if (caches[set][i].tag == caddr.tag ) {
+		if (caches[set][i].valid && caches[set][i].tag == caddr.tag ) {
 			memcpy(data, caches[set][i].content, BLOCK_SIZE);// found
 			return;
 		}
