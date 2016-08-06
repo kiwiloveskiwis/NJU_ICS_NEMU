@@ -98,7 +98,6 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 
 
 static void block_write(hwaddr_t addr, void *data, uint8_t *mask) {
-	Log("writing cache...");
 	Cache_Addr temp;
 	temp.value = addr & ~CACHE_MASK;
 	uint32_t tag = temp.tag;
