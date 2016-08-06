@@ -72,12 +72,11 @@ static void block_read(hwaddr_t addr, void *data) {
 	uint32_t set = caddr.setidx;
 	//uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
-	while(caches[set][i].valid && i < NR_WAY) {
+	for(i = 0; i < NR_WAY; i++) {
 		if (caches[set][i].tag == caddr.tag ) {
 			memcpy(data, caches[set][i].content, BLOCK_SIZE);// found
 			return;
 		}
-		i++;
 	}
 	if(i >= NR_WAY) {	// no empty slots
 		srand(time(0));
