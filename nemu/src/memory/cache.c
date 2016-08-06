@@ -51,6 +51,7 @@ static void block_read(hwaddr_t addr, void *data) {
 
 	Cache_Addr caddr ;
 	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
+	Log("%x, %x, %x", addr, ~CACHE_MASK, addr & ~CACHE_MASK);
 
 	uint32_t set = caddr.setidx;
 	uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
@@ -68,7 +69,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	}
 	caches[set][i].valid = true;
 	caches[set][i].tag = caddr.tag;
-	Log("%d, %d, %d", addr, caddr.value, caddr.value + BLOCK_SIZE);
+	Log("%x, %x, %x", addr, caddr.value, caddr.value + BLOCK_SIZE);
 	memcpy(caches[set][i].content, (void *)caddr.value, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);
 }
