@@ -17,7 +17,10 @@
 #define CACHE_MASK (CACHE_LEN - 1)// 111111
 
 extern uint32_t dram_read(hwaddr_t addr,size_t len);
-extern void dram_write(hwaddr_t addr,size_t len, uint32_t data);
+
+extern uint32_t cache_read_2(hwaddr_t addr, size_t len);
+extern void cache_write_2(hwaddr_t addr, size_t len, uint32_t data);
+
 
 typedef struct{
 	uint32_t valid	: 1;
@@ -51,7 +54,7 @@ bool print_cache(hwaddr_t addr) {
 	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
 	uint32_t set = caddr.setidx;
 	int i = 0;
-	while(caches[set][i].valid && i < NR_WAY) {
+	for(i = 0; i < NR_WAY; i++) {
 		if (caches[set][i].tag == caddr.tag ) {
 			int j;
 			printf("ADDR %x :", caddr.value);
@@ -66,11 +69,12 @@ bool print_cache(hwaddr_t addr) {
 	}
 	return false;
 }
+
 static void block_read(hwaddr_t addr, void *data) {
 	Cache_Addr caddr ;
 	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
 	uint32_t set = caddr.setidx;
-	//uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
+	// uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
 	for(i = 0; i < NR_WAY; i++) {
 		if (caches[set][i].valid && caches[set][i].tag == caddr.tag ) {
@@ -78,9 +82,12 @@ static void block_read(hwaddr_t addr, void *data) {
 			return;
 		}
 	}
+	for(i = 0; i < NR_WAY;i++) {
+		if(!caches[set][i].valid) break;
+	}
 	if(i >= NR_WAY) {	// no empty slots
 		srand(time(0));
-		i = rand() % 8;
+		i = rand() % NR_WAY;
 	}
 	caches[set][i].valid = true;
 	caches[set][i].tag = caddr.tag;
@@ -89,7 +96,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	int j;
 	uint32_t loading_temp[BLOCK_SIZE >> 2];
 	for(j = 0; j < (BLOCK_SIZE >> 2); j++) {
-		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
+		loading_temp[j] = cache_read_2(caddr.value + 4 * j, 4);
 	}
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content , BLOCK_SIZE);
@@ -103,11 +110,9 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 		block_read(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
 	}
 
-	uint32_t result = dram_read(addr, len) &  (~0u >> ((4 - len) << 3));
-	uint32_t mine = unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
-	if (mine != result) {
-		Log("%x, %x, %x", addr, mine, result);
-	}
+	// uint32_t result = dram_read(addr, len) &  (~0u >> ((4 - len) << 3));
+	// uint32_t mine = unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
+	// assert(mine == result);
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
 
@@ -124,6 +129,7 @@ static void block_write(hwaddr_t addr, void *data, uint8_t *mask) {
 			return;
 		}
 	}
+
 }
 
 void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
@@ -142,7 +148,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 		block_write(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
 
-	dram_write(addr, len, data);
+	cache_write_2(addr, len, data);
 }
 
 
@@ -157,5 +163,6 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 #undef CACHE_LEN
 #undef CACHE_MASK
+
 
 
