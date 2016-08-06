@@ -57,7 +57,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	int i = 0;
 	while(caches[set][i].valid && i < NR_WAY) {
 		if (caches[set][i].tag == caddr.tag ) {
-			memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);// found
+			memcpy(data, caches[set][i].content, BLOCK_SIZE);// found
 			return;
 		}
 		i++;
@@ -72,8 +72,9 @@ static void block_read(hwaddr_t addr, void *data) {
 	// LOADING DATA
 	int j;
 	uint32_t loading_temp[BLOCK_SIZE >> 2];
-	for(j = 0; j < (BLOCK_SIZE >> 2); j++) 
+	for(j = 0; j < (BLOCK_SIZE >> 2); j++) {
 		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
+	}
 	Log("Here!");
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);
@@ -88,8 +89,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	if(offset + len > BLOCK_SIZE) {
 		block_read(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
 	}
-
 	Log("reading Done.");
+
 	uint32_t result = dram_read(addr, len) &  (~0u >> ((4 - len) << 3));
 	uint32_t mine = unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 	Log("Ture = %d, Mine = %d", result, mine);
