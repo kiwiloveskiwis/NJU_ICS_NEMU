@@ -48,7 +48,6 @@ void init_cache() {
 }
 
 static void block_read(hwaddr_t addr, void *data) {
-
 	Cache_Addr caddr ;
 	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
 	Log("%x, %x, %x", addr, ~CACHE_MASK, addr & ~CACHE_MASK);
@@ -70,8 +69,13 @@ static void block_read(hwaddr_t addr, void *data) {
 	caches[set][i].valid = true;
 	caches[set][i].tag = caddr.tag;
 	Log("%x, %x, %x", addr, caddr.value, caddr.value + BLOCK_SIZE);
-	memcpy(caches[set][i].content, (void *)caddr.value, BLOCK_SIZE);
+	// LOADING DATA
+	int j;
+	uint32_t loading_temp[BLOCK_SIZE >> 2];
+	for(j = 0; j < (BLOCK_SIZE >> 2); j++) 
+		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
 	Log("Here!");
+	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);
 }
 
