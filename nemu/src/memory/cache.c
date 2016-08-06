@@ -55,9 +55,10 @@ bool print_cache(hwaddr_t addr) {
 		if (caches[set][i].tag == caddr.tag ) {
 			int j;
 			for(j = 0; j < CACHE_LEN; j++) {
+				if(j % 16 == 0) printf("\n %x", caddr.value + j);
 				printf("%hhX", *(caches[set][i].content + j));
-				if(j % 16 == 0) printf("\n");
 			}
+			printf("\n");
 			return true;
 		}
 	}
