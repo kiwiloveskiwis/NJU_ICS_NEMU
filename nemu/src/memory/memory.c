@@ -10,11 +10,11 @@ extern void cache_write_2(hwaddr_t addr, size_t len, uint32_t data);
 /* Memory accessing interfaces */
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	return cache_read_2(addr, len) & (~0u >> ((4 - len) << 3));
+	return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
-	cache_write_2(addr, len, data);
+	cache_write(addr, len, data);
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
