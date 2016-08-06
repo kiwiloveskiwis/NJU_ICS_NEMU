@@ -108,9 +108,6 @@ uint32_t cache_read_2(hwaddr_t addr, size_t len) { // len is handled in memory.c
 		block_read_2(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
 	}
 
-	uint32_t result = dram_read(addr, len) &  (~0u >> ((4 - len) << 3));
-	uint32_t mine = unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
-	assert(mine == result);
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
 
