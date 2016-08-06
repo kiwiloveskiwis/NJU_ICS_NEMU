@@ -57,6 +57,7 @@ bool print_cache(hwaddr_t addr) {
 			printf("ADDR %x :", caddr.value);
 			for(j = 0; j < CACHE_LEN; j++) {
 				if(j && j % 16 == 0) printf("\nADDR %x :", caddr.value + j);
+				else if(j && j % 4 == 0) printf(" ");
 				printf("%02hhX", *(caches[set][i].content + j));
 			}
 			printf("\n");
