@@ -34,7 +34,6 @@ typedef union {
 		uint32_t setidx : SET_WIDTH;
 		uint32_t tag : TAG_WIDTH;
 	};
-
 }Cache_Addr;
 
 Cache_Block caches[NR_SET][NR_WAY];
@@ -47,11 +46,26 @@ void init_cache() {
 			caches[i][j].valid = false;
 }
 
+bool print_cache(hwaddr_t addr) {
+	Cache_Addr caddr ;
+	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
+	uint32_t set = caddr.setidx;
+	int i = 0;
+	while(caches[set][i].valid && i < NR_WAY) {
+		if (caches[set][i].tag == caddr.tag ) {
+			int j;
+			for(j = 0; j < (CACHE_LEN >> 2); j++) {
+				printf("%hhX", *(caches[set][i].content + j));
+				if(j % 16 == 0) printf("\n");
+			}
+			return true;
+		}
+	}
+	return false;
+}
 static void block_read(hwaddr_t addr, void *data) {
 	Cache_Addr caddr ;
 	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
-	Log("%x, %x ", addr, addr & ~CACHE_MASK);
-
 	uint32_t set = caddr.setidx;
 	//uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
@@ -68,7 +82,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	}
 	caches[set][i].valid = true;
 	caches[set][i].tag = caddr.tag;
-	Log("%x, %x, %x", addr, caddr.value, caddr.value + BLOCK_SIZE);
+
 	// LOADING DATA
 	int j;
 	uint32_t loading_temp[BLOCK_SIZE >> 2];
@@ -78,7 +92,6 @@ static void block_read(hwaddr_t addr, void *data) {
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content , BLOCK_SIZE);
 }
-
 
 uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	uint32_t offset = addr & CACHE_MASK;  // 0 	~ 111111
@@ -93,9 +106,6 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	assert(mine == result);
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
-
-
-
 
 static void block_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	Cache_Addr temp;

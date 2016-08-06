@@ -11,6 +11,7 @@
 
 void cpu_exec(uint32_t);
 extern void printsh();
+extern bool print_cache(hwaddr_t addr);
 
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -53,6 +54,13 @@ static int cmd_bt(char *args) {
 
 static int cmd_c(char *args) {
 	cpu_exec(-1);
+	return 0;
+}
+static int cmd_cache(char *args) {	
+	int addr;
+	sscanf(args, "%x", &addr);
+	bool succ = print_cache(addr);
+	if(!succ) Log("Cache Not found!");
 	return 0;
 }
 
@@ -136,6 +144,7 @@ static struct {
 	int (*handler) (char *);
 } cmd_table [] = {
 	{ "help", "Display informations about all supported commands", cmd_help },
+	{ "cache", "Display the cache's concents which contains ADDR", cmd_cache},
 	{ "info", "Print information(r/w)", cmd_info}, 
 	{ "si", "Execute one machine instruction", cmd_si},
 	{ "bt", "Print backtrace of all stack frames", cmd_bt},
