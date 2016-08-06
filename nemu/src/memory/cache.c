@@ -55,7 +55,6 @@ static void block_read(hwaddr_t addr, void *data) {
 	uint32_t set = caddr.setidx;
 	uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
-	Log("1");
 	while(caches[set][i].valid && i < NR_WAY) {
 		if (caches[set][i].tag == caddr.tag ) {
 			memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);// found
@@ -71,6 +70,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	caches[set][i].tag = caddr.tag;
 	Log("2");
 	memcpy(caches[set][i].content, (void *)caddr.value, BLOCK_SIZE);
+	Log("3");
 	memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);
 }
 
