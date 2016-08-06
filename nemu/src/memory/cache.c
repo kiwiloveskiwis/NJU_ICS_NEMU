@@ -50,10 +50,10 @@ void init_cache() {
 static void block_read(hwaddr_t addr, void *data) {
 	Cache_Addr caddr ;
 	caddr.value = addr & ~CACHE_MASK; // discard the last 6 bits
-	Log("%x, %x, %x", addr, ~CACHE_MASK, addr & ~CACHE_MASK);
+	Log("%x, %x ", addr, addr & ~CACHE_MASK);
 
 	uint32_t set = caddr.setidx;
-	uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
+	//uint32_t offset = addr & CACHE_MASK;  // the last 6 bits
 	int i = 0;
 	while(caches[set][i].valid && i < NR_WAY) {
 		if (caches[set][i].tag == caddr.tag ) {
@@ -77,7 +77,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	}
 	Log("Here!");
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
-	memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);
+	memcpy(data, caches[set][i].content , BLOCK_SIZE);
 }
 
 
