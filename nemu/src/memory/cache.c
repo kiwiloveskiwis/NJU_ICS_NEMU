@@ -84,7 +84,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	Log("reading cache...");
 	uint32_t offset = addr & CACHE_MASK;  // 0 	~ 111111
 	uint8_t temp[2 * BLOCK_SIZE];
-
+	Log("%x", addr);
 	block_read(addr, temp);
 	if(offset + len > BLOCK_SIZE) {
 		block_read(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
