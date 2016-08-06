@@ -84,6 +84,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	}
 
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
+	Log("reading Done.");
 }
 
 
