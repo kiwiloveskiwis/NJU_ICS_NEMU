@@ -54,8 +54,9 @@ bool print_cache(hwaddr_t addr) {
 	while(caches[set][i].valid && i < NR_WAY) {
 		if (caches[set][i].tag == caddr.tag ) {
 			int j;
+			printf("ADDR %x :", caddr.value);
 			for(j = 0; j < CACHE_LEN; j++) {
-				if(!j && j % 16 == 0) printf("\nADDR %x :", caddr.value + j);
+				if(j && j % 16 == 0) printf("\nADDR %x :", caddr.value + j);
 				printf("%hhX", *(caches[set][i].content + j));
 			}
 			printf("\n");
