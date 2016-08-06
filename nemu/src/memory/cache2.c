@@ -119,44 +119,13 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 	uint32_t tag = temp.tag;
 	uint32_t set = temp.setidx;
 
-	int i = 0;
-	for(i = 0; i < NR_WAY;i++) {
+int i = 0;
+	for(;i < NR_WAY;i++) {
 		if(caches2[set][i].valid && caches2[set][i].tag == tag){
 			memcpy_with_mask(caches2[set][i].content, data, BLOCK_SIZE, mask);
-			caches2[set][i].dirty = true;
 			return;
 		}
 	}
-	// NOT FOUND
-	for(i = 0; i < NR_WAY;i++) {
-		if(!caches2[set][i].valid) break;
-	}
-	if(i >= NR_WAY) {	// no empty slots
-		srand(time(0));
-		i = rand() % NR_WAY;
-		if (caches2[set][i].dirty) {
-			int j;
-			Cache_Addr_2 replace;
-			replace.tag = caches2[set][i].tag;
-			replace.setidx = set;
-			for(j = 0; j < (BLOCK_SIZE >> 2); j++)
-				dram_write(replace.value, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
-		}
-	} 
-
-	caches2[set][i].valid = true;
-	caches2[set][i].dirty = false;
-	caches2[set][i].tag = temp.tag;
-
-	// LOADING DATA
-	int j;
-	uint32_t loading_temp[BLOCK_SIZE >> 2];
-	for(j = 0; j < (BLOCK_SIZE >> 2); j++) { 
-		loading_temp[j] = dram_read(temp.value + 4 * j, 4);
-	}
-	memcpy(caches2[set][i].content, loading_temp, BLOCK_SIZE);
-	memcpy(data, caches2[set][i].content , BLOCK_SIZE);
-
 }
 
 void cache_write_2(hwaddr_t addr, size_t len, uint32_t data) {
@@ -174,7 +143,7 @@ void cache_write_2(hwaddr_t addr, size_t len, uint32_t data) {
 	if(offset + len > BLOCK_SIZE) {
 		block_write_2(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
-	// dram_write(addr, len, data);
+	 dram_write(addr, len, data);
 }
 
 
