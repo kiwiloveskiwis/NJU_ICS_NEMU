@@ -69,6 +69,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	}
 	caches[set][i].valid = true;
 	caches[set][i].tag = caddr.tag;
+	Log("2");
 	memcpy(caches[set][i].content, (void *)caddr.value, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content + offset, BLOCK_SIZE);
 }
