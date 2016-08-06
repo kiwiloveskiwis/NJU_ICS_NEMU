@@ -32,4 +32,9 @@ FLOAT Fabs(FLOAT);
 FLOAT sqrt(FLOAT);
 FLOAT pow(FLOAT, FLOAT);
 
+// used when calling printf/sprintf to format a FLOAT argument
+#define FLOAT_ARG(f) (long long)f
+
+void init_FLOAT_vfprintf(void);
+
 #endif

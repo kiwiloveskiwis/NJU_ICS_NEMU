@@ -1,15 +1,16 @@
 ##### global settings #####
 
-.PHONY: nemu entry all_testcase kernel run gdb test submit clean
+.PHONY: nemu entry testcase kernel run gdb test submit clean
 
 CC := gcc
 LD := ld
 CFLAGS := -MMD -Wall -Werror -c
 
 LIB_COMMON_DIR := lib-common
-NEWLIBC_DIR := $(LIB_COMMON_DIR)/newlib
-NEWLIBC := $(NEWLIBC_DIR)/libc.a
-#FLOAT := obj/$(LIB_COMMON_DIR)/FLOAT.a
+LIBC_INC_DIR := $(LIB_COMMON_DIR)/uclibc/include
+LIBC_LIB_DIR := $(LIB_COMMON_DIR)/uclibc/lib
+LIBC := $(LIBC_LIB_DIR)/libc.a
+#FLOAT := obj/$(LIB_COMMON_DIR)/FLOAT/FLOAT.a
 
 include config/Makefile.git
 include config/Makefile.build
@@ -21,12 +22,12 @@ all: nemu
 
 include nemu/Makefile.part
 include testcase/Makefile.part
-include lib-common/Makefile.part
+include lib-common/FLOAT/Makefile.part
 include kernel/Makefile.part
 include game/Makefile.part
 
 nemu: $(nemu_BIN)
-all_testcase: $(testcase_BIN)
+testcase: $(testcase_BIN)
 kernel: $(kernel_BIN)
 game: $(game_BIN)
 

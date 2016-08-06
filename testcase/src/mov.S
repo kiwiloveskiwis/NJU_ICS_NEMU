@@ -1,7 +1,7 @@
 #include "trap.h"
 
-.globl start
-start:
+.globl _start
+_start:
 	movl $0, %eax
 	movl $0, %ebx
 	movl $0, %ecx

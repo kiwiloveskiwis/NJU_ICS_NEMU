@@ -25,7 +25,5 @@ int main() {
 
 	nemu_assert(i == 15);
 
-	HIT_GOOD_TRAP;
-
 	return 0;
 }

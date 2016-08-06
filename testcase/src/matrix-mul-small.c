@@ -55,7 +55,6 @@ int main() {
 	}
 
 	nemu_assert(loop == N * N * N);
-	HIT_GOOD_TRAP;
 
 	return 0;
 }
