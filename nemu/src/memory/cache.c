@@ -82,7 +82,6 @@ static void block_read(hwaddr_t addr, void *data) {
 
 uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	Log("cache reading %x", addr);
-	return dram_read(addr, len);
 	uint32_t offset = addr & CACHE_MASK;  // 0 	~ 111111
 	uint8_t temp[2 * BLOCK_SIZE];
 	block_read(addr, temp);
@@ -91,6 +90,9 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	}
 
 	Log("reading Done.");
+	uint32_t result = dram_read(addr, len) &  (~0u >> ((4 - len) << 3));
+	uint32_t mine = unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
+	Log("Ture = %d, Mine = %d", result, mine);
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
 
