@@ -48,7 +48,7 @@ void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
 static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
 	lnaddr_t result = addr;
 	if(cpu.cr0.protect_enable) {
-		//if(!cpu.sr[sreg].cached)
+		if(!cpu.sr[sreg].cached)
 			load_sreg_cache(sreg);
 		result += cpu.sr[sreg].base;
 	}
