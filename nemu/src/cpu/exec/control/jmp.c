@@ -18,10 +18,10 @@ make_helper(ljmp) {
 	if(!cpu.cr0.protect_enable) {
 		cpu.sr[R_CS].val = instr_fetch(eip + 5, 2);	
 		cpu.sr[R_CS].cached = false;
- 		cpu.eip = instr_fetch(eip + 1, 4);
+ 		cpu.eip = instr_fetch(eip + 1, 4) - 7;
 		print_asm("ljmp\t %x:%x", cpu.eip, cpu.sr[R_CS].val);
 	}
-	return 0;
+	return 7;
 
 }
 
