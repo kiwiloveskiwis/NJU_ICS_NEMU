@@ -26,13 +26,13 @@ typedef struct {
 	struct {
 		uint32_t base;
 		uint16_t limit;
-		bool cached ;
+		bool cached;
 		union {
 			uint16_t val;
 			struct {
-				uint32_t index	: 13;
-				uint32_t ti		:  1;
 				uint32_t rpl	:  2;
+				uint32_t ti		:  1;
+				uint32_t index	: 13;
 			};
 		};
 	}sr[6];		// segment registers
