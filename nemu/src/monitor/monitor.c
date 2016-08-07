@@ -89,7 +89,7 @@ void restart() {
 	/* Set the initial instruction pointer. */
 	cpu.eip = ENTRY_START;
 	cpu.EFLAGS = 0x00000002;
-	cpu.cr0.protect_enable = 1;
+	cpu.cr0.protect_enable = 0;
 	cpu.sr[R_CS].base = 0;
 	cpu.sr[R_CS].limit = 0xffffffff;
 	cpu.sr[R_CS].cached = true;
