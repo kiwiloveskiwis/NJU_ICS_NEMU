@@ -9,8 +9,9 @@ make_helper(lgdt){
 	int len = decode_rm_l(eip + 1);
 	lnaddr_t addr = op_src->addr; 
 	cpu.gdtr_limit = lnaddr_read(addr, 2);
-	cpu.gdtr_base = lnaddr_read(addr, 4);
-	print_asm("lgdt");
+	if(op_src->size == 16) cpu.gdtr_base = lnaddr_read(addr, 3);
+	else cpu.gdtr_base = lnaddr_read(addr, 4);
+	print_asm_template1();
 	return len + 1;
 }
 
