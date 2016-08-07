@@ -30,7 +30,7 @@ make_helper(mov_crx2r) {
 				  break;
 		default	: Log("mov_crx2r not valid!");	
 	}
-	print_asm("mov_crx2r" " %s%d,%%%s", "cr",src, regsl[dst]);
+	print_asm("mov_crx2r" " %%%s%d, %%%s", "cr",src, regsl[dst]);
 	return 2;
 }
 
@@ -41,10 +41,9 @@ make_helper(mov_r2crx) {
 	switch(dst) {
 		case 0	: cpu.cr0.val = reg_l(src);
 				  break;
-
 		default	: Log("mov_crx2r not valid!");	
 	}
-	print_asm("mov_r2crx" " %s,%s", op_src->str, op_dest->str);
+	print_asm("mov_r2crx" " %%%s, %%%s%d", regsl[src], "cr", dst);
 	return 2;
 }
 
