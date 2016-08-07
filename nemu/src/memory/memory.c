@@ -57,7 +57,11 @@ static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
 
 static void load_sreg_cache(uint8_t sreg) {
 	lnaddr_t seg_desc_addr = cpu.gdtr_base + 8 * cpu.sr[sreg].index;
-	SegDesc desc = *(SegDesc *)seg_desc_addr;
+	SegDesc desc;
+	uint32_t * tmp = (uint32_t *) &desc;
+	*tmp = lnaddr_read(seg_desc_addr, 4);
+	tmp++;
+	*tmp = lnaddr_read(seg_desc_addr + 4, 4);
 	
 	cpu.sr[sreg].base = (desc.base_31_24 << 24) + (desc.base_23_16 << 16) + desc.base_15_0;
 	cpu.sr[sreg].limit = desc.limit_15_0 + (desc.limit_19_16 << 16);
