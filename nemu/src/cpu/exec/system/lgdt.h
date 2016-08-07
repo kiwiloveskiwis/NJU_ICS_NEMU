@@ -11,7 +11,7 @@ make_helper(lgdt){
 	cpu.gdtr_limit = lnaddr_read(addr, 2);
 	if(op_src->size == 16) cpu.gdtr_base = lnaddr_read(addr, 3);
 	else cpu.gdtr_base = lnaddr_read(addr, 4);
-	print_asm_template1();
+	print_asm("lgdt\t" "%s", op_src->str);
 	return len + 1;
 }
 
