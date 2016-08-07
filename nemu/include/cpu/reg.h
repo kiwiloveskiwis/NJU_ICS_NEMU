@@ -25,7 +25,7 @@ typedef struct {
 	swaddr_t eip;
 	struct {
 		uint32_t base;
-		uint16_t limit;
+		uint32_t limit;
 		bool cached;
 		union {
 			uint16_t val;
