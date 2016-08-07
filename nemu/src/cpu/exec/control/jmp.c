@@ -15,11 +15,10 @@ make_helper_v(jmp_i)
 make_helper_v(jmp_rm)
 // ea 0b 01 bd 0b 		jmp obbd:010b
 make_helper(ljmp) {
-		cpu.sr[R_CS].val = instr_fetch(eip + 5, 2);	
-		cpu.sr[R_CS].cached = false;
- 		cpu.eip = instr_fetch(eip + 1, 4) - 7;
-	print_asm("ljmp\t %x:%x", cpu.eip, cpu.sr[R_CS].val);
+	cpu.sr[R_CS].val = instr_fetch(eip + 5, 2);	
+	cpu.sr[R_CS].cached = false;
+	cpu.eip = instr_fetch(eip + 1, 4) - 7;
+	print_asm("ljmp\t %x:%x", cpu.eip + 7, cpu.sr[R_CS].val);
 	return 7;
-
 }
 

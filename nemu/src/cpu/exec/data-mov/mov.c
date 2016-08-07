@@ -13,6 +13,7 @@
 #undef DATA_BYTE
 
 /* for instruction encoding overloading */
+extern make_helper(decode_rm2r_v);
 
 make_helper_v(mov_i2r)
 make_helper_v(mov_i2rm)
@@ -47,3 +48,9 @@ make_helper(mov_r2crx) {
 	return 2;
 }
 
+make_helper(mov_rm2sreg) {
+	int len = decode_rm2r_w(eip + 1);	// op_src = rm. op_dst = reg
+	cpu.sr[op_dest->reg].val = op_src->val;	
+	cpu.sr[op_dest->reg].cached = false;
+	return len + 1;
+}
