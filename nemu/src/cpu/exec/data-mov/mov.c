@@ -30,6 +30,7 @@ make_helper(mov_crx2r) {
 				  break;
 		default	: Log("mov_crx2r not valid!");	
 	}
+	print_asm("mov_crx2r" " %s,%s", op_src->str, op_dest->str);
 	return 2;
 }
 
@@ -43,6 +44,7 @@ make_helper(mov_r2crx) {
 
 		default	: Log("mov_crx2r not valid!");	
 	}
+	print_asm("mov_r2crx" " %s,%s", op_src->str, op_dest->str);
 	return 2;
 }
 
