@@ -20,13 +20,6 @@ make_helper(concat(decode_i_, SUFFIX)) {
 #endif
 	return DATA_BYTE;
 }
-make_helper(concat(decode_m_, SUFFIX)) {
-	op_src->type = OP_TYPE_MEM;
-	op_src->addr = instr_fetch(eip, DATA_BYTE);
-	op_src->val = swaddr_read(op_src->addr, DATA_BYTE);
-
-	return DATA_BYTE;
-}
 
 #if DATA_BYTE == 1 || DATA_BYTE == 4
 /* sign immediate */
@@ -190,7 +183,7 @@ make_helper(concat(decode_rm_imm_, SUFFIX)) {
 
 void concat(write_operand_, SUFFIX) (Operand *op, DATA_TYPE src) {
 	if(op->type == OP_TYPE_REG) { REG(op->reg) = src; }
-	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src); }
+	else if(op->type == OP_TYPE_MEM) { swaddr_write(op->addr, op->size, src, op->sreg); }
 	else { assert(0); }
 }
 

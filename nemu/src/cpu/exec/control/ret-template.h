@@ -2,7 +2,7 @@
 
 #define instr ret
 static void do_execute(){
-	cpu.eip = swaddr_read(cpu.esp, 4) - 1 - DATA_BYTE;
+	cpu.eip = swaddr_read(cpu.esp, 4, R_SS) - 1 - DATA_BYTE;
 	cpu.esp += 4;
 	DATA_TYPE inc_adr = op_src->val ;
 	cpu.esp += inc_adr;

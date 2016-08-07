@@ -213,7 +213,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 		if (domin == p) switch (tokens[domin].type) {
 			case NOT : return !eval(p + 1, q);
 			case NEG : return -eval(p + 1, q);
-			case PTR : return swaddr_read(eval(p + 1, q), 4);
+			case PTR : return swaddr_read(eval(p + 1, q), 4, R_DS);
 		}
 		uint32_t left = eval(p, domin - 1);
 		uint32_t right = eval(domin + 1, q);

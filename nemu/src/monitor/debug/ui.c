@@ -36,13 +36,13 @@ static int cmd_bt(char *args) {
 	int current_ebp = cpu.ebp;
 	printf("#%d\t 0x%x (current eip) \n", index++, cpu.eip);
 
-#define readoff(off) swaddr_read(current_ebp + off, 4)
+#define readoff(off) swaddr_read(current_ebp + off, 4, R_SS)
 	while(current_ebp) {
 		if(current_ebp + 20 < 0x8000000) {
 			printf("#%d\t 0x%x\t ", index++, readoff(4));
 			printf("Stored: %x %x %x %x \n", readoff(8), readoff(12), readoff(16), readoff(20));
 		}
-		current_ebp = swaddr_read(current_ebp, 4);
+		current_ebp = swaddr_read(current_ebp, 4, R_SS);
 		if(index >= 10) {
 			Log("BackTrace overflow!");
 			break;
@@ -105,7 +105,7 @@ static int cmd_x(char *args) {
 			Log("physical address %x is outside of the physical memory!", addr + 4 * i);
 			return 0;
 		}
-		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4 ));
+		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4, R_DS));
 	}
 	return 0;
 }

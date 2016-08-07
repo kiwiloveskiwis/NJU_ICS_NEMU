@@ -6,7 +6,7 @@ static void do_execute(){
 	if(op_src->type == OP_TYPE_IMM) {	
 		DATA_TYPE inc_adr = op_src->val ;
 		cpu.esp -= DATA_BYTE;
-		swaddr_write(cpu.esp, DATA_BYTE, cpu.eip + DATA_BYTE + 1);
+		swaddr_write(cpu.esp, DATA_BYTE, cpu.eip + DATA_BYTE + 1, R_SS);
 		cpu.eip += inc_adr;
 		print_asm("call\t0x%x", cpu.eip + 1 + DATA_BYTE);
 	}
@@ -15,7 +15,7 @@ static void do_execute(){
 		if(op_src->type == OP_TYPE_REG) off = 2;
 		else off = 3; // Same as jmp
 		cpu.esp -= DATA_BYTE;
-		MEM_W(cpu.esp, cpu.eip + off);	
+		MEM_W(cpu.esp, cpu.eip + off, R_SS);
 		cpu.eip = op_src->val - off;
 
 	}
