@@ -6,9 +6,7 @@ extern int decode_rm_l(swaddr_t eip);
 // 0F 01 /2		LGDT m16&32		 Load m into GDTR
 
 make_helper(lgdt){
-	Log("wrong?");
 	int len = decode_rm_l(eip + 1);
-	Log("wrong?");
 	lnaddr_t addr = op_src->addr; 
 	cpu.gdtr_limit = lnaddr_read(addr, 2);
 	if(op_src->size == 16) cpu.gdtr_base = lnaddr_read(addr + 2, 3);
