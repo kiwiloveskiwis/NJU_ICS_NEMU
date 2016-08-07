@@ -30,7 +30,7 @@ make_helper(mov_crx2r) {
 				  break;
 		default	: Log("mov_crx2r not valid!");	
 	}
-	print_asm("mov_crx2r" " %s,%s", op_src->str, op_dest->str);
+	print_asm("mov_crx2r" " %s%d,%%%s", "cr",src, regsl[dst]);
 	return 2;
 }
 
