@@ -8,6 +8,7 @@ uint32_t cache_read(hwaddr_t addr, size_t len);
 void cache_write(hwaddr_t addr, size_t len, uint32_t data);
 
 static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg);
+static hwaddr_t page_translate(lnaddr_t addr);
 static void load_sreg_cache(uint8_t sreg);
 
 /* Memory accessing interfaces */
@@ -21,11 +22,28 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
-	return hwaddr_read(addr, len);
+	assert(len == 1 || len == 2 || len == 4);
+	//if ((addr & 0xfff) + len > 0xfff) {
+	if(0) {
+		/* this is a special case, you can handle it later. */
+		assert(0);
+	}
+	else {
+		hwaddr_t hwaddr = page_translate(addr);
+		return hwaddr_read(hwaddr, len);
+	}
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	hwaddr_write(addr, len, data);
+	assert(len == 1 || len == 2 || len == 4);
+	//if ((addr & 0xfff) + len > 0xfff) {
+	if(0){
+		assert(0);
+	}
+	else {
+		hwaddr_t hwaddr = page_translate(addr);
+		hwaddr_write(hwaddr, len, data);
+	}
 }
 
 uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
@@ -68,4 +86,24 @@ static void load_sreg_cache(uint8_t sreg) {
 	cpu.sr[sreg].cached = true;	
 }
 
+
+static hwaddr_t page_translate(lnaddr_t addr) {
+	hwaddr_t result = addr;
+	if(cpu.cr0.protect_enable && cpu.cr0.paging) {
+		uint32_t dir = (addr >> 22) & 0x3ff;
+		uint32_t page = (addr >> 12) & 0x3ff;
+		uint32_t offset = addr & 0xfff;
+		hwaddr_t page_directory_addr = (cpu.cr3.page_directory_base << 12) + (dir << 2); 
+		// 4 bytes per dir
+		PDE *page_directory = (PDE *)page_directory_addr;
+		assert(page_directory->present);
+
+		hwaddr_t page_table_addr = (page_directory->page_frame << 12) + (page << 2);
+		PTE *page_table = (PTE *)page_table_addr;
+		assert(page_table->present);
+
+		result = (page_table->page_frame << 20) + offset;
+	}
+	return result;
+}
 
