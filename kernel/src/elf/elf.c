@@ -29,11 +29,11 @@ uint32_t loader() {
 #endif
 
 	elf = (void*)buf;
-
 	/* TODO: fix the magic number with the correct one */
 	const uint32_t elf_magic = 0x464c457f; // all the same for exec in testcases
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
+
 	/* Load each program segment */
 	int i = 0;
 	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff); 
@@ -41,8 +41,10 @@ uint32_t loader() {
 		ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff + i * elf->e_phentsize); 
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
-			mm_malloc(ph->p_vaddr, ph->p_memsz);
-			
+			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
+			assert(0);
+			Log("vaddr : %x, hwaddr :%x", ph->p_vaddr, hwaddr);
+
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
 			 */
