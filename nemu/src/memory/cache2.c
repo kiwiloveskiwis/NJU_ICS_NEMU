@@ -79,7 +79,6 @@ static void block_read_2(hwaddr_t addr, void *data) {
 			memcpy(data, caches2[set][i].content, BLOCK_SIZE);// found
 			return;
 		}
-		i++;
 	}
 	if(i >= NR_WAY) {	// no empty slots
 		srand(time(0));
@@ -176,7 +175,7 @@ void cache_write_2(hwaddr_t addr, size_t len, uint32_t data) {
 	if(offset + len > BLOCK_SIZE) {
 		block_write_2(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
-	 dram_write(addr, len, data);
+	// dram_write(addr, len, data);
 }
 
 
