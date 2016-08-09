@@ -23,8 +23,9 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
-	//if ((addr & 0xfff) + len > 0xfff) {
+	// if ((addr & 0xfff) + len > 0xfff) {
 	if(0) {
+		Log("Addr : %x", addr);
 		/* this is a special case, you can handle it later. */
 		assert(0);
 	}
@@ -36,8 +37,9 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	assert(len == 1 || len == 2 || len == 4);
-	//if ((addr & 0xfff) + len > 0xfff) {
-	if(0){
+	// if ((addr & 0xfff) + len > 0xfff) {
+	if(0) {
+		Log("Addr : %x", addr);
 		assert(0);
 	}
 	else {
@@ -95,14 +97,16 @@ static hwaddr_t page_translate(lnaddr_t addr) {
 		uint32_t offset = addr & 0xfff;
 		hwaddr_t page_directory_addr = (cpu.cr3.page_directory_base << 12) + (dir << 2); 
 		// 4 bytes per dir
-		PDE *page_directory = (PDE *)page_directory_addr;
-		assert(page_directory->present);
+		PDE page_directory;
+		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr,4);
+		assert(page_directory.present);
 
-		hwaddr_t page_table_addr = (page_directory->page_frame << 12) + (page << 2);
-		PTE *page_table = (PTE *)page_table_addr;
-		assert(page_table->present);
+		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
+		PTE  page_table;
+		page_table.val = (uint32_t)hwaddr_read(page_table_addr,4);
+		assert(page_table.present);
 
-		result = (page_table->page_frame << 20) + offset;
+		result = (page_table.page_frame << 20) + offset;
 	}
 	return result;
 }
