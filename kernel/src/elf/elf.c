@@ -42,7 +42,6 @@ uint32_t loader() {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
-			Log("vaddr : %x, hwaddr :%x", ph->p_vaddr, hwaddr);
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
@@ -52,6 +51,7 @@ uint32_t loader() {
 			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
 			 */
 			memset((void *)(ph->p_vaddr + ph->p_filesz), 0, (ph->p_memsz - ph->p_filesz));
+			memcpy((uint8_t *)hwaddr, (void *)ph->p_vaddr, ph->p_memsz);
 
 
 #ifdef IA32_PAGE
