@@ -14,11 +14,11 @@ static void load_sreg_cache(uint8_t sreg);
 /* Memory accessing interfaces */
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
+	return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
-	dram_write(addr, len, data);
+	cache_write(addr, len, data);
 	assert(hwaddr_read(addr, len) == data);
 }
 
