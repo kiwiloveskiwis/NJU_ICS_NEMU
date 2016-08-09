@@ -25,10 +25,10 @@ uint32_t loader() {
 #ifdef HAS_DEVICE
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #else
+	assert(0);
 	ramdisk_read(buf, ELF_OFFSET_IN_DISK, 4096);
 #endif
 
-	assert(0);
 	elf = (void*)buf;
 
 	/* TODO: fix the magic number with the correct one */
