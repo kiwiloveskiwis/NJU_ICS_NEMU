@@ -108,7 +108,7 @@ static hwaddr_t page_translate(lnaddr_t addr) {
 
 		result = (page_table.page_frame << 12) + offset;
 	}
-	if(result < 10000) Log("addr %x, result %x", addr, result);
+	 Log("addr %x, result %x", addr, result);
 	return result;
 }
 
