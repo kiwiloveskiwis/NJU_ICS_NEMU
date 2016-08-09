@@ -98,16 +98,17 @@ static hwaddr_t page_translate(lnaddr_t addr) {
 		hwaddr_t page_directory_addr = (cpu.cr3.page_directory_base << 12) + (dir << 2); 
 		// 4 bytes per dir
 		PDE page_directory;
-		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr,4);
+		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr, 4);
 		assert(page_directory.present);
 
 		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
 		PTE  page_table;
-		page_table.val = (uint32_t)hwaddr_read(page_table_addr,4);
+		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
 		assert(page_table.present);
 
-		result = (page_table.page_frame << 20) + offset;
+		result = (page_table.page_frame << 12) + offset;
 	}
+	if(result < 10000) Log("addr %x, result %x", addr, result);
 	return result;
 }
 
