@@ -15,7 +15,7 @@ void video_mapping_read_test();
 void video_mapping_clear();
 
 void init_cond();
-volatile x = 222;
+volatile int x = 222;
 
 /* Initialization phase 1
  * The assembly code in start.S will finally jump here.
