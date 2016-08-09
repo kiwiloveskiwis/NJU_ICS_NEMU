@@ -19,6 +19,7 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_write(addr, len, data);
+	assert(hwaddr_read(addr, len) == data);
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
@@ -45,7 +46,6 @@ void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	else {
 		hwaddr_t hwaddr = page_translate(addr);
 		hwaddr_write(hwaddr, len, data);
-		assert(hwaddr_read(hwaddr, len) == data);
 	}
 }
 
