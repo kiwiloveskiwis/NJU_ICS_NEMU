@@ -91,24 +91,25 @@ static void load_sreg_cache(uint8_t sreg) {
 
 
 static hwaddr_t page_translate(lnaddr_t addr) {
-	hwaddr_t result = addr;
-	if(cpu.cr0.protect_enable && cpu.cr0.paging) {
-		uint32_t dir = (addr >> 22) & 0x3ff;
-		uint32_t page = (addr >> 12) & 0x3ff;
-		uint32_t offset = addr & 0xfff;
-		hwaddr_t page_directory_addr = (cpu.cr3.page_directory_base << 12) + (dir << 2); 
-		// 4 bytes per dir
-		PDE page_directory;
-		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr, 4);
-		assert(page_directory.present);
+if(!cpu.cr0.protect_enable||!cpu.cr0.paging)
+		return addr;
+	else
+	{
+		uint16_t offset=addr&0xfff;//12
+		uint16_t page_index=(addr>>12)&0x3ff;//10
+		uint16_t dir_index=(addr>>22)&0x3ff;//10
 
-		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
-		PTE  page_table;
-		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-		assert(page_table.present);
+		hwaddr_t page_dir_addr=(cpu.cr3.page_directory_base<<12)+(dir_index<<2);
+		PDE pde;
+		pde.val=(uint32_t)hwaddr_read(page_dir_addr,4);
+		Assert(pde.present,"%x\n",cpu.eip);
 
-		result = (page_table.page_frame << 12) + offset;
+		hwaddr_t page_table_addr=(pde.page_frame<<12)+(page_index<<2);
+		PTE pte;
+		pte.val=(uint32_t)hwaddr_read(page_table_addr,4);
+		Assert(pte.present,"%x\n",cpu.eip);
+
+		return (pte.page_frame<<12)+offset;
 	}
-	return result;
 }
 
