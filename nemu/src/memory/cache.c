@@ -150,7 +150,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 	dram_write(addr, len, data);
 }
-
+// TODO : debug cache2!!!
 
 #undef BLOCK_WIDTH
 #undef WAY_WIDTH
