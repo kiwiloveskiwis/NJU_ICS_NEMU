@@ -18,8 +18,8 @@
 
 extern uint32_t dram_read(hwaddr_t addr,size_t len);
 
-extern uint32_t cache_read_2(hwaddr_t addr, size_t len);
-extern void cache_write_2(hwaddr_t addr, size_t len, uint32_t data);
+extern uint32_t dram_read(hwaddr_t addr, size_t len);
+extern void dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
 
 typedef struct{
@@ -96,7 +96,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	int j;
 	uint32_t loading_temp[BLOCK_SIZE >> 2];
 	for(j = 0; j < (BLOCK_SIZE >> 2); j++) {
-		loading_temp[j] = cache_read_2(caddr.value + 4 * j, 4);
+		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
 	}
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content , BLOCK_SIZE);
@@ -148,7 +148,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 		block_write(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
 
-	cache_write_2(addr, len, data);
+	dram_write(addr, len, data);
 }
 
 
