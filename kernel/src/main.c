@@ -79,6 +79,8 @@ void init_cond() {
 #endif
 
 	/* Load the program. */
+
+	assert(0);
 	uint32_t eip = loader();
 	
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
@@ -100,7 +102,6 @@ void init_cond() {
 	/* Keep the `bt' command happy. */
 	asm volatile("movl $0, %ebp");
 	asm volatile("subl $16, %esp");
-	assert(0);
 	/* Here we go! */
 	((void(*)(void))eip)();
 
