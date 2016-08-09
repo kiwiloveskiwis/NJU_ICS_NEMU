@@ -42,6 +42,7 @@ uint32_t loader() {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
+			assert(0);
 			memcpy((void *)hwaddr, (void *)ph->p_offset, ph->p_filesz);
 			memset((void *)(hwaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
