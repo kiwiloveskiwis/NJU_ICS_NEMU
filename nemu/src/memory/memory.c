@@ -108,7 +108,6 @@ static hwaddr_t page_translate(lnaddr_t addr) {
 
 		result = (page_table.page_frame << 12) + offset;
 	}
-	 Log("addr %x, result %x", addr, result);
 	return result;
 }
 
