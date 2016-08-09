@@ -42,7 +42,6 @@ uint32_t loader() {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
-			assert(0);
 			Log("vaddr : %x, hwaddr :%x", ph->p_vaddr, hwaddr);
 
 			/* TODO: read the content of the segment from the ELF file 
