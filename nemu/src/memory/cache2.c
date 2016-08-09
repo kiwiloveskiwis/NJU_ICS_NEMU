@@ -176,7 +176,7 @@ void cache_write_2(hwaddr_t addr, size_t len, uint32_t data) {
 	if(offset + len > BLOCK_SIZE) {
 		block_write_2(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
-	// dram_write(addr, len, data);
+	 dram_write(addr, len, data);
 }
 
 
