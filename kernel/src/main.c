@@ -15,13 +15,11 @@ void video_mapping_read_test();
 void video_mapping_clear();
 
 void init_cond();
-volatile int x = 222;
 
 /* Initialization phase 1
  * The assembly code in start.S will finally jump here.
  */
 void init() {
-	x = x + 1;
 #ifdef IA32_PAGE
 	/* We must set up kernel virtual memory first because our kernel thinks it 
 	 * is located at 0xc0100000, which is set by the linking options in Makefile.
