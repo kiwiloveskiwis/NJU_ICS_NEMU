@@ -43,7 +43,6 @@ uint32_t loader() {
 		if(ph->p_type == PT_LOAD) {
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
 			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_filesz);
-			// memcpy((void *)hwaddr, (void *)ph->p_offset, ph->p_filesz);
 			memset((void *)(hwaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
 
 			/* TODO: read the content of the segment from the ELF file 

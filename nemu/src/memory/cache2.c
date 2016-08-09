@@ -118,7 +118,7 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 	uint32_t set = temp.setidx;
 
 	int i = 0;
-	for(i = 0; i < NR_WAY;i++) {
+	for(i = 0; i < NR_WAY; i++) {
 		if(caches2[set][i].valid && caches2[set][i].tag == tag){
 			memcpy_with_mask(caches2[set][i].content, data, BLOCK_SIZE, mask);
 			caches2[set][i].dirty = true;
@@ -133,11 +133,13 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 	if(i >= NR_WAY) {	// no empty slots
 		srand(time(0));
 		i = rand() % NR_WAY;
-		if (caches2[set][i].dirty) {
+		if (caches2[set][i].valid && caches2[set][i].dirty) {
 			int j;
 			Cache_Addr_2 replace;
+			replace.value = 0;
 			replace.tag = caches2[set][i].tag;
 			replace.setidx = set;
+
 			for(j = 0; j < (BLOCK_SIZE >> 2); j++)
 				dram_write(replace.value, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
 		}
