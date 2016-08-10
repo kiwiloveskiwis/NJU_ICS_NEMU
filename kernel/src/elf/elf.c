@@ -39,9 +39,9 @@ uint32_t loader() {
 	ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff); 
 	for(; i < elf->e_phnum; i++) {
 		ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff + i * elf->e_phentsize); 
+		uint32_t hwaddr = mm_malloc(ph->p_vaddr, (ph->p_memsz + 4096) & (~0xfff));
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
-			uint32_t hwaddr = mm_malloc(ph->p_vaddr, (ph->p_memsz + 4096) & (~0xfff));
 			
 			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_filesz);
 			memset((void *)(hwaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
