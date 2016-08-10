@@ -41,12 +41,13 @@ uint32_t loader() {
 		ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff + i * elf->e_phentsize); 
 
 		if(ph->p_type == PT_LOAD) {
-			assert(0);
 			uint32_t loaded = 0;
 			uint32_t unit = 1 << 12;
 			uint32_t start = ph->p_vaddr & ~0xfff;
 			uint32_t end = (ph->p_memsz + ph->p_vaddr);
 			uint32_t offstart = ph->p_offset & ~0xfff;
+			assert(0);
+
 			while(end - start - loaded > 0) {
 				uint32_t hwaddr = mm_malloc(start + loaded, unit);
 				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
