@@ -24,8 +24,8 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
-	// if ((addr & 0xfff) + len > 0xfff) {
-	if(0) {
+	 if ((addr & 0xfff) + len > 0xfff) {
+	// if(0) {
 		Log("Addr : %x", addr);
 		/* this is a special case, you can handle it later. */
 		assert(0);
@@ -38,8 +38,8 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
 	assert(len == 1 || len == 2 || len == 4);
-	// if ((addr & 0xfff) + len > 0xfff) {
-	if(0) {
+	if ((addr & 0xfff) + len > 0xfff) {
+	// if(0) {
 		Log("Addr : %x", addr);
 		assert(0);
 	}
