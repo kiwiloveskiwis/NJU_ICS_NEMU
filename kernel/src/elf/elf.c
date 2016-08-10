@@ -53,6 +53,7 @@ uint32_t loader() {
 				loaded += unit;
 			}
 			memset((void *)end, 0, ((end + unit) & ~0xfff) - end);
+			break;
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
 			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
 			 *  LOAD           0x000200 0x08049200 0x08049200 0x1d4c0 0x27100 RW  0x1000
