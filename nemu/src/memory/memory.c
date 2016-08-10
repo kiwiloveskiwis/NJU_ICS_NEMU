@@ -100,12 +100,13 @@ static hwaddr_t page_translate(lnaddr_t addr) {
 		// 4 bytes per dir
 		PDE page_directory;
 		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr, 4);
-		Assert(page_directory.present, "%x\n", cpu.eip);
+		Assert(page_directory.present, "eip == 0x%x\n lnaddr = %x ", cpu.eip, addr);
 
 		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
 		PTE  page_table;
 		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-		Assert(page_table.present,  "%x\n", cpu.eip);
+		Assert(page_table.present,  "eip == %x\n, lnaddr = %x, table.val = %x",\
+			   	cpu.eip, addr, page_table.val);
 
 		result = (page_table.page_frame << 12) + offset;
 	}
