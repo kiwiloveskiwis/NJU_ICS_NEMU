@@ -41,6 +41,7 @@ uint32_t loader() {
 		ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff + i * elf->e_phentsize); 
 
 		if(ph->p_type == PT_LOAD) {
+			assert(0);
 			uint32_t loaded = 0;
 			uint32_t unit = 1 << 12;
 			uint32_t start = ph->p_vaddr & ~0xfff;
