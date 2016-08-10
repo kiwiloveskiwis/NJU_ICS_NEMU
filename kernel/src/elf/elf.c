@@ -42,9 +42,12 @@ uint32_t loader() {
 
 		if(ph->p_type == PT_LOAD) {
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
-			assert(ph->p_vaddr != 0x80480a6);
 			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_memsz);
-			
+			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
+			 *  LOAD           0x000200 0x08049200 0x08049200 0x1d4c0 0x27100 RW  0x1000
+			 */
+			break;	
 			
 
 			/* TODO: read the content of the segment from the ELF file 
