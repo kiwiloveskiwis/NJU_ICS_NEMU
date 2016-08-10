@@ -63,3 +63,4 @@ hwaddr_t read_tlb(lnaddr_t addr) {
 
 #undef TAG_WIDTH
 #undef NR_TLB
+
