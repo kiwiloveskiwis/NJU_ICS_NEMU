@@ -44,7 +44,6 @@ uint32_t loader() {
 			uint32_t loaded = 0;
 			uint32_t unit = 1 << 12;
 			uint32_t start = ph->p_vaddr & ~0xfff;
-			assert(start != 0x8048000);
 			uint32_t end = (ph->p_memsz + ph->p_vaddr);
 			uint32_t offstart = ph->p_offset & ~0xfff;
 			while(end - start - loaded > 0) {
