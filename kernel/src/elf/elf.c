@@ -46,12 +46,12 @@ uint32_t loader() {
 			uint32_t start = ph->p_vaddr & ~0xfff;
 			uint32_t end = (ph->p_memsz + ph->p_vaddr);
 			uint32_t offstart = ph->p_offset & ~0xfff;
-			assert(0);
 
 			while(end - start - loaded > 0) {
 				uint32_t hwaddr = mm_malloc(start + loaded, unit);
 				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
 				loaded += unit;
+			assert(0);
 			}
 			memset((void *)end, 0, ((end + unit) & ~0xfff) - end);
 			break;
