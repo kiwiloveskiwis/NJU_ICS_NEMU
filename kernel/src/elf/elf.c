@@ -45,7 +45,6 @@ uint32_t loader() {
 			
 			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_filesz);
 			memset((void *)(hwaddr + ph->p_filesz), 0, ph->p_memsz - ph->p_filesz);
-			assert(swaddr_read(ph->vaddr) == hwaddr);
 
 			/* TODO: read the content of the segment from the ELF file 
 			 * to the memory region [VirtAddr, VirtAddr + FileSiz)

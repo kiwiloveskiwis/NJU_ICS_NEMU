@@ -105,8 +105,9 @@ static hwaddr_t page_translate(lnaddr_t addr) {
 		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
 		PTE  page_table;
 		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-		Assert(page_table.present,  "eip == %x\n, lnaddr = %x, table.val = %x",\
-			   	cpu.eip, addr, page_table.val);
+		Assert(page_table.present,  "eip == %x\nlnaddr = %x\n \
+				page_directory.val = %x, page_table.val = %x",\
+			   	cpu.eip, addr, page_directory.val, page_table.val);
 
 		result = (page_table.page_frame << 12) + offset;
 	}
