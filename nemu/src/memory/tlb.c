@@ -23,7 +23,7 @@ void init_tlb(){
 	}
 }
 
-hwaddr_t tlb_read(lnaddr_t addr) {
+hwaddr_t read_tlb(lnaddr_t addr) {
 	assert(cpu.cr0.protect_enable && cpu.cr0.paging) ;
 	uint32_t tag = addr >> 12;
 	uint32_t offset = addr & 0xfff;
