@@ -101,10 +101,6 @@ static int cmd_x(char *args) {
 	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
-		if(addr + 4 * i >= HW_MEM_SIZE) {
-			Log("physical address %x is outside of the physical memory!", addr + 4 * i);
-			return 0;
-		}
 		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4, R_DS));
 	}
 	return 0;
