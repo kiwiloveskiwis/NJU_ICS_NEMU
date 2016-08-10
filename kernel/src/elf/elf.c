@@ -76,6 +76,6 @@ uint32_t loader() {
 
 	write_cr3(get_ucr3());
 #endif
-
+	assert(entry < 9000000);
 	return entry;
 }
