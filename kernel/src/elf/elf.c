@@ -42,6 +42,7 @@ uint32_t loader() {
 
 		if(ph->p_type == PT_LOAD) {
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
+			assert((ph->p_vaddr & ~0xfff) != 0x8048000);
 			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_memsz);
 			
 			
@@ -77,6 +78,6 @@ uint32_t loader() {
 
 	write_cr3(get_ucr3());
 #endif
-	assert(entry != 0x80480a6); // 0x8048xxx 
+	assert(entry == 0x80480a6); // 0x8048xxx 
 	return entry;
 }
