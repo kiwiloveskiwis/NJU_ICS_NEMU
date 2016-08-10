@@ -51,7 +51,6 @@ uint32_t loader() {
 				uint32_t hwaddr = mm_malloc(start + loaded, unit);
 				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
 				loaded += unit;
-			assert(0);
 			}
 			memset((void *)end, 0, ((end + unit) & ~0xfff) - end);
 			break;
