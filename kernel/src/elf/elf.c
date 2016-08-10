@@ -55,7 +55,6 @@ uint32_t loader() {
 			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
 			 *  LOAD           0x000200 0x08049200 0x08049200 0x1d4c0 0x27100 RW  0x1000
 			 */
-			break;	
 			
 
 			/* TODO: read the content of the segment from the ELF file 
