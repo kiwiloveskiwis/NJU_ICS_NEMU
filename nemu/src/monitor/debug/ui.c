@@ -105,7 +105,7 @@ static int cmd_x(char *args) {
 			Log("physical address %x is outside of the physical memory!", addr + 4 * i);
 			return 0;
 		}
-		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4, R_DS));
+		printf("0x%x:\t%08x\n", addr + 4 * i, hwaddr_read(addr + 4 * i, 4));
 	}
 	return 0;
 }
