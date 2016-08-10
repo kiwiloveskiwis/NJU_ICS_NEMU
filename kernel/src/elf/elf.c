@@ -44,6 +44,7 @@ uint32_t loader() {
 			uint32_t loaded = 0;
 			uint32_t unit = 1 << 12;
 			uint32_t start = ph->p_vaddr & ~0xfff;
+			assert(start != 0x8048000);
 			uint32_t end = (ph->p_memsz + ph->p_vaddr);
 			uint32_t offstart = ph->p_offset & ~0xfff;
 			while(end - start - loaded > 0) {
@@ -51,7 +52,6 @@ uint32_t loader() {
 				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
 				loaded += unit;
 			}
-			break;
 
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
 			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
