@@ -77,6 +77,6 @@ uint32_t loader() {
 
 	write_cr3(get_ucr3());
 #endif
-	assert(entry < 0x9000000); // 0x8048xxx 
+	assert(entry == 0x80480a6); // 0x8048xxx 
 	return entry;
 }
