@@ -26,7 +26,7 @@ make_helper(inv) {
 
 extern hwaddr_t page_translate(lnaddr_t addr);
 extern lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg);
-extern uint32_t hwaddr_read(hwaddr_t addr, size_t len);
+extern uint32_t swaddr_read(hwaddr_t addr, size_t len, uint8_t sreg);
 
 make_helper(nemu_trap) {
 	print_asm("nemu trap (eax = %d)", cpu.eax);
@@ -36,7 +36,7 @@ make_helper(nemu_trap) {
 		case 2:
 			cpu.eax = cpu.edx;
 			while(edx > 0) {
-				printf("%c",hwaddr_read(ecx++, 1));
+				printf("%c",swaddr_read(ecx++, 1, R_SS));
 				edx--;
 			}
 			// fwrite((char *)hwaddr, cpu.edx, 1, stdout);
