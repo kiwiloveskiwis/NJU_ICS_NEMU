@@ -38,7 +38,6 @@ make_helper(nemu_trap) {
 		case 2:
 			lnaddr = seg_translate(cpu.ecx, R_SS);
 			hwaddr = page_translate(lnaddr);
-			Log("hwaddr = 0x%x, cpu.eip == 0x%x", hwaddr, cpu.eip);
 			for(i = 0; i < cpu.edx; i++) {
 				printf("%c", hwaddr_read(hwaddr++, 1));
 			}
