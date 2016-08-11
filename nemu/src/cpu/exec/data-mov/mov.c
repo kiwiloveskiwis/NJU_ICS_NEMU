@@ -14,6 +14,7 @@
 
 /* for instruction encoding overloading */
 extern make_helper(decode_rm2r_v);
+extern void init_tlb();
 
 make_helper_v(mov_i2r)
 make_helper_v(mov_i2rm)
@@ -45,6 +46,7 @@ make_helper(mov_r2crx) {
 		case 0	: cpu.cr0.val = reg_l(src);
 				  break;
 		case 3	: cpu.cr3.val = reg_l(src);
+				 init_tlb();
 				  break;
 		default	: Log("mov_crx2r not valid!");	
 	}
