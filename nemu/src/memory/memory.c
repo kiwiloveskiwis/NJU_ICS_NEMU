@@ -77,31 +77,19 @@ void load_seg_cache(uint8_t sreg)
 }
 lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg)
 {
-	if(cpu.cr0.protect_enable == 1)
-	{
+	if(cpu.cr0.protect_enable == 1) {
 		if(!cpu.sr[sreg].cached)
 			load_seg_cache(sreg);
 		return addr + cpu.sr[sreg].base;
 	}
-	else
-		return (lnaddr_t)addr;
+	else return (lnaddr_t)addr;
 }
-
-
 
 uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
 #endif
 	lnaddr_t lnaddr = seg_translate(addr, sreg);
-	if(cpu.cr0.paging == 1)
-	{
-		/*
-		   printf("swaddr:%x\n",addr);
-		   printf("lnaddr:%x\n",lnaddr);
-		   printf("sreg:%d\n",sreg);
-		 */
-	}
 	return lnaddr_read(lnaddr, len);
 }
 
