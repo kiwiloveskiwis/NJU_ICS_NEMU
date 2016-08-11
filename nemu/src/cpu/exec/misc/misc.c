@@ -16,9 +16,17 @@ make_helper(int3) {
 }
 
 make_helper(int_i_b) {
+#define pushfrom(reg) cpu.esp -= 4; swaddr_write(cpu.esp, 4, reg, R_SS);
+	pushfrom(cpu.EFLAGS)
+	cpu.IF = 0;
+	cpu.TF = 0;
+	pushfrom(cpu.sr[R_CS].val)
+	pushfrom(cpu.eip)
+
 	uint8_t aim = instr_fetch(eip + 1, 1);
 	raise_intr(aim);
-	return 0; // doesnt matter 
+	return 0; //doesnt matter
+#undef pushfrom
 }
 
 make_helper(lea) {
