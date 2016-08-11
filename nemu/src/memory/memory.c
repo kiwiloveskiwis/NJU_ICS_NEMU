@@ -108,8 +108,7 @@ static hwaddr_t page_translate(lnaddr_t addr, bool *succ) {
 		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
 		PTE  page_table;
 		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-		if(!page_table.present) Log("page table invalid!");
-		Assert(page_table.present,  "eip == %x\nlnaddr = %x\n\
+		if(!page_table.present) Log("page table invalid!eip == %x\nlnaddr = %x\n\
 page_directory.page_frame = %x, page_table.page_frame = %x", \
 cpu.eip, addr, page_directory.page_frame, page_table.page_frame);
 
