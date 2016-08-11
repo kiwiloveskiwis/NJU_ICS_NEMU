@@ -37,6 +37,7 @@ make_helper(nemu_trap) {
 
 			lnaddr = seg_translate(cpu.ecx, R_SS);
 			hwaddr = page_translate(lnaddr);
+			Log("hwaddr = 0x%x", hwaddr);
 			fwrite((char *)hwaddr, cpu.edx, 1, stdout);
 			// printf("%.*s\n", cpu.edx, (char *)hwaddr);
 		   	break;
