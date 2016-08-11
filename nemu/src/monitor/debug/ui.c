@@ -70,6 +70,12 @@ static int cmd_si(char *args) {
 	else cpu_exec(atoi(arg));
 	return 0;
 }
+static int cmd_page(char *args) {
+	int addr;
+	sscanf(args, "%x", &addr);
+	return 0;
+
+}
 
 static int cmd_info(char *args) {
 	int i;
@@ -153,6 +159,7 @@ static struct {
 } cmd_table [] = {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "cache", "Display the cache's concents which contains ADDR", cmd_cache},
+	{ "page", "Display whether the address has been paged", cmd_page},
 	{ "info", "Print information(r/w)", cmd_info}, 
 	{ "si", "Execute one machine instruction", cmd_si},
 	{ "bt", "Print backtrace of all stack frames", cmd_bt},
