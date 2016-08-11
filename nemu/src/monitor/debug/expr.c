@@ -9,9 +9,10 @@
 #include <stdlib.h>
 
 extern uint32_t find_var_addr(char * name, bool* succ);
+extern hwaddr_t page_translate(lnaddr_t addr, bool *succ);
 
 enum {
-	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR, NEG, VAR
+	NOTYPE = 256, EQ, NUM, NEQ, HEX, DEC, AND, NOT, REG, OR, PTR, NEG, VAR, PAGE
 
 	/* TODO: Add more token types */
 
@@ -40,6 +41,7 @@ static struct rule {
 	{"&&", AND},
 	{"\\|{2}",OR},
 	{"0x[0-9a-fA-F]+", HEX},
+	{"page", PAGE},
 	{"[a-zA-z_][_a-zA-z0-9]+", VAR},
 	{"[0-9]+", DEC}
 	
@@ -119,6 +121,7 @@ static bool make_token(char *e) {
 								  }
 								  nr_token++;
 								  break;
+					case PAGE:
 					case VAR :	
 								  tokens[nr_token].type = rules[i].token_type;
 								  memcpy(tokens[nr_token].str, substr_start, substr_len );
@@ -176,6 +179,7 @@ uint32_t expr(char *e, bool *success) {
 }
 
 uint32_t eval(uint32_t p, uint32_t q) {
+	bool succ;
 	//Log("p == %d,q == %d",p, q);
 	if (p > q) {
 		Log("p > q!");
@@ -184,7 +188,6 @@ uint32_t eval(uint32_t p, uint32_t q) {
 	else if (p == q) {
 		int temp = 0;
 		char * tempstr = tokens[p].str;
-		bool succ;
 		switch (tokens[p].type) {
 			case DEC : return atoi(tokens[p].str);
 			case HEX : 
@@ -194,6 +197,7 @@ uint32_t eval(uint32_t p, uint32_t q) {
 						uint32_t addr = find_var_addr(tempstr, &succ);
 						if (!succ) Log("Varable Not Found!");
 						return addr;
+						
 			case REG :
 					   for(temp = R_EAX; temp <= R_EDI; temp++) {
 						   if(!strcmp(tempstr, regsl[temp])) return cpu.gpr[temp]._32;
@@ -214,6 +218,9 @@ uint32_t eval(uint32_t p, uint32_t q) {
 			case NOT : return !eval(p + 1, q);
 			case NEG : return -eval(p + 1, q);
 			case PTR : return swaddr_read(eval(p + 1, q), 4, R_DS);
+			case PAGE:  succ = true;
+						hwaddr_t hwaddr = page_translate(eval(p + 1, q), &succ);
+						return hwaddr;
 		}
 		uint32_t left = eval(p, domin - 1);
 		uint32_t right = eval(domin + 1, q);
