@@ -21,7 +21,7 @@ make_helper(lidt){
 	cpu.gdtr_limit = lnaddr_read(addr, 2);
 	if(op_src->size == 16) cpu.idtr_base = lnaddr_read(addr + 2, 3);
 	else cpu.idtr_base = lnaddr_read(addr + 2, 4);
-	print_asm("lgdt\t" "%s", op_src->str);
+	print_asm("lidt\t" "%s", op_src->str);
 	return len + 1;
 }
 
