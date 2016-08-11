@@ -50,7 +50,8 @@ uint32_t loader() {
 
 			while(end - start - loaded > 0) {
 			asm volatile("nop" : : :);
-				loaded = unit + start + end + offstart;
+				loaded += unit;
+				offstart --;
 			}
 
 			break; // eip == 0xc0100f0c
