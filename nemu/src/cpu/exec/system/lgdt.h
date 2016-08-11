@@ -15,4 +15,14 @@ make_helper(lgdt){
 	return len + 1;
 }
 
+make_helper(lidt){
+	int len = decode_rm_l(eip + 1);
+	lnaddr_t addr = op_src->addr; 
+	cpu.gdtr_limit = lnaddr_read(addr, 2);
+	if(op_src->size == 16) cpu.idtr_base = lnaddr_read(addr + 2, 3);
+	else cpu.idtr_base = lnaddr_read(addr + 2, 4);
+	print_asm("lgdt\t" "%s", op_src->str);
+	return len + 1;
+}
+
 #endif
