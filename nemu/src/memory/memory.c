@@ -2,124 +2,115 @@
 #include "cpu/reg.h"
 #include "../../lib-common/x86-inc/mmu.h"
 
-uint32_t dram_read(hwaddr_t, size_t);
-void dram_write(hwaddr_t, size_t, uint32_t);
-uint32_t cache_read(hwaddr_t addr, size_t len);
-void cache_write(hwaddr_t addr, size_t len, uint32_t data);
-
-static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg);
-static void load_sreg_cache(uint8_t sreg);
-hwaddr_t page_translate(lnaddr_t addr, bool *succ);
+uint32_t cache_read(hwaddr_t, size_t);
+void cache_write(hwaddr_t, size_t, uint32_t);
+int32_t hwaddr_read(hwaddr_t addr, size_t len);
+hwaddr_t tlb_read(lnaddr_t);
 
 /* Memory accessing interfaces */
 
-uint32_t hwaddr_read(hwaddr_t addr, size_t len) {
-	return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+hwaddr_t page_translate(lnaddr_t addr)
+{
+	if(!cpu.cr0.protect_enable||!cpu.cr0.paging)
+		return addr;
+	else
+	{
+		//printf("1_addr:%x\n",addr);
+		uint16_t offset=addr&0xfff;//12
+		  uint16_t page_index=(addr>>12)&0x3ff;//10
+		  uint16_t dir_index=(addr>>22)&0x3ff;//10
+
+		  hwaddr_t page_dir_addr=(cpu.cr3.page_directory_base<<12)+(dir_index*4);
+		  PDE pde;
+		  pde.val=(uint32_t)hwaddr_read(page_dir_addr,4);
+		  Assert(pde.present,"%x\n",cpu.eip);
+
+		  hwaddr_t page_table_addr=(pde.page_frame<<12)+(page_index*4);
+		  PTE pte;
+		  pte.val=(uint32_t)hwaddr_read(page_table_addr,4);
+		  Assert(pte.present,"%x\n",cpu.eip);
+
+		  return (pte.page_frame<<12)+offset;
+	}
+}
+int32_t hwaddr_read(hwaddr_t addr, size_t len) {
+	if(cpu.cr0.paging == 1)
+		if(cpu.eip == 0x100b47)
+		//printf("addr:%x\n",addr);
+			;
+	return cache_read(addr, len)&(~0u >> ((4 - len) << 3));
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	cache_write(addr, len, data);
-	assert(hwaddr_read(addr, len) == data);
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
+#ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
-	// if ((addr & 0xfff) + len > 0xfff) {
-	if(0) {
-		Log("Addr : %x", addr);
-		/* this is a special case, you can handle it later. */
-		assert(0);
-	}
-	else {
-		bool succ = true;
-		hwaddr_t hwaddr = page_translate(addr, &succ);
-		if(!succ) assert(0);
-		return hwaddr_read(hwaddr, len);
-	}
+#endif
+	hwaddr_t hwaddr=page_translate(addr);
+	return hwaddr_read(hwaddr,len);
 }
 
 void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data) {
-	assert(len == 1 || len == 2 || len == 4);
-	// if ((addr & 0xfff) + len > 0xfff) {
-	if(0) {
-		Log("Addr : %x", addr);
-		assert(0);
-	}
-	else {
-		bool succ = true;
-		hwaddr_t hwaddr = page_translate(addr, &succ);
-		hwaddr_write(hwaddr, len, data);
-	}
-}
-
-uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
 #endif
-	lnaddr_t lnaddr = seg_translate(addr, len, sreg);
+	hwaddr_t hwaddr=page_translate(addr);
+	hwaddr_write(hwaddr,len,data);
+}
+
+void load_seg_cache(uint8_t sreg)
+{
+	lnaddr_t off_addr = (lnaddr_t)cpu.gdtr_base + 8*cpu.sr[sreg].index; 
+	SegDesc d;
+	uint32_t *tmp=(uint32_t *)&d;
+	*tmp=lnaddr_read( off_addr,4);
+	tmp++;
+	*tmp=lnaddr_read( off_addr+4,4);
+
+	cpu.sr[sreg].base= d.base_15_0 + (d.base_23_16<<16) + (d.base_31_24 << 24);
+	cpu.sr[sreg].limit= d.limit_15_0 + (d.limit_19_16<<16);
+	cpu.sr[sreg].cached=true;
+	return;
+}
+lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg)
+{
+	if(cpu.cr0.protect_enable == 1)
+	{
+		if(!cpu.sr[sreg].cached)
+			load_seg_cache(sreg);
+		return addr + cpu.sr[sreg].base;
+	}
+	else
+		return (lnaddr_t)addr;
+}
+
+
+
+uint32_t swaddr_read(swaddr_t addr, size_t len,uint8_t sreg) {
+#ifdef DEBUG
+	assert(len == 1 || len == 2 || len == 4);
+#endif
+	lnaddr_t lnaddr = seg_translate(addr, sreg);
+	if(cpu.cr0.paging == 1)
+	{
+		/*
+		   printf("swaddr:%x\n",addr);
+		   printf("lnaddr:%x\n",lnaddr);
+		   printf("sreg:%d\n",sreg);
+		 */
+	}
 	return lnaddr_read(lnaddr, len);
 }
 
-void swaddr_write(swaddr_t addr, size_t len, uint32_t data, uint8_t sreg) {
+void swaddr_write(swaddr_t addr, size_t len, uint32_t data,uint8_t sreg) {
 #ifdef DEBUG
 	assert(len == 1 || len == 2 || len == 4);
 #endif
-	lnaddr_t lnaddr = seg_translate(addr, len, sreg);
+	lnaddr_t lnaddr = seg_translate(addr, sreg);
 	lnaddr_write(lnaddr, len, data);
-	assert(swaddr_read(addr, len, sreg) == data);
 }
 
-
-static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg) {
-	lnaddr_t result = addr;
-	if(cpu.cr0.protect_enable) {
-		if(!cpu.sr[sreg].cached)
-			load_sreg_cache(sreg);
-		result += cpu.sr[sreg].base;
-	}
-	return result;
-}
-
-static void load_sreg_cache(uint8_t sreg) {
-	lnaddr_t seg_desc_addr = cpu.gdtr_base + 8 * cpu.sr[sreg].index;
-	SegDesc desc;
-	uint32_t * tmp = (uint32_t *) &desc;
-	*tmp = lnaddr_read(seg_desc_addr, 4);
-	tmp++;
-	*tmp = lnaddr_read(seg_desc_addr + 4, 4); // ATTENTION!! DONT USE *(SegDesc *)
-	
-	cpu.sr[sreg].base = (desc.base_31_24 << 24) + (desc.base_23_16 << 16) + desc.base_15_0;
-	cpu.sr[sreg].limit = desc.limit_15_0 + (desc.limit_19_16 << 16);
-	cpu.sr[sreg].cached = true;	
-}
-
-
-hwaddr_t page_translate(lnaddr_t addr, bool *succ) {
-	hwaddr_t result = addr;
-	if(cpu.cr0.protect_enable && cpu.cr0.paging) {
-		uint32_t dir = (addr >> 22) & 0x3ff;
-		uint32_t page = (addr >> 12) & 0x3ff;
-		uint32_t offset = addr & 0xfff;
-		hwaddr_t page_directory_addr = (cpu.cr3.page_directory_base << 12) + (dir << 2); 
-		// 4 bytes per dir
-		PDE page_directory;
-		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr, 4);
-		if(!page_directory.present) {
-			Log("page dir invalid!eip == 0x%x\n lnaddr = %x ", cpu.eip, addr);
-			*succ = false;
-		}
-		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
-		PTE  page_table;
-		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-		if(!page_table.present) {
-			Log("page table invalid!eip == %x\nlnaddr = %x\n\
-			page_directory.page_frame = %x, page_table.page_frame = %x", \
-			cpu.eip, addr, page_directory.page_frame, page_table.page_frame);
-			*succ = false;
-		}
-
-		result = (page_table.page_frame << 12) + offset;
-	}
-	return result;
-}
 
