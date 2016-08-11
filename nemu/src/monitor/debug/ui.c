@@ -12,6 +12,7 @@
 void cpu_exec(uint32_t);
 extern void printsh();
 extern bool print_cache(hwaddr_t addr);
+extern hwaddr_t page_translate(lnaddr_t addr, bool *succ);
 
 
 /* We use the ``readline'' library to provide more flexibility to read from stdin. */
@@ -73,6 +74,11 @@ static int cmd_si(char *args) {
 static int cmd_page(char *args) {
 	int addr;
 	sscanf(args, "%x", &addr);
+	bool succ = true;
+	hwaddr_t hwaddr = page_translate(addr, &succ);
+	if(!succ) Log("Not found!");
+	else Log("hwaddr = 0x%x", hwaddr);
+	
 	return 0;
 
 }

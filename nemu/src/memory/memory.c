@@ -8,8 +8,8 @@ uint32_t cache_read(hwaddr_t addr, size_t len);
 void cache_write(hwaddr_t addr, size_t len, uint32_t data);
 
 static lnaddr_t seg_translate(swaddr_t addr, size_t len, uint8_t sreg);
-static hwaddr_t page_translate(lnaddr_t addr, bool *succ);
 static void load_sreg_cache(uint8_t sreg);
+hwaddr_t page_translate(lnaddr_t addr, bool *succ);
 
 /* Memory accessing interfaces */
 
@@ -33,6 +33,7 @@ uint32_t lnaddr_read(lnaddr_t addr, size_t len) {
 	else {
 		bool succ = true;
 		hwaddr_t hwaddr = page_translate(addr, &succ);
+		if(!succ) assert(0);
 		return hwaddr_read(hwaddr, len);
 	}
 }
@@ -93,7 +94,7 @@ static void load_sreg_cache(uint8_t sreg) {
 }
 
 
-static hwaddr_t page_translate(lnaddr_t addr, bool *succ) {
+hwaddr_t page_translate(lnaddr_t addr, bool *succ) {
 	hwaddr_t result = addr;
 	if(cpu.cr0.protect_enable && cpu.cr0.paging) {
 		uint32_t dir = (addr >> 22) & 0x3ff;
@@ -103,14 +104,19 @@ static hwaddr_t page_translate(lnaddr_t addr, bool *succ) {
 		// 4 bytes per dir
 		PDE page_directory;
 		page_directory.val = (uint32_t)hwaddr_read(page_directory_addr, 4);
-		if(!page_directory.present) Log("page dir invalid!eip == 0x%x\n lnaddr = %x ", cpu.eip, addr);
-
+		if(!page_directory.present) {
+			Log("page dir invalid!eip == 0x%x\n lnaddr = %x ", cpu.eip, addr);
+			*succ = false;
+		}
 		hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
 		PTE  page_table;
 		page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-		if(!page_table.present) Log("page table invalid!eip == %x\nlnaddr = %x\n\
-page_directory.page_frame = %x, page_table.page_frame = %x", \
-cpu.eip, addr, page_directory.page_frame, page_table.page_frame);
+		if(!page_table.present) {
+			Log("page table invalid!eip == %x\nlnaddr = %x\n\
+			page_directory.page_frame = %x, page_table.page_frame = %x", \
+			cpu.eip, addr, page_directory.page_frame, page_table.page_frame);
+			succ = false;
+		}
 
 		result = (page_table.page_frame << 12) + offset;
 	}
