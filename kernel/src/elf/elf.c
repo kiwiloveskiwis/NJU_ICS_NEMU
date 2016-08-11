@@ -43,13 +43,12 @@ uint32_t loader() {
 		if(ph->p_type == PT_LOAD) {
 			uint32_t loaded = 0;
 			uint32_t unit = 1 << 12;
-			uint32_t start = ph->p_vaddr & ~0xfff;
-			uint32_t end = (ph->p_memsz + ph->p_vaddr);
 			uint32_t offstart = ph->p_offset & ~0xfff;
-			asm volatile("nop" : : :);
+			int start = ph->p_vaddr & ~0xfff;
+			int end = (ph->p_memsz + ph->p_vaddr);
 
 			while(end - start - loaded > 0) {
-			asm volatile("nop" : : :);
+				asm volatile("nop" : : :);
 				loaded += unit;
 				offstart --;
 			}
