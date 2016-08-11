@@ -34,11 +34,11 @@ make_helper(nemu_trap) {
 
 	switch(cpu.eax) {
 		case 2:
-			assert(0);
 
 			lnaddr = seg_translate(cpu.ecx, R_SS);
 			hwaddr = page_translate(lnaddr);
 			printf("%.*s\n", cpu.edx, (char *)hwaddr);
+			assert(0);
 		   	break;
 
 		default:
