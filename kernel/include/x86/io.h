@@ -26,5 +26,3 @@ static inline void
 out_long(uint16_t port, uint32_t data) {
 	asm volatile("out %%eax, %%dx" : : "a"(data), "d"(port));
 }
-
-#endif
