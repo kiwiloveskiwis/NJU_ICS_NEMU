@@ -32,7 +32,8 @@ void raise_intr(uint8_t NO) {
 	tmp++;
 	*tmp = lnaddr_read(gdaddr + 4, 4);
 	uint32_t intr_addr = (gd.offset_31_16 << 16) + gd.offset_15_0;
-	exec(intr_addr);
+	Assert(gd.present, "Gate Desc Invalid! eip == 0x%x", cpu.eip);
+	cpu.eip = intr_addr;
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }
