@@ -1,6 +1,7 @@
 #include "prefix/prefix.h"
 
 #include "system/lgdt.h"
+#include "system/iret.h"
 
 #include "data-mov/mov.h"
 #include "data-mov/xchg.h"

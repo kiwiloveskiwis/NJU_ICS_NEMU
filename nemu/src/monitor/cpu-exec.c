@@ -1,6 +1,7 @@
 #include "monitor/monitor.h"
 #include "monitor/watchpoint.h"
 #include "cpu/helper.h"
+#include "../../lib-common/x86-inc/mmu.h"
 #include <setjmp.h>
 
 /* The assembly code of instructions executed is only output to the screen
@@ -23,10 +24,15 @@ jmp_buf jbuf;
 
 void raise_intr(uint8_t NO) {
 	/* TODO: Trigger an interrupt/exception with ``NO''.
-	 *	 * That is, use ``NO'' to index the IDT.
-	 *		 */
-
-
+	 *	 * That is, use ``NO'' to index the IDT. */
+	uint32_t gdaddr = cpu.idtr_base + NO * 8; // 8 bytes
+	GateDesc gd;
+	uint32_t *tmp = (uint32_t *)&gd;
+	*tmp = lnaddr_read(gdaddr, 4);
+	tmp++;
+	*tmp = lnaddr_read(gdaddr + 4, 4);
+	uint32_t intr_addr = (gd.offset_31_16 << 16) + gd.offset_15_0;
+	exec(intr_addr);
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }
