@@ -46,7 +46,6 @@ make_helper(mov_r2crx) {
 		case 0	: cpu.cr0.val = reg_l(src);
 				  break;
 		case 3	: cpu.cr3.val = reg_l(src);
-				 init_tlb();
 				  break;
 		default	: Log("mov_crx2r not valid!");	
 	}
