@@ -52,6 +52,7 @@ uint32_t loader() {
 				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
 				loaded += unit;
 			}
+			break;
 
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
 			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
