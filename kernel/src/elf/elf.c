@@ -41,24 +41,25 @@ uint32_t loader() {
 		ph = (Elf32_Phdr *) (void *)(buf + elf->e_phoff + i * elf->e_phentsize); 
 
 		if(ph->p_type == PT_LOAD) {
-			int loaded = 0;
-			int unit = 1 << 12;
-			int start = ph->p_vaddr & ~0xfff;
-			int end = (ph->p_memsz + ph->p_vaddr);
-			int offstart = ph->p_offset & ~0xfff;
 
-			while(end - start - loaded > 0) {
-				uint32_t hwaddr = mm_malloc(start + loaded, unit);
-				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
-				loaded += unit;
-			}
+			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
+			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_memsz);
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
 			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
 			 *  LOAD           0x000200 0x08049200 0x08049200 0x1d4c0 0x27100 RW  0x1000
 			 */
+			
 
+			/* TODO: read the content of the segment from the ELF file 
+			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
+			 */
 			// ramdisk_read((uint8_t *)ph->p_vaddr, ELF_OFFSET_IN_DISK + ph->p_offset, ph->p_filesz);  
+			/* TODO: zero the memory region 
+			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
+			 */
 			// memset((void *)(ph->p_vaddr + ph->p_filesz), 0, (ph->p_memsz - ph->p_filesz));
+
+
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
@@ -80,5 +81,6 @@ uint32_t loader() {
 
 	write_cr3(get_ucr3());
 #endif
+	assert(entry == 0x80480a6); // 0x8048xxx 
 	return entry;
 }
