@@ -12,7 +12,7 @@ static void sys_brk(TrapFrame *tf) {
 	tf->eax = 0;
 }
 
-uint32_t sys_ret_val = 0;
+uint32_t sys_ret_val;
 void do_syscall(TrapFrame *tf) {
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
@@ -31,7 +31,6 @@ void do_syscall(TrapFrame *tf) {
 			asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
 			asm volatile (" movl %eax, sys_ret_val");
 			tf->eax = sys_ret_val; // SYS_call return value: length of string
-			assert(sys_ret_val);
 			break;
 
 

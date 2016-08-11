@@ -33,13 +33,12 @@ make_helper(nemu_trap) {
 	lnaddr_t lnaddr;
 	hwaddr_t hwaddr;
 	int i;
-
 	switch(cpu.eax) {
 		case 2:
 			lnaddr = seg_translate(cpu.ecx, R_SS);
 			hwaddr = page_translate(lnaddr);
 			for(i = 0; i < cpu.edx; i++) {
-				printf("%c", hwaddr_read(hwaddr++, 1));
+				printf("%1c", hwaddr_read(hwaddr++, 1));
 			}
 			// fwrite((char *)hwaddr, cpu.edx, 1, stdout);
 			// printf("%.*s\n", cpu.edx, (char *)hwaddr);  why SegFault?
