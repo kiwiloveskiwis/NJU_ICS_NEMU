@@ -115,7 +115,7 @@ hwaddr_t page_translate(lnaddr_t addr, bool *succ) {
 			Log("page table invalid!eip == %x\nlnaddr = %x\n\
 			page_directory.page_frame = %x, page_table.page_frame = %x", \
 			cpu.eip, addr, page_directory.page_frame, page_table.page_frame);
-			succ = false;
+			*succ = false;
 		}
 
 		result = (page_table.page_frame << 12) + offset;
