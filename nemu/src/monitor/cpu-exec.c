@@ -15,6 +15,7 @@ int nemu_state = STOP;
 
 int exec(swaddr_t);
 extern bool checkWP();
+extern void load_seg_cache(uint8_t sreg);
 
 char assembly[80];
 char asm_buf[128];
@@ -27,13 +28,17 @@ void raise_intr(uint8_t NO) {
 	 *	 * That is, use ``NO'' to index the IDT. */
 	uint32_t gdaddr = cpu.idtr_base + NO * 8; // 8 bytes
 	GateDesc gd;
+
 	uint32_t *tmp = (uint32_t *)&gd;
 	*tmp = lnaddr_read(gdaddr, 4);
 	tmp++;
 	*tmp = lnaddr_read(gdaddr + 4, 4);
+
 	uint32_t intr_addr = (gd.offset_31_16 << 16) + gd.offset_15_0;
 	Assert(gd.present, "Gate Desc Invalid! eip == 0x%x", cpu.eip);
-	cpu.eip = intr_addr;
+	cpu.sr[R_CS].val = gd.segment;
+	load_seg_cache(R_CS);// Watch out!!!
+	cpu.eip = intr_addr + cpu.sr[R_CS].base;
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }

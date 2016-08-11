@@ -10,8 +10,8 @@ make_helper(iret) {
 	cpu.esp += 4;
 	cpu.EFLAGS = swaddr_read(cpu.esp, 4, R_SS);
 	cpu.esp += 4;
-	longjmp(jbuf, 1);
 	print_asm_template1();
+	longjmp(jbuf, 1);
 	
 	return 0; 
 }

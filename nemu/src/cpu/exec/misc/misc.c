@@ -21,7 +21,7 @@ make_helper(int_i_b) {
 	cpu.IF = 0;
 	cpu.TF = 0;
 	pushfrom(cpu.sr[R_CS].val)
-	pushfrom(cpu.eip)
+	pushfrom(cpu.eip + 2) // iret to the next instr
 
 	uint8_t aim = instr_fetch(eip + 1, 1);
 	raise_intr(aim);
