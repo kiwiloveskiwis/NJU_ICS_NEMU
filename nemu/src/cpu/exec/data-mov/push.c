@@ -31,5 +31,3 @@ make_helper(pushad) {
 	return 1;
 #undef pushfrom
 }
-
-
