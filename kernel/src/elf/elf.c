@@ -44,7 +44,6 @@ uint32_t loader() {
 
 			uint32_t hwaddr = mm_malloc(ph->p_vaddr, ph->p_memsz);
 			ramdisk_read((uint8_t *)hwaddr, ph->p_offset, ph->p_memsz);
-			break;
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
 			 *  LOAD           0x000000 0x08048000 0x08048000 0x001f0 0x001f0 R E 0x1000
 			 *  LOAD           0x000200 0x08049200 0x08049200 0x1d4c0 0x27100 RW  0x1000
