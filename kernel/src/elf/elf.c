@@ -43,15 +43,16 @@ uint32_t loader() {
 		if(ph->p_type == PT_LOAD) {
 			int loaded = 0;
 			int unit = 1 << 12;
-			uint32_t offstart = ph->p_offset & ~0xfff;
 			int start = ph->p_vaddr & ~0xfff;
 			int end = (ph->p_memsz + ph->p_vaddr);
+			int offstart = ph->p_offset & ~0xfff;
 
 			while(end - start - loaded > 0) {
-				asm volatile("nop" : : :);
+				uint32_t hwaddr = mm_malloc(start + loaded, unit);
+				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
 				loaded += unit;
-				offstart --;
 			}
+			memset((void *)end, 0, ((end + unit) & ~0xfff) - end);
 
 			break; // eip == 0xc0100f0c
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
