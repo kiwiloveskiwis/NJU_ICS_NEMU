@@ -52,6 +52,7 @@ uint32_t loader() {
 				ramdisk_read((uint8_t *)hwaddr, offstart + loaded, unit);
 				loaded += unit;
 			}
+			memset((void *)start, 0, ((end + unit) & ~0xfff) - end);
 
 			break; // eip == 0xc0100f0c
 			/*  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
