@@ -28,6 +28,8 @@ void do_syscall(TrapFrame *tf) {
 
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
+			asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
+			asm volatile (" movl %eax, sys_ret_val");
 			tf->eax = sys_ret_val; // SYS_call return value: length of string
 			break;
 
