@@ -27,6 +27,15 @@ jmp_buf jbuf;
 void raise_intr(uint8_t NO) {
 	/* TODO: Trigger an interrupt/exception with ``NO''.
 	 *	 * That is, use ``NO'' to index the IDT. */
+	cpu.esp-=4;
+	swaddr_write(cpu.esp,4,(uint32_t)cpu.EFLAGS, R_SS);
+
+	cpu.esp-=4;
+	swaddr_write(cpu.esp,4,(uint32_t)(uint16_t)cpu.sr[R_CS].val, R_SS);
+
+	cpu.esp-=4;
+	swaddr_write(cpu.esp,4,(uint32_t)cpu.eip,R_SS);
+
 	uint32_t gdaddr = cpu.idtr_base + NO * 8; // 8 bytes
 	GateDesc gd;
 
@@ -35,10 +44,11 @@ void raise_intr(uint8_t NO) {
 	tmp++;
 	*tmp = lnaddr_read(gdaddr + 4, 4);
 
-	uint32_t intr_addr = (gd.offset_31_16 << 16) + gd.offset_15_0;
 	Assert(gd.present, "Gate Desc Invalid! eip == 0x%x", cpu.eip);
+	uint32_t intr_addr = (gd.offset_31_16 << 16) + gd.offset_15_0;
 	cpu.sr[R_CS].val = gd.segment;
 	load_seg_cache(R_CS);// Watch out!!!
+
 	cpu.eip = intr_addr;
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
