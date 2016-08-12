@@ -58,16 +58,12 @@ void init_cond() {
 	/* Initialize the IDE driver. */
 	init_ide();
 	/* Enable interrupts. */
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("nop");
-	asm volatile("xchg %eax, %eax");
-	assert(1);
 	sti();
 #endif
 
 #ifdef IA32_PAGE
 	/* Initialize the memory manager. */
+	assert(0);
 	init_mm();
 #endif
 
