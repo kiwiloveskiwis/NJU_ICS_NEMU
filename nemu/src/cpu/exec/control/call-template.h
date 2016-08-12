@@ -11,7 +11,7 @@ static void do_execute(){
 		print_asm("call\t0x%x", cpu.eip + 1 + DATA_BYTE);
 	}
 	else {
-		int off = concat(decode_rm_, SUFFIX)(cpu.eip + 1); 
+		int off = concat(decode_rm_, SUFFIX)(cpu.eip + 1) + 1;
 		cpu.esp -= DATA_BYTE;
 		MEM_W(cpu.esp, cpu.eip + off, R_SS);
 		cpu.eip = op_src->val - off;
