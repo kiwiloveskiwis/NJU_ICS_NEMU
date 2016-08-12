@@ -4,11 +4,11 @@
 // DATA_BYTE can only be 2 or 4
 static void do_execute(){
 	if(op_src->type == OP_TYPE_IMM) {	
-		DATA_TYPE inc_adr = op_src->val ;
-		cpu.esp -= DATA_BYTE;
-		swaddr_write(cpu.esp, DATA_BYTE, cpu.eip + DATA_BYTE + 1, R_SS);
-		cpu.eip += inc_adr;
-		print_asm("call\t0x%x", cpu.eip + 1 + DATA_BYTE);
+		int len = concat(decode_i_, SUFFIX)(cpu.eip + 1);
+		cpu.esp -= 4;
+		MEM_W(cpu.esp, cpu.eip + len + 1, R_SS);
+		cpu.eip += op_src->val;
+		print_asm_template1();
 	}
 	else {
 		int off = concat(decode_rm_, SUFFIX)(cpu.eip + 1) + 1;
