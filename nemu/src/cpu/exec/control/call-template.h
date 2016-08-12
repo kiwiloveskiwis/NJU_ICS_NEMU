@@ -1,7 +1,6 @@
 #include "cpu/exec/template-start.h"
-
 #define instr call
-// DATA_BYTE can only be 2 or 4
+
 static void do_execute(){
 	if(op_src->type == OP_TYPE_IMM) {	
 		DATA_TYPE inc_adr = op_src->val ;
@@ -11,8 +10,8 @@ static void do_execute(){
 		print_asm("call\t0x%x", cpu.eip + 1 + DATA_BYTE);
 	}
 }
-
 make_instr_helper(i)
+
 make_helper(concat(call_rm_,SUFFIX)) {
 	int len = concat(decode_rm_, SUFFIX)(eip + 1);
 	cpu.esp -= DATA_BYTE;
