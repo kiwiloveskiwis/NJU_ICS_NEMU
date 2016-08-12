@@ -142,7 +142,7 @@ helper_fun opcode_table [256] = {
 /* 0xbc */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
 /* 0xc0 */	group2_i_b, group2_i_v, ret_i_w, ret, // ret_near
 /* 0xc4 */	inv, inv, mov_i2rm_b, mov_i2rm_v,
-/* 0xc8 */	inv, leave, ret_i_w, ret, // ret_far
+/* 0xc8 */	inv, leave, inv, ret, // ret_far
 /* 0xcc */	int3, int_i_b, inv, iret,
 /* 0xd0 */	group2_1_b, group2_1_v, group2_cl_b, group2_cl_v,
 /* 0xd4 */	inv, inv, nemu_trap, inv,
@@ -153,7 +153,7 @@ helper_fun opcode_table [256] = {
 /* 0xe8 */	call_i_v, jmp_i_v, ljmp, jmp_i_b,
 /* 0xec */	in_d2a_b, in_d2a_v, out_a2d_b, out_a2d_v,
 /* 0xf0 */	inv, inv, inv, rep,
-/* 0xf4 */	inv, inv, group3_b, group3_v,
+/* 0xf4 */	hlt, inv, group3_b, group3_v,
 /* 0xf8 */	inv, inv, cli, sti,
 /* 0xfc */	cld, std, group4, group5
 };
