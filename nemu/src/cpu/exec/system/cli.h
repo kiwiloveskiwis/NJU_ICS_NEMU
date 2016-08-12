@@ -6,6 +6,10 @@ make_helper(cli) {
 	return 1;
 }
 
+make_helper(sti) {
+	cpu.IF = 1;
+	return 1;
+}
 
 
 #endif
