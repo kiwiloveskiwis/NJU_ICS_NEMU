@@ -60,6 +60,7 @@ void init_cond() {
 	/* Enable interrupts. */
 	asm volatile("nop");
 	asm volatile("nop");
+	asm volatile("nop");
 	asm volatile("xchg %eax, %eax");
 	assert(1);
 	sti();
