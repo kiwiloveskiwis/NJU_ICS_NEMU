@@ -27,14 +27,11 @@ jmp_buf jbuf;
 void raise_intr(uint8_t NO) {
 	/* TODO: Trigger an interrupt/exception with ``NO''.
 	 *	 * That is, use ``NO'' to index the IDT. */
-	cpu.esp-=4;
-	swaddr_write(cpu.esp,4,(uint32_t)cpu.EFLAGS, R_SS);
-
-	cpu.esp-=4;
-	swaddr_write(cpu.esp,4,(uint32_t)(uint16_t)cpu.sr[R_CS].val, R_SS);
-
-	cpu.esp-=4;
-	swaddr_write(cpu.esp,4,(uint32_t)cpu.eip,R_SS);
+#define pushfrom(reg) cpu.esp -= 4; swaddr_write(cpu.esp, 4, reg, R_SS);
+	pushfrom(cpu.EFLAGS);
+	pushfrom(cpu.sr[R_CS].val)
+	pushfrom(cpu.eip) // iret to the next instr
+#undef pushfrom
 
 	uint32_t gdaddr = cpu.idtr_base + NO * 8; // 8 bytes
 	GateDesc gd;
