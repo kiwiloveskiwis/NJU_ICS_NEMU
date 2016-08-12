@@ -39,7 +39,7 @@ void raise_intr(uint8_t NO) {
 	Assert(gd.present, "Gate Desc Invalid! eip == 0x%x", cpu.eip);
 	cpu.sr[R_CS].val = gd.segment;
 	load_seg_cache(R_CS);// Watch out!!!
-	cpu.eip = intr_addr + cpu.sr[R_CS].base;
+	cpu.eip = intr_addr;
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }
