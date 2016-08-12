@@ -1,6 +1,5 @@
 #include "cpu/exec/template-start.h"
-
-void pio_write(ioaddr_t addr, size_t len, uint32_t data);
+#include "../include/device/port-io.h"
 
 make_helper(concat(out_a2i_, SUFFIX)) {
 	uint8_t port = instr_fetch(eip + 1, 1);
