@@ -58,7 +58,7 @@ void init_cond() {
 	/* Initialize the IDE driver. */
 	init_ide();
 	/* Enable interrupts. */
-	assert(0);
+	Log("reached");
 	sti();
 #endif
 
