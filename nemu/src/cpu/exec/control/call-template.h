@@ -11,12 +11,13 @@ static void do_execute(){
 		print_asm("call\t0x%x", cpu.eip + 1 + DATA_BYTE);
 	}
 }
-make_instr_helper(i)
 
+make_instr_helper(i)
 make_helper(concat(call_rm_,SUFFIX)) {
-	int len = concat(decode_rm_,SUFFIX)(eip+1);
+	int len = concat(decode_rm_, SUFFIX)(eip + 1);
 	cpu.esp -= DATA_BYTE;
 	MEM_W(cpu.esp, cpu.eip + len + 1, R_SS);
+
 	cpu.eip = op_src->val - len - 1;
 
 	print_asm_template1();
