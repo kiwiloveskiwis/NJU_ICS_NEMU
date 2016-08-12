@@ -14,7 +14,6 @@ static void sys_brk(TrapFrame *tf) {
 
 uint32_t sys_ret_val;
 void do_syscall(TrapFrame *tf) {
-	int i;
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
 		 * let user program register its interrupt handlers. But this is 
@@ -28,21 +27,9 @@ void do_syscall(TrapFrame *tf) {
 			break;
 
 		case SYS_brk: sys_brk(tf); break;
-		case SYS_open:
-			tf->eax = fs_open((const char *)tf->ebx, tf->ecx);
+		case SYS_write: 
+			tf->eax = sys_ret_val; // SYS_call return value: length of string
 			break;
-		case SYS_read:
-			tf->eax = fs_read(tf->ebx, (void *)tf->ecx, tf->edx);
-			break;
-		case SYS_write:
-			  tf->eax = fs_write(tf->ebx, (void *)tf->ecx, tf->edx);
-			  break;
-		case SYS_lseek:
-			  tf->eax = fs_lseek(tf->ebx, tf->ecx, tf->edx);
-			  break;
-		case SYS_close:
-			  tf->eax = fs_close(tf->ebx);
-			  break;
 
 
 		/* TODO: Add more system calls. */
