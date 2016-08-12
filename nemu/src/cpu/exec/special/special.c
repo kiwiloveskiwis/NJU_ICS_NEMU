@@ -35,8 +35,8 @@ make_helper(nemu_trap) {
 	switch(cpu.eax) {
 		case 2:
 			cpu.eax = cpu.edx;
-			while(edx > 0) {
-				printf("%c",swaddr_read(ecx++, 1, R_SS));
+			while(edx > 0) { // what if for loop?
+				printf("%c", swaddr_read(ecx++, 1, R_SS));
 				edx--;
 			}
 			// fwrite((char *)hwaddr, cpu.edx, 1, stdout);

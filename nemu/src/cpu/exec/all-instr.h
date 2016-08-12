@@ -3,6 +3,8 @@
 #include "system/lgdt.h"
 #include "system/iret.h"
 #include "system/cli.h"
+#include "system/in.h"
+#include "system/out.h"
 
 #include "data-mov/mov.h"
 #include "data-mov/xchg.h"
