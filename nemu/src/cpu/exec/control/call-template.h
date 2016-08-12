@@ -7,7 +7,7 @@ static void do_execute(){
 		int len = concat(decode_i_, SUFFIX)(cpu.eip + 1);
 		cpu.esp -= 4;
 		MEM_W(cpu.esp, cpu.eip + len + 1, R_SS);
-		cpu.eip += op_src->val;
+		cpu.eip += op_src->val - len - 1;
 		print_asm_template1();
 	}
 	else {
