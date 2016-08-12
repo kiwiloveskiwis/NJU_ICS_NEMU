@@ -51,7 +51,6 @@ uint32_t loader() {
 
 				uint32_t n = unit - offset;
 				if((ph->p_filesz - data_loaded) < n) n = ph->p_filesz-data_loaded;
-				assert(0);
 				ide_read((void *)(pagebuf + offset), ph->p_offset + data_loaded, n);
 				memcpy((void *)addr, pagebuf, unit);
 				va += unit;
