@@ -30,11 +30,9 @@ uint32_t loader() {
 
 	elf = (void*)buf;
 
-	/* TODO: fix the magic number with the correct one */
 	const uint32_t elf_magic = 0x464c457f;
 	uint32_t *p_magic = (void *)buf;
 	nemu_assert(*p_magic == elf_magic);
-
 	/* Load each program segment */
 	//panic("please implement me");
 	unsigned i;
@@ -53,6 +51,7 @@ uint32_t loader() {
 
 				uint32_t n = unit - offset;
 				if((ph->p_filesz - data_loaded) < n) n = ph->p_filesz-data_loaded;
+				assert(0);
 				ide_read((void *)(pagebuf + offset), ph->p_offset + data_loaded, n);
 				memcpy((void *)addr, pagebuf, unit);
 				va += unit;
