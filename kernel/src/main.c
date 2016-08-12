@@ -89,6 +89,7 @@ void init_cond() {
 
 	/* Clear the test data we just written in the video memory. */
 	video_mapping_clear();
+	assert(0);
 #endif
 
 #ifdef IA32_PAGE
