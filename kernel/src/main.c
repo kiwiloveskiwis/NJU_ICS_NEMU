@@ -58,7 +58,10 @@ void init_cond() {
 	/* Initialize the IDE driver. */
 	init_ide();
 	/* Enable interrupts. */
-	Log("reached");
+	asm volatile("nop");
+	asm volatile("nop");
+	asm volatile("xchg %eax, %eax");
+	assert(0);
 	sti();
 #endif
 
