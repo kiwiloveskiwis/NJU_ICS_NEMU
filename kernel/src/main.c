@@ -61,7 +61,7 @@ void init_cond() {
 	asm volatile("nop");
 	asm volatile("nop");
 	asm volatile("xchg %eax, %eax");
-	assert(0);
+	assert(1);
 	sti();
 #endif
 
