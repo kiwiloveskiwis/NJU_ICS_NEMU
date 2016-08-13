@@ -33,6 +33,8 @@ void do_syscall(TrapFrame *tf) {
 			break;
 		case 1: // KEYBORAD_IRQ
 			sys_char = in_byte(0x60);
+			Log("key pressed!");
+			assert(0);
 			break;
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
