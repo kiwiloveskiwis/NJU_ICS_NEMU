@@ -46,8 +46,8 @@ void *sbrk(int incr) {
 }
 
 int close(int fd) {
-	nemu_assert(0);
-	return 0; 
+	Log("closing file");
+	return syscall(SYS_close, fd);
 }
 
 int fstat(int fd, struct stat *buf) {
