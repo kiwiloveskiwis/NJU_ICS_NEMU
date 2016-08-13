@@ -231,9 +231,13 @@ PAL_TrademarkScreen(
 
 --*/
 {
+	Log("tms");
    PAL_SetPalette(3, FALSE);
+	Log("tms1");
    PAL_RNGPlay(6, 0, 1000, 25);
+	Log("tms2");
    UTIL_Delay(1000);
+	Log("tms3");
    PAL_FadeOut(1);
 }
 
