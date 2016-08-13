@@ -16,6 +16,8 @@ game_init(void) {
 
 	Log("game start!");
 
+	keyboard_event();
+
 	main_loop();
 
 	assert(0); /* main_loop是死循环，永远无法返回这里 */

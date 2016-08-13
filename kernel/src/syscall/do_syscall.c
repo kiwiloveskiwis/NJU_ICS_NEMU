@@ -6,6 +6,7 @@ void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
 uint8_t read_byte(uint32_t offset);
 void serial_printc(char ch);
+void keyboard_event();
 
 static void sys_brk(TrapFrame *tf) {
 #ifdef IA32_PAGE
@@ -30,7 +31,9 @@ void do_syscall(TrapFrame *tf) {
 			add_irq_handle(tf->ebx, (void*)tf->ecx);
 			sti();
 			break;
-
+		case 1: // KEYBORAD_IRQ
+			keyboard_event();
+			break;
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
 			while(edx > 0) { // what if for loop?
