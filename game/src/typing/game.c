@@ -40,7 +40,9 @@ main_loop(void) {
 	bool redraw;
 
 	while (true) {
+		Log("wait");
 		wait_intr();
+		Log("waiting finished");
 		cli();
 		if (now == tick) {
 			sti();
