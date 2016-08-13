@@ -20,7 +20,10 @@ static void sys_brk(TrapFrame *tf) {
 }
 
 char sys_char;
+int ecx;
 void do_syscall(TrapFrame *tf) {
+	ecx = tf->ecx;
+		int edx = tf->edx;
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
 		 * let user program register its interrupt handlers. But this is 
