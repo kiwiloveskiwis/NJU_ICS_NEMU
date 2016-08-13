@@ -57,6 +57,7 @@ void do_syscall(TrapFrame *tf) {
 				edx--;
 				ecx++;
 			}
+			break;
 
 		/* TODO: Add more system calls. */
 
