@@ -4,6 +4,8 @@
 
 void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
+uint8_t read_byte(uint32_t offset);
+void serial_printc(char ch);
 
 static void sys_brk(TrapFrame *tf) {
 #ifdef IA32_PAGE
@@ -14,6 +16,8 @@ static void sys_brk(TrapFrame *tf) {
 
 uint32_t sys_ret_val;
 void do_syscall(TrapFrame *tf) {
+	int ecx = tf->ecx;
+	int edx = tf->edx;
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
 		 * let user program register its interrupt handlers. But this is 
@@ -28,9 +32,12 @@ void do_syscall(TrapFrame *tf) {
 
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
-			asm volatile (".byte 0xd6" : : "a"(2), "c"(tf->ecx), "d"(tf->edx));
-			asm volatile (" movl %eax, sys_ret_val");
-			tf->eax = sys_ret_val; // SYS_call return value: length of string
+			while(edx > 0) { // what if for loop?
+				char c = read_byte(ecx++);
+				serial_printc(c);
+				edx--;
+			}
+			tf->eax = tf->edx; // SYS_call return value: length of string
 			break;
 
 
