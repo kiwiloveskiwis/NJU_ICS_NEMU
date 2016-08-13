@@ -14,10 +14,9 @@ static void sys_brk(TrapFrame *tf) {
 	tf->eax = 0;
 }
 
-uint32_t sys_ret_val;
+char write_char;
 void do_syscall(TrapFrame *tf) {
-	int ecx = tf->ecx - 0x8048000 + 0xc0000000;
-	Log("ecx == 0x%x", ecx);
+	int ecx = tf->ecx;
 	int edx = tf->edx;
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
@@ -34,9 +33,11 @@ void do_syscall(TrapFrame *tf) {
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
 			while(edx > 0) { // what if for loop?
-				char c = read_byte(ecx++);
-				serial_printc(c);
+				asm("movl (%ecx), %edx");
+				asm("movb %edx, write_char");
+				serial_printc(write_char);
 				edx--;
+				ecx++;
 			}
 			tf->eax = tf->edx; // SYS_call return value: length of string
 			break;
