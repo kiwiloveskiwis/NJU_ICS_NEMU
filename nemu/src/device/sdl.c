@@ -52,11 +52,9 @@ void device_update() {
 
 		uint32_t sym = event.key.keysym.sym;
 		if( event.type == SDL_KEYDOWN ) {
-			Log("key down!");
 			keyboard_intr(sym2scancode[sym >> 8][sym & 0xff]);
 		}
 		else if( event.type == SDL_KEYUP ) {
-			Log("key up!");
 			keyboard_intr(sym2scancode[sym >> 8][sym & 0xff] | 0x80);
 		}
 
