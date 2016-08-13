@@ -15,10 +15,10 @@ static void sys_brk(TrapFrame *tf) {
 }
 
 char write_char;
+int ecx;
 void do_syscall(TrapFrame *tf) {
-	int ecx = tf->ecx;
+	ecx = tf->ecx;
 	int edx = tf->edx;
-	Log("ecx=0x%x, edx=0x%x", ecx, edx);
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
 		 * let user program register its interrupt handlers. But this is 
@@ -34,9 +34,9 @@ void do_syscall(TrapFrame *tf) {
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
 			while(edx > 0) { // what if for loop?
-				asm volatile("movl (%ecx), %ebx");
-				asm volatile("movb %ebx, write_char");
-				Log("char = %c", write_char);	
+				asm("movl ecx, %ecx");
+				asm("movl (%ecx), %edx");
+				asm("movb %dl, write_char");
 				serial_printc(write_char);
 				edx--;
 				ecx++;
