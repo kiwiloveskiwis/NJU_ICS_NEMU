@@ -9,6 +9,7 @@ int get_fps();
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
+		Log("%s", __func__);
 	assert(dst && src);
 	int srcx, srcy, srcw, srch, dstx, dsty, j;
 	if (srcrect == NULL || dstrect == NULL) { // copy entirely
@@ -38,6 +39,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+		Log("%s", __func__);
 	assert(dst);
 	assert(color <= 0xff);
 	int dstx = dstrect->x, dsty = dstrect->y, dstw = dstrect->w, dsth = dstrect->h;
@@ -53,6 +55,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
+		Log("%s", __func__);
 	assert(screen);
 	assert(screen->pitch == 320);
 	if(screen->flags & SDL_HWSURFACE) {
@@ -76,6 +79,7 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
 		int firstcolor, int ncolors) {
+		Log("%s", __func__);
 	assert(s);
 	assert(s->format);
 	assert(s->format->palette);
