@@ -15,7 +15,8 @@ press_key(int scan_code) {
 	int i;
 	for (i = 0; i < 26; i ++) {
 		if (letter_code[i] == scan_code) {
-			letter_pressed[i] = true;
+			letter_pressed[i] = (scan_code < 0x80 ? true : false);
+			Log("%d", letter_pressed[i]);
 		}
 	}
 }
@@ -43,7 +44,7 @@ void
 keyboard_event() {
 	key_code = in_byte(0x60);
 	Log("key board event, keycode = 0x%x", key_code);
-
 	press_key(key_code);
+	
 }
 
