@@ -609,7 +609,6 @@ VIDEO_SetPalette(
 
    SDL_SetSurfacePalette(gpScreen, palette);
    SDL_SetSurfacePalette(gpScreenBak, palette);
-   Log("setting done");
 
    //
    // HACKHACK: need to invalidate gpScreen->map otherwise the palette
@@ -625,13 +624,11 @@ VIDEO_SetPalette(
    SDL_SetPalette(gpScreen, SDL_LOGPAL | SDL_PHYSPAL, rgPalette, 0, 256);
    SDL_SetPalette(gpScreenBak, SDL_LOGPAL | SDL_PHYSPAL, rgPalette, 0, 256);
    SDL_SetPalette(gpScreenReal, SDL_LOGPAL | SDL_PHYSPAL, rgPalette, 0, 256);
-   Log("7");
 #if (defined (__SYMBIAN32__))
    {
       static UINT32 time = 0;
       if (SDL_GetTicks() - time > 50)
       {
-   Log("8");
 		  
 	      SDL_UpdateRect(gpScreenReal, 0, 0, gpScreenReal->w, gpScreenReal->h);
 	      time = SDL_GetTicks();

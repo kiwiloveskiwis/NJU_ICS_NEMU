@@ -39,7 +39,6 @@ void do_syscall(TrapFrame *tf) {
 			tf->eax = fs_read(tf->ebx, (void *)tf->ecx, tf->edx);
 			break;
 		case SYS_write:
-			Log("eax=%x ebx = %x, ecx=%x, edx=%x", tf->eax, tf->ebx, tf->ecx, tf->edx);
 			tf->eax = fs_write(tf->ebx, (void *)tf->ecx, tf->edx);
 			break;
 		case SYS_lseek:

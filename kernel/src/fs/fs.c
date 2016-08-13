@@ -55,6 +55,8 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 				return i;
 		}
 	}
+	Log("File not found");
+	assert(0);
 	return 0;
 }
 
@@ -79,7 +81,6 @@ int fs_write(int fd, void *buf, int len){
 			serial_printc(((char *)buf)[i]);
 		}
 		return len;
-
 	}
 	if(fd == 0 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_write failed! fd = %d", fd);
@@ -88,6 +89,7 @@ int fs_write(int fd, void *buf, int len){
 	}
 	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
 	int writelen = min(len, file_table[fd - 3].size - files[fd].offset);
+	files[fd].offset += writelen;
 	ide_write(buf, start, writelen);
 	return writelen;
 }
