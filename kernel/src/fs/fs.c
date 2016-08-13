@@ -59,6 +59,7 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 }
 
 int fs_read(int fd, void *buf, int len){
+	Log("%s", __func__);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_read failed! fd = %d", fd);
 		nemu_assert(0);
@@ -72,6 +73,7 @@ int fs_read(int fd, void *buf, int len){
 }
 
 int fs_write(int fd, void *buf, int len){
+	Log("%s", __func__);
 	int i;
 	if (fd == 1 || fd == 2) {
 		for(i = 0; i < len; i++) {
@@ -92,6 +94,7 @@ int fs_write(int fd, void *buf, int len){
 }
 
 int fs_lseek(int fd, int offset, int whence) {
+	Log("%s", __func__);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_lseek failed! fd = %d", fd);
 		nemu_assert(0);
@@ -107,6 +110,7 @@ int fs_lseek(int fd, int offset, int whence) {
 }
 
 int fs_close(int fd){
+	Log("%s", __func__);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_close failed! fd = %d", fd);
 		nemu_assert(0);
