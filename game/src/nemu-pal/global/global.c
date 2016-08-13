@@ -85,7 +85,6 @@ PAL_InitGlobals(
 #ifndef PAL_WIN95
    Log("loading desc.dat");
    gpGlobals->lpObjectDesc = PAL_LoadObjectDesc(va("%s%s", PAL_PREFIX, "desc.dat"));
-   assert(0);
 #endif
    gpGlobals->bCurrentSaveSlot = 1;
 
