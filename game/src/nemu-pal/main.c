@@ -239,6 +239,7 @@ PAL_TrademarkScreen(
    UTIL_Delay(1000);
 	Log("tms3");
    PAL_FadeOut(1);
+	Log("tms4");
 }
 
 VOID
@@ -287,9 +288,11 @@ PAL_SplashScreen(
    //
    // Create the surfaces
    //
+   Log("splash 1");
    lpBitmapDown = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
+   Log("splash 2");
    lpBitmapUp = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
@@ -305,8 +308,10 @@ PAL_SplashScreen(
    //
    // Read the bitmaps
    //
+   Log("splash 3");
    PAL_MKFReadChunk(buf, 320 * 200, BITMAPNUM_SPLASH_UP, gpGlobals->f.fpFBP);
    Decompress(buf, buf2, 320 * 200);
+   Log("splash 4");
    PAL_FBPBlitToSurface(buf2, lpBitmapUp);
    PAL_MKFReadChunk(buf, 320 * 200, BITMAPNUM_SPLASH_DOWN, gpGlobals->f.fpFBP);
    Decompress(buf, buf2, 320 * 200);
@@ -316,6 +321,7 @@ PAL_SplashScreen(
    lpBitmapTitle = (LPBITMAPRLE)PAL_SpriteGetFrame(buf2, 0);
    PAL_MKFReadChunk(buf, 32000, SPRITENUM_SPLASH_CRANE, gpGlobals->f.fpMGO);
    Decompress(buf, lpSpriteCrane, 32000);
+   Log("splash 5");
 
    iTitleHeight = PAL_RLEGetHeight(lpBitmapTitle);
    lpBitmapTitle[2] = 0;
@@ -353,6 +359,7 @@ PAL_SplashScreen(
    dstrect.x = 0;
    dstrect.w = 320;
 
+   Log("readed");
    while (TRUE)
    {
       PAL_ProcessEvent();
