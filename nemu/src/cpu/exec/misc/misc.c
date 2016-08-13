@@ -18,7 +18,6 @@ make_helper(int3) {
 make_helper(int_i_b) {
 #define pushfrom(reg) cpu.esp -= 4; swaddr_write(cpu.esp, 4, reg, R_SS);
 	uint8_t aim = instr_fetch(eip + 1, 1);
-	Log("int_i_b : raise_intr...");
 	raise_intr(aim, cpu.eip + 2);
 	return 0; //doesnt matter
 #undef pushfrom
