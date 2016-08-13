@@ -7,6 +7,7 @@ make_helper(iret) {
 	cpu.eip = swaddr_read(cpu.esp, 4, R_SS);
 	cpu.esp += 4;
 	cpu.sr[R_CS].val = swaddr_read(cpu.esp, 4, R_SS);
+	cpu.sr[R_CS].cached = false;
 	cpu.esp += 4;
 	cpu.EFLAGS = swaddr_read(cpu.esp, 4, R_SS);
 	cpu.esp += 4;

@@ -24,13 +24,13 @@ char asm_buf[128];
 /* Used with exception handling. */
 jmp_buf jbuf;
 
-void raise_intr(uint8_t NO) {
+void raise_intr(uint8_t NO, uint32_t eip) {
 	/* TODO: Trigger an interrupt/exception with ``NO''.
 	 *	 * That is, use ``NO'' to index the IDT. */
 #define pushfrom(reg) cpu.esp -= 4; swaddr_write(cpu.esp, 4, reg, R_SS);
 	pushfrom(cpu.EFLAGS);
 	pushfrom(cpu.sr[R_CS].val)
-	pushfrom(cpu.eip) // iret to the next instr
+	pushfrom(eip) // iret to the next instr
 #undef pushfrom
 	cpu.IF = 0;
 	cpu.TF = 0;
@@ -117,7 +117,7 @@ void cpu_exec(volatile uint32_t n) {
 		if(cpu.INTR & cpu.IF) {
 			uint32_t intr_no = i8259_query_intr();
 			i8259_ack_intr();
-			raise_intr(intr_no);
+			raise_intr(intr_no, cpu.eip);
 		}
 	}
 

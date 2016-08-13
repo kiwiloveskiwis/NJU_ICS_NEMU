@@ -1,7 +1,7 @@
 #include "cpu/exec/helper.h"
 #include "cpu/decode/modrm.h"
 
-extern void raise_intr(uint8_t NO);
+extern void raise_intr(uint8_t NO, uint32_t eip);
 extern int push_i_l(swaddr_t eip);
 make_helper(nop) {
 	print_asm("nop");
@@ -17,9 +17,9 @@ make_helper(int3) {
 
 make_helper(int_i_b) {
 #define pushfrom(reg) cpu.esp -= 4; swaddr_write(cpu.esp, 4, reg, R_SS);
-
 	uint8_t aim = instr_fetch(eip + 1, 1);
-	raise_intr(aim);
+	Log("int_i_b");
+	raise_intr(aim, cpu.eip + 2);
 	return 0; //doesnt matter
 #undef pushfrom
 }
