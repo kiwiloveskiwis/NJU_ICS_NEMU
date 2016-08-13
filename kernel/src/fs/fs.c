@@ -46,7 +46,6 @@ static inline int min(int a, int b) {
 }
 
 int fs_open(const char *pathname, int flags) {	// flags don't matter
-	Log("fs_open");
 	int i;
 	for(i = 3; i < NR_FILES + 3; i++) {
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
@@ -66,21 +65,23 @@ int fs_read(int fd, void *buf, int len){
 	}
 	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
 	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
+
 	ide_read(buf, start, readlen);
 	return readlen;
 }
 
 int fs_write(int fd, void *buf, int len){
 	int i;
-	if(fd == 0 || fd >= NR_FILES + 3 || !files[fd].opened) {
-		Log("fs_write failed! fd = %d", fd);
-		nemu_assert(0);
-		return -1;
-	} else if (fd == 1 || fd == 2) {
+	if (fd == 1 || fd == 2) {
 		for(i = 0; i < len; i++) {
 			serial_printc(*(char *)(buf + i));
 			return len;
 		}
+	}
+	if(fd == 0 || fd >= NR_FILES + 3 || !files[fd].opened) {
+		Log("fs_write failed! fd = %d", fd);
+		nemu_assert(0);
+		return -1;
 	}
 	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
 	int writelen = min(len, file_table[fd - 3].size - files[fd].offset);
