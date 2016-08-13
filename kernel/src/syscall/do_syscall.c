@@ -16,7 +16,7 @@ static void sys_brk(TrapFrame *tf) {
 
 uint32_t sys_ret_val;
 void do_syscall(TrapFrame *tf) {
-	int ecx = tf->ecx - 0x8048000;
+	int ecx = tf->ecx - 0x8048000 + 0xc0100000;
 	int edx = tf->edx;
 	switch(tf->eax) {
 		/* The ``add_irq_handle'' system call is artificial. We use it to 
