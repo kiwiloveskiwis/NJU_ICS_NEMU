@@ -114,7 +114,6 @@ PAL_Init(
 
    Log("VIDEO_Init success");
    SDL_WM_SetCaption("Loading...", NULL);
-	assert(0);
    e = PAL_InitGlobals();
    if (e != 0)
    {
@@ -128,6 +127,7 @@ PAL_Init(
       TerminateOnError("Could not load fonts: %d.\n", e);
    }
    Log("PAL_InitFont success");
+   assert(0);
 
    e = PAL_InitUI();
    if (e != 0)
