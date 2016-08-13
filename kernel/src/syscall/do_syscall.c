@@ -6,7 +6,6 @@ void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
 uint8_t read_byte(uint32_t offset);
 void serial_printc(char ch);
-void keyboard_event();
 int fs_open(const char *pathname, int flags);	/* 在我们的实现中可以忽略flags */
 int fs_read(int fd, void *buf, int len);
 int fs_write(int fd, void *buf, int len);
