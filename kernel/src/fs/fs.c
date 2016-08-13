@@ -76,6 +76,7 @@ int fs_read(int fd, void *buf, int len){
 int fs_write(int fd, void *buf, int len){
 	// Log("%s", __func__);
 	int i;
+	assert(len > 0);
 	if (fd == 1 || fd == 2) {
 		for(i = 0; i < len; i++) {
 			serial_printc(((char *)buf)[i]);
@@ -101,13 +102,15 @@ int fs_lseek(int fd, int offset, int whence) {
 		nemu_assert(0);
 		return -1;
 	}
+	int temp = 0;
 	switch(whence) {
-		case SEEK_SET : files[fd].offset = offset; break;
-		case SEEK_CUR : files[fd].offset += offset; break;
-		case SEEK_END : files[fd].offset = file_table[fd - 3].size - offset;
+		case SEEK_SET : temp = offset; break;
+		case SEEK_CUR : temp = files[fd].offset + offset; break;
+		case SEEK_END : temp = file_table[fd - 3].size + offset;
 						break;
 		default		: Log("whence invalid");
 	}
+	files[fd].offset = min(files[fd].size, temp);
 	return files[fd].offset;
 
 }
