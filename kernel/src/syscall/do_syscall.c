@@ -38,15 +38,21 @@ void do_syscall(TrapFrame *tf) {
 		case SYS_read:
 			tf->eax = fs_read(tf->ebx, (void *)tf->ecx, tf->edx);
 			break;
-		case SYS_write:
-			tf->eax = fs_write(tf->ebx, (void *)tf->ecx, tf->edx);
-			break;
 		case SYS_lseek:
 			tf->eax = fs_lseek(tf->ebx, tf->ecx, tf->edx);
 			break;
 		case SYS_close:
 			tf->eax = fs_close(tf->ebx);
 			break;
+		case SYS_write: 
+			while(edx > 0) { // what if for loop?
+				asm("movl ecx, %ecx");
+				asm("movl (%ecx), %edx");
+				asm("movb %dl, sys_char");
+				serial_printc(sys_char);
+				edx--;
+				ecx++;
+			}
 
 		/* TODO: Add more system calls. */
 
