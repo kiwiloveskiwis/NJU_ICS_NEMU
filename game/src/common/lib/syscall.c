@@ -11,27 +11,22 @@ syscall(int id, ...) {
 }
 
 void _exit(int status) {
-	assert(0);
 	syscall(SYS_exit, status); 
 }
 
 int open(const char *pathname, int flags) {
-	assert(0);
 	return syscall(SYS_open, pathname, flags); 
 }
 
 int read(int fd, char *buf, int len) {
-	assert(0);
 	return syscall(SYS_read, fd, buf, len); 
 }
 
 int write(int fd, char *buf, int len) {
-	assert(0);
 	return syscall(SYS_write, fd, buf, len); 
 }
 
 off_t lseek(int fd, off_t offset, int whence) {
-	assert(0);
 	return syscall(SYS_lseek, fd, offset, whence); 
 }
 
