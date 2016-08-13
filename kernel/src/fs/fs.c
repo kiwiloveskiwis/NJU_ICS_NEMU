@@ -1,4 +1,5 @@
 #include "common.h"
+#include "string.h"
 
 typedef struct {
 	char *name;
@@ -32,7 +33,7 @@ void ide_write(uint8_t *, uint32_t, uint32_t);
 
 /* TODO: implement a simplified file system here. */
 
-writruct {
+typedef struct {
 	bool opened;
 	uint32_t offset;
 } Fstate;
@@ -48,57 +49,56 @@ int fs_open(const char *pathname, int flags) {
 	int i;
 	for(i = 3; i < NR_FILES + 3; i++) {
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
-				Fstate[i].opened = true;
-				Fstate[i].offset = 0;
+				files[i].opened = true;
+				files[i].offset = 0;
 				return i;
 		}
 	}
-	Assert(0, "fsopen %s failed!", pathname);
 	return 0;
 }
 
 int fs_read(int fd, void *buf, int len){
-	if(fd < 3 || !Fstate[fd].opened) {
-		Assert(0, "fs_read failed! fd = %d", fd);
+	if(fd < 3 || !files[fd].opened) {
+		Log("fs_read failed! fd = %d", fd);
 		return -1;
 	}
-	uint32_t start = file_table[fd - 3].disk_offset + Fstate[fd].offset;
-	int readlen = min(len, file_table[fd - 3].size - Fstate[fd].offset);
+	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
+	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
 	ide_read(buf, start, readlen);
 	return readlen;
 }
 
 int fs_write(int fd, void *buf, int len){
-	if(fd < 3 || !Fstate[fd].opened) {
-		Assert(0, "fs_write failed! fd = %d", fd);
+	if(fd < 3 || !files[fd].opened) {
+		Log("fs_write failed! fd = %d", fd);
 		return -1;
 	}
-	uint32_t start = file_table[fd - 3].disk_offset + Fstate[fd].offset;
-	int writelen = min(len, file_table[fd - 3].size - Fstate[fd].offset);
-	ide_write(buf, start, readlen);
+	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
+	int writelen = min(len, file_table[fd - 3].size - files[fd].offset);
+	ide_write(buf, start, writelen);
 	return writelen;
 }
 
 int fs_lseek(int fd, int offset, int whence) {
-	if(fd < 3 || !Fstate[fd].opened) {
-		Assert(0, "fs_lseek failed! fd = %d", fd);
+	if(fd < 3 || !files[fd].opened) {
+		Log("fs_lseek failed! fd = %d", fd);
 		return -1;
 	}
 	switch(whence) {
-		case SEEK_SET : Fstate[fd].offset = offset;
-		case SEEK_CUR : Fstate[fd].offset += offset;
-		case SEEK_END : Fstate[fd].offset = file_table[fd - 3].size - offset;
+		case SEEK_SET : files[fd].offset = offset;
+		case SEEK_CUR : files[fd].offset += offset;
+		case SEEK_END : files[fd].offset = file_table[fd - 3].size - offset;
 	}
-	return Fstate[fd].offset;
+	return files[fd].offset;
 
 }
 
 int fs_close(int fd){
-	if(fd < 3 || !Fstate[fd].opened) {
-		Assert(0, "fs_close failed! fd = %d", fd);
+	if(fd < 3 || !files[fd].opened) {
+		Log("fs_close failed! fd = %d", fd);
 		return -1;
 	}
-	Fstate[fd].opened = false;
+	files[fd].opened = false;
 	return 0;
 }
 
