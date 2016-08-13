@@ -1,5 +1,5 @@
 #include "irq.h"
-
+#include "../../nemu/src/device/sdl.h"
 #include <sys/syscall.h>
 
 void add_irq_handle(int, void (*)(void));
@@ -15,7 +15,7 @@ static void sys_brk(TrapFrame *tf) {
 	tf->eax = 0;
 }
 
-char write_char;
+char sys_char;
 int ecx;
 void do_syscall(TrapFrame *tf) {
 	ecx = tf->ecx;
@@ -32,15 +32,15 @@ void do_syscall(TrapFrame *tf) {
 			sti();
 			break;
 		case 1: // KEYBORAD_IRQ
-			keyboard_event();
+			sys_char = in_byte(0x60);
 			break;
 		case SYS_brk: sys_brk(tf); break;
 		case SYS_write: 
 			while(edx > 0) { // what if for loop?
 				asm("movl ecx, %ecx");
 				asm("movl (%ecx), %edx");
-				asm("movb %dl, write_char");
-				serial_printc(write_char);
+				asm("movb %dl, sys_char");
+				serial_printc(sys_char);
 				edx--;
 				ecx++;
 			}
