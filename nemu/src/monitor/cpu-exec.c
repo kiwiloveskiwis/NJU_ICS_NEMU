@@ -32,6 +32,8 @@ void raise_intr(uint8_t NO) {
 	pushfrom(cpu.sr[R_CS].val)
 	pushfrom(cpu.eip) // iret to the next instr
 #undef pushfrom
+	cpu.IF = 0;
+	cpu.TF = 0;
 
 	uint32_t gdaddr = cpu.idtr_base + NO * 8; // 8 bytes
 	GateDesc gd;
