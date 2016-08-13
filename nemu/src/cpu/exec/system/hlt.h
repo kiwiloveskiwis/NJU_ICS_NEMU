@@ -3,7 +3,6 @@
 #include "cpu/exec/helper.h"
 
 make_helper(hlt) {
-
-	return 0;
+	return cpu.INTR;
 }
 #endif
