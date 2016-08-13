@@ -571,14 +571,14 @@ main_loop() {
    sdlpal_psp_init();
 #endif
    PAL_Init(wScreenWidth, wScreenHeight, fFullScreen);
-   Log("Init finished!");
-   assert(0);
 
    //
    // Show the trademark screen and splash screen
    //
    PAL_TrademarkScreen();
+   Log("Screen finished");
    PAL_SplashScreen();
+   Log("splash finished");
 
    //
    // Run the main game routine
