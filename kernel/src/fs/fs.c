@@ -67,7 +67,7 @@ int fs_read(int fd, void *buf, int len){
 	}
 	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
 	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
-
+	files[fd].offset += readlen;
 	ide_read(buf, start, readlen);
 	return readlen;
 }
