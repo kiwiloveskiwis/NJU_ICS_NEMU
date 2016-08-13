@@ -110,7 +110,7 @@ int fs_lseek(int fd, int offset, int whence) {
 						break;
 		default		: Log("whence invalid");
 	}
-	assert(temp > 0);
+	assert(temp >= 0);
 	files[fd].offset = min(file_table[fd - 3].size, temp);
 	return files[fd].offset;
 
