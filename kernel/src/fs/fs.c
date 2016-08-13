@@ -74,7 +74,7 @@ int fs_write(int fd, void *buf, int len){
 	int i;
 	if (fd == 1 || fd == 2) {
 		for(i = 0; i < len; i++) {
-			serial_printc(*(char *)(buf + i));
+			serial_printc(((char *)buf)[i]);
 			return len;
 		}
 	}
