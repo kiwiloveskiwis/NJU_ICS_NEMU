@@ -36,6 +36,7 @@ void do_syscall(TrapFrame *tf) {
 			while(edx > 0) { // what if for loop?
 				asm volatile("movl (%ecx), %ebx");
 				asm volatile("movb %ebx, write_char");
+				Log("char = %c", write_char);	
 				serial_printc(write_char);
 				edx--;
 				ecx++;
