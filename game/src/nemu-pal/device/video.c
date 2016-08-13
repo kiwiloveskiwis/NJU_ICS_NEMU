@@ -609,26 +609,37 @@ VIDEO_SetPalette(
 
    SDL_SetSurfacePalette(gpScreen, palette);
    SDL_SetSurfacePalette(gpScreenBak, palette);
+   Log("setting done");
 
    //
    // HACKHACK: need to invalidate gpScreen->map otherwise the palette
    // would not be effective during blit
    //
    SDL_SetSurfaceColorMod(gpScreen, 0, 0, 0);
+   Log("1");
    SDL_SetSurfaceColorMod(gpScreen, 0xFF, 0xFF, 0xFF);
+   Log("2");
+
    SDL_SetSurfaceColorMod(gpScreenBak, 0, 0, 0);
+   Log("3");
    SDL_SetSurfaceColorMod(gpScreenBak, 0xFF, 0xFF, 0xFF);
+   Log("4");
 
    VIDEO_UpdateScreen(NULL);
 #else
    SDL_SetPalette(gpScreen, SDL_LOGPAL | SDL_PHYSPAL, rgPalette, 0, 256);
+   Log("5");
    SDL_SetPalette(gpScreenBak, SDL_LOGPAL | SDL_PHYSPAL, rgPalette, 0, 256);
+   Log("6");
    SDL_SetPalette(gpScreenReal, SDL_LOGPAL | SDL_PHYSPAL, rgPalette, 0, 256);
+   Log("7");
 #if (defined (__SYMBIAN32__))
    {
       static UINT32 time = 0;
       if (SDL_GetTicks() - time > 50)
       {
+   Log("8");
+		  
 	      SDL_UpdateRect(gpScreenReal, 0, 0, gpScreenReal->w, gpScreenReal->h);
 	      time = SDL_GetTicks();
       }
