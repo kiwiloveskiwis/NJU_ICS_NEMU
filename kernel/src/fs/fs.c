@@ -75,8 +75,9 @@ int fs_write(int fd, void *buf, int len){
 	if (fd == 1 || fd == 2) {
 		for(i = 0; i < len; i++) {
 			serial_printc(((char *)buf)[i]);
-			return len;
 		}
+		return len;
+
 	}
 	if(fd == 0 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_write failed! fd = %d", fd);
