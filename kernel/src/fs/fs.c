@@ -32,3 +32,77 @@ void ide_write(uint8_t *, uint32_t, uint32_t);
 
 /* TODO: implement a simplified file system here. */
 
+writruct {
+	bool opened;
+	uint32_t offset;
+} Fstate;
+
+Fstate files[NR_FILES + 3];
+
+static inline int min(int a, int b) {
+	return a < b ? a : b;
+}
+
+int fs_open(const char *pathname, int flags) {	
+	/* 在我们的实现中可以忽略flags */
+	int i;
+	for(i = 3; i < NR_FILES + 3; i++) {
+		if (!strcmp(file_table[i - 3].name, pathname)) { // found
+				Fstate[i].opened = true;
+				Fstate[i].offset = 0;
+				return i;
+		}
+	}
+	Assert(0, "fsopen %s failed!", pathname);
+	return 0;
+}
+
+int fs_read(int fd, void *buf, int len){
+	if(fd < 3 || !Fstate[fd].opened) {
+		Assert(0, "fs_read failed! fd = %d", fd);
+		return -1;
+	}
+	uint32_t start = file_table[fd - 3].disk_offset + Fstate[fd].offset;
+	int readlen = min(len, file_table[fd - 3].size - Fstate[fd].offset);
+	ide_read(buf, start, readlen);
+	return readlen;
+}
+
+int fs_write(int fd, void *buf, int len){
+	if(fd < 3 || !Fstate[fd].opened) {
+		Assert(0, "fs_write failed! fd = %d", fd);
+		return -1;
+	}
+	uint32_t start = file_table[fd - 3].disk_offset + Fstate[fd].offset;
+	int writelen = min(len, file_table[fd - 3].size - Fstate[fd].offset);
+	ide_write(buf, start, readlen);
+	return writelen;
+}
+
+int fs_lseek(int fd, int offset, int whence) {
+	if(fd < 3 || !Fstate[fd].opened) {
+		Assert(0, "fs_lseek failed! fd = %d", fd);
+		return -1;
+	}
+	switch(whence) {
+		case SEEK_SET : Fstate[fd].offset = offset;
+		case SEEK_CUR : Fstate[fd].offset += offset;
+		case SEEK_END : Fstate[fd].offset = file_table[fd - 3].size - offset;
+	}
+	return Fstate[fd].offset;
+
+}
+
+int fs_close(int fd){
+	if(fd < 3 || !Fstate[fd].opened) {
+		Assert(0, "fs_close failed! fd = %d", fd);
+		return -1;
+	}
+	Fstate[fd].opened = false;
+	return 0;
+}
+
+
+
+
+
