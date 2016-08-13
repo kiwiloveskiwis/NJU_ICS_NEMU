@@ -78,6 +78,7 @@ void i8259_raise_intr(int n) {
 
 /* CPU interface */
 uint8_t i8259_query_intr() {
+	Log("insr_NO = 0x%x", intr_NO);
 	return intr_NO;
 }
 
