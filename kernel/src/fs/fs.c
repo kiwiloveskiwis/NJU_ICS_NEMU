@@ -46,7 +46,7 @@ static inline int min(int a, int b) {
 }
 
 int fs_open(const char *pathname, int flags) {	// flags don't matter
-	Log("%s", __func__);
+	// Log("%s", __func__);
 	int i;
 	for(i = 3; i < NR_FILES + 3; i++) {
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
@@ -59,7 +59,6 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 }
 
 int fs_read(int fd, void *buf, int len){
-	Log("%s fd = %d, len = %d", __func__, fd, len);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_read failed! fd = %d", fd);
 		nemu_assert(0);
@@ -69,7 +68,6 @@ int fs_read(int fd, void *buf, int len){
 	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
 	files[fd].offset += readlen;
 	ide_read(buf, start, readlen);
-	Log("readlen = %x", readlen); 
 	return readlen;
 }
 
