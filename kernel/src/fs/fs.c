@@ -46,6 +46,7 @@ static inline int min(int a, int b) {
 }
 
 int fs_open(const char *pathname, int flags) {	// flags don't matter
+	Log("%s", __func__);
 	int i;
 	for(i = 3; i < NR_FILES + 3; i++) {
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
