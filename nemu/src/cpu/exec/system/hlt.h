@@ -3,6 +3,7 @@
 #include "cpu/exec/helper.h"
 
 make_helper(hlt) {
-	longjmp(jbuf, 1);
+
+	return 0;
 }
 #endif
