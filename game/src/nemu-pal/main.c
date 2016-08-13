@@ -127,7 +127,6 @@ PAL_Init(
       TerminateOnError("Could not load fonts: %d.\n", e);
    }
    Log("PAL_InitFont success");
-   assert(0);
 
    e = PAL_InitUI();
    if (e != 0)
