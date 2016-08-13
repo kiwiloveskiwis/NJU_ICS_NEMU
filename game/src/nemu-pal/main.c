@@ -136,7 +136,7 @@ PAL_Init(
    Log("PAL_InitUI success");
 
    e = PAL_InitText();
-   if (e != 0)
+   if (e != 0) // wrong
    {
       TerminateOnError("Could not initialize text subsystem: %d.\n", e);
    }

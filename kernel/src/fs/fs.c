@@ -102,9 +102,11 @@ int fs_lseek(int fd, int offset, int whence) {
 		return -1;
 	}
 	switch(whence) {
-		case SEEK_SET : files[fd].offset = offset;
-		case SEEK_CUR : files[fd].offset += offset;
+		case SEEK_SET : files[fd].offset = offset; break;
+		case SEEK_CUR : files[fd].offset += offset; break;
 		case SEEK_END : files[fd].offset = file_table[fd - 3].size - offset;
+						break;
+		default		: Log("whence invalid");
 	}
 	return files[fd].offset;
 

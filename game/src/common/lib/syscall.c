@@ -46,7 +46,6 @@ void *sbrk(int incr) {
 }
 
 int close(int fd) {
-	Log("closing file");
 	return syscall(SYS_close, fd);
 }
 
