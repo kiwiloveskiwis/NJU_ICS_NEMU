@@ -12,7 +12,6 @@ make_helper(iret) {
 	cpu.EFLAGS = swaddr_read(cpu.esp, 4, R_SS);
 	cpu.esp += 4;
 	print_asm_template1();
-	Log("cpu.eip = 0x%x. iret", cpu.eip);
 	longjmp(jbuf, 1);
 	
 	return 0; 
