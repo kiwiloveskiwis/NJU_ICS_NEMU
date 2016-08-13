@@ -14,6 +14,8 @@ game_init(void) {
 
 	add_irq_handle(0, timer_event);
 
+	add_irq_handle(1, keyboard_event);
+
 	keyboard_event();
 
 	Log("game start!");
