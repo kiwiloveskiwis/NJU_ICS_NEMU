@@ -16,7 +16,6 @@ press_key(int scan_code) {
 	for (i = 0; i < 26; i ++) {
 		if (letter_code[i] == scan_code || letter_code[i] == scan_code - 0x80) {
 			letter_pressed[i] = (scan_code < 0x80 ? true : false);
-			Log("%d", letter_pressed[i]);
 		}
 	}
 }
