@@ -293,6 +293,7 @@ PAL_SplashScreen(
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
    Log("splash 2");
+   assert(0);
    lpBitmapUp = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
@@ -583,8 +584,7 @@ main_loop() {
    // Show the trademark screen and splash screen
    //
    PAL_TrademarkScreen();
-   Log("Screen finished");
-   PAL_SplashScreen();
+   PAL_SplashScreen(); // wrong
    Log("splash finished");
 
    //
