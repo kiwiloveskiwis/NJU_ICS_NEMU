@@ -56,7 +56,7 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 		}
 	}
 	Log("File not found");
-	assert(0);
+	nemu_assert(0);
 	return 0;
 }
 
