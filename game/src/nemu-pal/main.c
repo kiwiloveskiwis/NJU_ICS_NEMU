@@ -281,6 +281,7 @@ PAL_SplashScreen(
    //
    // Allocate all the needed memory at once for simplification
    //
+   Log("splash 1");
    buf = (LPBYTE)UTIL_calloc(1, 320 * 200 * 2);
    buf2 = (LPBYTE)(buf + 320 * 200);
    lpSpriteCrane = (LPSPRITE)buf2 + 32000;
@@ -288,7 +289,6 @@ PAL_SplashScreen(
    //
    // Create the surfaces
    //
-   Log("splash 1");
    lpBitmapDown = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
