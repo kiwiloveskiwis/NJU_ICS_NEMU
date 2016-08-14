@@ -1,63 +1,82 @@
-#include "FLOAT.h" 
-typedef unsigned int uint32_t;
+#include "FLOAT.h"
 
-typedef union{ // little-endian!!
-	struct{
-		uint32_t frac   :   23 ;
-		uint32_t exp    :   8 ;
-		uint32_t sign   :   1 ;
-	};
-}myfloat;
-
-FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	return ((unsigned long long)a * b ) >> 16;
+FLOAT F_mul_F(FLOAT a, FLOAT b) 
+{
+	long long la=(long long)a;
+	long long lb=(long long)b;
+	union
+	{
+		long long l;
+		FLOAT i[2];
+	}u;
+	u.l=la*lb;
+	return ((u.i[0]>>16)&0xffff)+((u.i[1]&0xffff)<<16);
 }
 
-FLOAT F_div_F(FLOAT a, FLOAT b) {
-	int sign = (a < 0) != (b < 0);
-	a = Fabs(a);
-	b = Fabs(b);
-	nemu_assert( b != 0);
-	int result = a / b;
-	a = a % b ;
-	int i = 0;
-	for (i = 0; i < 16; i++) {
-		a <<= 1;
-		result <<= 1;
-		if (a >= b) {
-			a -= b;
-			result++;
-		}
+FLOAT F_div_F(FLOAT a, FLOAT b) 
+{
+	int i;
+	FLOAT x=(a/b)<<16;
+	a-=(a/b)*b;
+	a<<=1;
+	for(i=1;i<=16;i++)
+	{
+		x+=(a/b)<<(16-i);
+		a-=(a/b)*b;
+		a<<=1;
 	}
-	return sign ? -result : result;
+	return x;
 }
 
-FLOAT f2F(float s) {
-	myfloat a = * (myfloat *) &s;
-	unsigned int x = (a.exp) ? a.frac + (1 << 23) : a.exp;
-	int exp = a.exp - (127 + 7);
-	if (exp < 0) x >>= - exp;
-	if (exp > 0) x <<= exp ;
-	return a.sign? -x :x;
+FLOAT f2F(float a) 
+{
+	int i=0;
+	void *p=(void *)&a;
+	int *bp=(int *)p;
+	int b=*bp;
+	unsigned msb=(b&0x80000000)>>31;
+	unsigned e=(b&0x7f800000)>>23;
+	unsigned val=0x00800000|(b&0x007fffff);
+	e=(e-134)&0xff;//-134=-127+16-23
+	if(e>>7)
+	{
+		e=(~(e-1))&0xff;
+		val>>=e;
+	}else
+	{
+		val<<=e;
+	}
+	i=(msb) ? -val:val;
+	return i;
 }
 
-FLOAT Fabs(FLOAT a) {
-	return (a >= 0) ? a: -a;
+FLOAT Fabs(FLOAT a)
+{
+	return (a<0) ? -a:a;
 }
 
-FLOAT sqrt(FLOAT x) {
+FLOAT sqrt(FLOAT x) 
+{
 	FLOAT dt, t = int2F(2);
+
 	do {
 		dt = F_div_int((F_div_F(x, t) - t), 2);
 		t += dt;
 	} while(Fabs(dt) > f2F(1e-4));
+
 	return t;
 }
 
-FLOAT pow(FLOAT x, FLOAT y) {
-	/* we only compute x^0.333 */
+FLOAT pow(FLOAT x, FLOAT y) 
+{
 	FLOAT t2, dt, t = int2F(2);
+
+	do {
+		t2 = F_mul_F(t, t);
+		dt = (F_div_F(x, t2) - t) / 3;
+		t += dt;
+	} while(Fabs(dt) > f2F(1e-4));
+
 	return t;
 }
-
 
