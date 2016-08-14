@@ -14,56 +14,59 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 		SDL_Surface *dst, SDL_Rect *dstrect) {
 	int sx, sy, dx, dy, sw, dw, sh, dh; 
 
-	if(srcrect!=NULL) 
-	{
-			sx = srcrect->x;
-			sy = srcrect->y;
-			sw = min(srcrect->w, src->w-sx);
-			sh = min(srcrect->h, src->h-sy);
+	if(srcrect!=NULL) {
+		sx = srcrect->x;
+		sy = srcrect->y;
+		sw = min(srcrect->w, src->w-sx);
+		sh = min(srcrect->h, src->h-sy);
 	} else {
-				sx = 0;
-				sy = 0;
-				sw = src->w;
-				sh = src->h;
-			}
-
+		sx = 0;
+		sy = 0;
+		sw = src->w;
+		sh = src->h;
+	}
 	if(dstrect != NULL) {
-			dx = dstrect->x;
-			dy = dstrect->y;
-			dw = min(dstrect->w, dst->w - dx);
-			dh = min(dstrect->h, dst->h - dy);
-		} else {
-				dx = 0;
-				dy = 0;
-				dw = dst->w;
-				dh = dst->h;
-			}
+		dx = dstrect->x;
+		dy = dstrect->y;
+		dw = min(dstrect->w, dst->w - dx);
+		dh = min(dstrect->h, dst->h - dy);
+	} else {
+		dx = 0;
+		dy = 0;
+		dw = dst->w;
+		dh = dst->h;
+	}
 
 	int width = min(dw,sw);
 	int height = min(dh,sh);
 
 	int i,j;
 	for(i = 0; i < height; i++)	{
-			for(j = 0; j < width; j++)	{
-						dst->pixels[(dy+i)*dst->w+dx+j] = src->pixels[(sy+i)*src->w+sx+j];
-					}
+		for(j = 0; j < width; j++)	{
+			dst->pixels[(dy+i)*dst->w+dx+j] = src->pixels[(sy+i)*src->w+sx+j];
 		}
+	}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	assert(dst);
 	assert(color <= 0xff);
-	int dstx = dstrect->x, dsty = dstrect->y, dstw = dstrect->w, dsth = dstrect->h;
-	void * dststart = dst->pixels + dsty * dst->pitch + dstx;
-	int j;
-	for(j = 0; j < dsth; j++)
-		memset(dststart + j * dst->pitch, color, dstw);
+	int x=(dstrect == NULL ? 0 : dstrect->x);
+	int y=(dstrect == NULL ? 0 : dstrect->y);
+	int w=(dstrect == NULL ? dst->w : dstrect->w);
+	int h=(dstrect == NULL ? dst->h : dstrect->h);
+	int i,j;
+	for(i = y;i < y + h; i++) {
+		for(j = x; j < x + w; j++) {
+			dst->pixels[i * dst->w + j] = color;
+		}
+	}
 
 	/* TODO: Fill the rectangle area described by ``dstrect''
 	 * in surface ``dst'' with color ``color''. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
-		Log("%s", __func__);
+	Log("%s", __func__);
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
@@ -117,7 +120,6 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 		/* TODO: Set the VGA palette by calling write_palette(). */
 		write_palette(colors, ncolors); 
 	}
-		Log("%s", __func__);
 }
 
 /* ======== The following functions are already implemented. ======== */
