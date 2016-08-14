@@ -68,6 +68,10 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 		}
 		return;
 	}
+	if(!x && !y && !w && !h) {
+		w = screen->w;
+		h = screen->h;
+	}
 	void * vmemstart = (void *)VMEM_ADDR + y * screen->w + x;
 	void * screenstart = screen->pixels + y * screen->w + x;
 	int j;
