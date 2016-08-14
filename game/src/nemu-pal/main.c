@@ -114,37 +114,37 @@ PAL_Init(
 
    Log("VIDEO_Init success");
    SDL_WM_SetCaption("Loading...", NULL);
-   e = PAL_InitGlobals();
+  //  e = PAL_InitGlobals();
    if (e != 0)
    {
       TerminateOnError("Could not initialize global data: %d.\n", e);
    }
    Log("PAL_InitGolbals success");
 
-   e = PAL_InitFont();
+//   e = PAL_InitFont();
    if (e != 0)
    {
       TerminateOnError("Could not load fonts: %d.\n", e);
    }
    Log("PAL_InitFont success");
 
-   e = PAL_InitUI();
+ //  e = PAL_InitUI();
    if (e != 0)
    {
       TerminateOnError("Could not initialize UI subsystem: %d.\n", e);
    }
    Log("PAL_InitUI success");
 
-   e = PAL_InitText();
+  // e = PAL_InitText();
    if (e != 0) // wrong
    {
       TerminateOnError("Could not initialize text subsystem: %d.\n", e);
    }
    Log("PAL_InitText success");
 
-   PAL_InitInput();
+//   PAL_InitInput();
    Log("PAL_InitInput success");
-   PAL_InitResources();
+ //  PAL_InitResources();
    Log("PAL_InitResources success");
    SOUND_OpenAudio();
 
@@ -281,7 +281,6 @@ PAL_SplashScreen(
    //
    // Allocate all the needed memory at once for simplification
    //
-   Log("splash 1");
    buf = (LPBYTE)UTIL_calloc(1, 320 * 200 * 2);
    buf2 = (LPBYTE)(buf + 320 * 200);
    lpSpriteCrane = (LPSPRITE)buf2 + 32000;
@@ -292,7 +291,6 @@ PAL_SplashScreen(
    lpBitmapDown = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
-   Log("splash 2");
    lpBitmapUp = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
       gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
       gpScreen->format->Amask);
@@ -582,9 +580,8 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
-   PAL_TrademarkScreen();
-   PAL_SplashScreen(); // wrong
-   Log("splash finished");
+//   PAL_TrademarkScreen();
+//    PAL_SplashScreen(); // wrong
 
    //
    // Run the main game routine
