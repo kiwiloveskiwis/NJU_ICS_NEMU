@@ -12,40 +12,42 @@ static inline int min(int a, int b) {
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
-		Log("%s", __func__);
-	assert(dst && src);
-	int srcx, srcy, srcw, srch, dstx, dsty, j;
-	if (srcrect == NULL || dstrect == NULL) { // copy entirely
-		srcx = 0;
-		srcy = 0;
-		srcw = src->w;
-		srch = src->h;
-	} else {
-		srcx = srcrect->x;
-	   	srcy = srcrect->y;
-	   	srcw = min(srcrect->w, src->w-srcx);
-	   	srch = min(srcrect->h, src->h-srcy);
-	}
-	if (dstrect == NULL) {
-		dstx = 0;
-		dsty = 0;
-	} else {
-		dstx = dstrect->x;
-		dsty = dstrect->y;
-	}
-	void * srcstart = src->pixels + srcy * src->pitch + srcx;
-	void * dststart = dst->pixels + dsty * dst->pitch + dstx;
-	for(j = 0; j < srch; j++)
-			memcpy(dststart + j * src->pitch, srcstart + j * src->pitch + j, srcw);
+	int sx, sy, dx, dy, sw, dw, sh, dh; 
 
-	/* TODO: Performs a fast blit from the source surface to the 
-	 * destination surface. Only the position is used in the
-	 * ``dstrect'' (the width and height are ignored). If either
-	 * ``srcrect'' or ``dstrect'' are NULL, the entire surface 
-	 * (``src'' or ``dst'') is copied. The final blit rectangle 
-	 * is saved in ``dstrect'' after all clipping is performed
-	 * (``srcrect'' is not modified).
-	 */
+	if(srcrect!=NULL) 
+	{
+			sx = srcrect->x;
+			sy = srcrect->y;
+			sw = min(srcrect->w, src->w-sx);
+			sh = min(srcrect->h, src->h-sy);
+	} else {
+				sx = 0;
+				sy = 0;
+				sw = src->w;
+				sh = src->h;
+			}
+
+	if(dstrect != NULL) {
+			dx = dstrect->x;
+			dy = dstrect->y;
+			dw = min(dstrect->w, dst->w - dx);
+			dh = min(dstrect->h, dst->h - dy);
+		} else {
+				dx = 0;
+				dy = 0;
+				dw = dst->w;
+				dh = dst->h;
+			}
+
+	int width = min(dw,sw);
+	int height = min(dh,sh);
+
+	int i,j;
+	for(i = 0; i < height; i++)	{
+			for(j = 0; j < width; j++)	{
+						dst->pixels[(dy+i)*dst->w+dx+j] = src->pixels[(sy+i)*src->w+sx+j];
+					}
+		}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
