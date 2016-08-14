@@ -6,6 +6,9 @@
 #include <stdlib.h>
 
 int get_fps();
+static inline int min(int a, int b) {
+	return a < b ? a : b;
+}
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
@@ -15,13 +18,20 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 	if (srcrect == NULL || dstrect == NULL) { // copy entirely
 		srcx = 0;
 		srcy = 0;
-		dstx = 0;
-		dsty = 0;
 		srcw = src->w;
 		srch = src->h;
 	} else {
-		srcx = srcrect->x, srcy = srcrect->y, srcw = srcrect->w, srch = srcrect->h;
-		dstx = dstrect->x, dsty = dstrect->y;
+		srcx = srcrect->x;
+	   	srcy = srcrect->y;
+	   	srcw = min(srcrect->w, src->w-srcx);
+	   	srch = min(srcrect->h, src->h-srcy);
+	}
+	if (dstrect == NULL) {
+		dstx = 0;
+		dsty = 0;
+	} else {
+		dstx = dstrect->x;
+		dsty = dstrect->y;
 	}
 	void * srcstart = src->pixels + srcy * src->pitch + srcx;
 	void * dststart = dst->pixels + dsty * dst->pitch + dstx;
