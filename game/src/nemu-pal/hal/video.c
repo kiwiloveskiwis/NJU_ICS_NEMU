@@ -49,7 +49,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-		Log("%s", __func__);
 	assert(dst);
 	assert(color <= 0xff);
 	int dstx = dstrect->x, dsty = dstrect->y, dstw = dstrect->w, dsth = dstrect->h;
@@ -62,10 +61,10 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	 * in surface ``dst'' with color ``color''. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
+		Log("%s", __func__);
 }
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
-		Log("%s", __func__);
 	assert(screen);
 	assert(screen->pitch == 320);
 	if(screen->flags & SDL_HWSURFACE) {
@@ -75,25 +74,21 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 			char buf[80];
 			sprintf(buf, "%dFPS", get_fps());
 			draw_string(buf, 0, 0, 10);
+		} else {
+			vmem = VMEM_ADDR;
+			int i, j;
+			for(i = y; i < (y + h); i++) {
+				for(j = x; j < (x + w); j++)
+					vmem[i * screen->w + j] = screen->pixels[i * screen->w + j];
+			}
 		}
 		return;
 	}
-	if(!x && !y && !w && !h) {
-		w = screen->w;
-		h = screen->h;
-	}
-	void * vmemstart = (void *)VMEM_ADDR + y * screen->w + x;
-	void * screenstart = screen->pixels + y * screen->w + x;
-	int j;
-	for(j = 0; j < h; j++)
-		memcpy(vmemstart + j * screen->w, screenstart + j * screen->w, w);
-	/* TODO: Copy the pixels in the rectangle area to the screen. */
 
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
 		int firstcolor, int ncolors) {
-		Log("%s", __func__);
 	assert(s);
 	assert(s->format);
 	assert(s->format->palette);
@@ -118,8 +113,9 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 
 	if(s->flags & SDL_HWSURFACE) {
 		/* TODO: Set the VGA palette by calling write_palette(). */
-		write_palette(s->format->palette->colors, ncolors); 
+		write_palette(colors, ncolors); 
 	}
+		Log("%s", __func__);
 }
 
 /* ======== The following functions are already implemented. ======== */
