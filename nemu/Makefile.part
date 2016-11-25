@@ -21,4 +21,4 @@ $(PP_TARGET): %.i: %.c
 cpp: $(PP_TARGET)
 
 clean-cpp:
-	-rm -f $(PP_TARGET) 2> /dev/null
+	-@rm -f $(PP_TARGET) 2> /dev/null

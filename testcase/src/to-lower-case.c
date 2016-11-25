@@ -16,7 +16,5 @@ int main() {
 
 	nemu_assert(i == 128);
 
-	HIT_GOOD_TRAP;
-
 	return 0;
 }

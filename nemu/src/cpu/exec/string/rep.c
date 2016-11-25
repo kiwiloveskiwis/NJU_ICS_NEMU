@@ -39,3 +39,28 @@ make_helper(rep) {
 	
 	return len + 1;
 }
+
+make_helper(repnz) {
+	int count = 0;
+	while(cpu.ecx) {
+		exec(eip + 1);
+		count ++;
+		cpu.ecx --;
+		assert(ops_decoded.opcode == 0xa6	// cmpsb
+				|| ops_decoded.opcode == 0xa7	// cmpsw
+				|| ops_decoded.opcode == 0xae	// scasb
+				|| ops_decoded.opcode == 0xaf	// scasw
+			  );
+
+		/* TODO: Jump out of the while loop if necessary. */
+
+	}
+
+#ifdef DEBUG
+	char temp[80];
+	sprintf(temp, "repnz %s", assembly);
+	sprintf(assembly, "%s[cnt = %d]", temp, count);
+#endif
+
+	return 1 + 1;
+}

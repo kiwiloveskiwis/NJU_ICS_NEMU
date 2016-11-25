@@ -22,7 +22,5 @@ int main() {
 
 	nemu_assert(loop == NR_DATA * NR_DATA);
 
-	HIT_GOOD_TRAP;
-
 	return 0;
 }

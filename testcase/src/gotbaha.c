@@ -32,7 +32,5 @@ int main() {
 
 	nemu_assert(n == 102);
 
-	HIT_GOOD_TRAP;
-
 	return 0;
 }

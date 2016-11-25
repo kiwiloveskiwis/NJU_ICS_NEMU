@@ -95,8 +95,8 @@ static bool make_token(char *e) {
 					*/
 				position += substr_len;
 				/* TODO: Now a new token is recognized with rules[i]. Add codes
-				 * to record the token in the array ``tokens''. For certain 
-				 * types of tokens, some extra actions should be performed.
+				 * to record the token in the array `tokens'. For certain types
+				 * of tokens, some extra actions should be performed.
 				 */
 #define PTYPE tokens[nr_token - 1].type
 				bool unary = nr_token == 0 || (PTYPE == '+') || (PTYPE == '-') || (PTYPE == '*') || (PTYPE == '/' ) \

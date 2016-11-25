@@ -24,7 +24,5 @@ int main() {
 
 	nemu_assert(j == 31);
 
-	HIT_GOOD_TRAP;
-
 	return 0;
 }

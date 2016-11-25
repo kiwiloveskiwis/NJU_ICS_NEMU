@@ -45,7 +45,5 @@ int main() {
 
 	nemu_assert(i == N);
 
-	HIT_GOOD_TRAP;
-
 	return 0;
 }

@@ -53,9 +53,9 @@ uint32_t loader() {
 
 #ifdef IA32_PAGE
 			/* Record the program break for future use. */
-			extern uint32_t brk;
+			extern uint32_t cur_brk, max_brk;
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
-			if(brk < new_brk) { brk = new_brk; }
+			if(cur_brk < new_brk) { max_brk = cur_brk = new_brk; }
 #endif
 		}
 	}
