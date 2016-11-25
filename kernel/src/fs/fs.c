@@ -1,4 +1,5 @@
 #include "common.h"
+#include <sys/ioctl.h>
 
 typedef struct {
 	char *name;
@@ -26,6 +27,11 @@ static const file_info file_table[] __attribute__((used)) = {
 };
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
+
+int fs_ioctl(int fd, uint32_t request, void *p) {
+	assert(request == TCGETS);
+	return (fd >= 0 && fd <= 2 ? 0 : -1);
+}
 
 void ide_read(uint8_t *, uint32_t, uint32_t);
 void ide_write(uint8_t *, uint32_t, uint32_t);

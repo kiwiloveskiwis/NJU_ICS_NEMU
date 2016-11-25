@@ -5,7 +5,7 @@
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
- * This is useful when you use the ``si'' command.
+ * This is useful when you use the `si' command.
  * You can modify this value as you want.
  */
 #define MAX_INSTR_TO_PRINT 10
@@ -78,13 +78,12 @@ void cpu_exec(volatile uint32_t n) {
 		bool change = checkWP();
 		if(change) nemu_state = STOP;
 
-		if(nemu_state != RUNNING) { return; }
-
 #ifdef HAS_DEVICE
 		extern void device_update();
 		device_update();
 #endif
 
+		if(nemu_state != RUNNING) { return; }
 	}
 
 	if(nemu_state == RUNNING) { nemu_state = STOP; }

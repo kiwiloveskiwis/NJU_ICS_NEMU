@@ -17,6 +17,5 @@ int main() {
 	nemu_assert(strcmp( strcat(strcpy(str, str1), s[3]), s[4]) == 0);
 
 
-	HIT_GOOD_TRAP;
 	return 0;
 }

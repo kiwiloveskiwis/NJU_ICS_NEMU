@@ -20,8 +20,7 @@ int main() {
 											nemu_assert(Fabs(x1_ans - x1) < f2F(1e-4));
 												nemu_assert(Fabs(x2_ans - x2) < f2F(1e-4));
 
-													HIT_GOOD_TRAP;
-														return 0;
+	return 0;
 }
 
 

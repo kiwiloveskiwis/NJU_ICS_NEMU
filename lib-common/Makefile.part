@@ -5,10 +5,12 @@ FLOAT_OBJ := $(FLOAT:.a=.o)
 FLOAT_CFLAGS := -c -m32 -fno-builtin
 
 $(FLOAT): $(FLOAT_OBJ)
-		ar r $(FLOAT) $(FLOAT_OBJ)
+	ar r $(FLOAT) $(FLOAT_OBJ)
 
 $(FLOAT_OBJ) : $(LIB_COMMON_DIR)/FLOAT.c 
-		$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
+	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
 
+$(FLOAT_vfprintf_OBJ):  $(LIB_COMMON_DIR)/FLOAT_vfprintf.c 
+	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
 
 
