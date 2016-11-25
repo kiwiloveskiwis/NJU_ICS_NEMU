@@ -2,15 +2,18 @@
 
 FLOAT_O := $(FLOAT:.a=.o)
 FLOAT_VFPRINTF_O := $(dir $(FLOAT))FLOAT_vfprintf.o
+FLOAT_CFLAGS := -c -m32 -fno-builtin
+OBJ_LIB_COMMON:=obj/lib-common
 
 FLOAT_A_OBJ := $(FLOAT_O) $(FLOAT_VFPRINTF_O)
 
 $(FLOAT): $(FLOAT_A_OBJ)
 	ar r $@ $^
 
-$(FLOAT_O):$(LIB_COMMON_DIR)/FLOAT/FLOAT.c 
-	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
+$(FLOAT_O): 
+	mkdir -p $(OBJ_LIB_COMMON)
+	gcc -c -m33 $(LIB_COMMON_DIR)/FLOAT.c -fno-builtin -I $(LIB_COMMON_DIR) -o $(OBJ_LIB_COMMON)/FLOAT.o
 
-$(FLOAT_VFPRINTF_O):$(LIB_COMMON_DIR)/FLOAT/FLOAT.c 
-	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
+$(FLOAT_VFPRINTF_O):
+	gcc -c -m33 $(LIB_COMMON_DIR)/FLOAT_vfprintf.c -fno-builtin -I $(LIB_COMMON_DIR) -o $(OBJ_LIB_COMMON)/FLOAT_vfprintf.o
 
