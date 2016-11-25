@@ -8,9 +8,9 @@ FLOAT_A_OBJ := $(FLOAT_O) $(FLOAT_VFPRINTF_O)
 $(FLOAT): $(FLOAT_A_OBJ)
 	ar r $@ $^
 
-# TODO: complete the following rules
+$(FLOAT_O):$(LIB_COMMON_DIR)/FLOAT/FLOAT.c 
+	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
 
-$(FLOAT_O):
-
-$(FLOAT_VFPRINTF_O):
+$(FLOAT_VFPRINTF_O):$(LIB_COMMON_DIR)/FLOAT/FLOAT.c 
+	$(call make_command, $(CC), $(FLOAT_CFLAGS), cc $@, $^)
 
