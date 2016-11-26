@@ -42,7 +42,7 @@ make_helper(rep) {
 
 make_helper(repnz) {
 	int count = 0;
-	while(cpu.ecx) {
+	while(cpu.ecx && !cpu.ZF) {
 		exec(eip + 1);
 		count ++;
 		cpu.ecx --;
