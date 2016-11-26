@@ -17,16 +17,15 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 *         0x00013333    "1.199996"
 	 */
 	char buf[80];
-	int p = 0;
+	int p = 0, len = 0;
 	myfloat mf;
-	unsigned usf = f & (~0x80000000);
-	while(usf >> p) p++; // if p == 5 then usf = 0x1*.
-	mf.sign = f & 0x80000000;
-	mf.exp = 0x7f + (p - 17);
-	mf.frac = f & ~(0x80000000 >> (32 - p));
-	float realf = *(float *) & mf;
-	
-	int len = sprintf(buf, "%.6f", f);
+	/* unsigned usf = f & (~0x80000000);
+	while(usf >> p) p++; // if p == 5 then usf = 0x1*. */
+	mf.sign = (f & 0x80000000) >> 31;
+	if(mf.sign) {len += sprintf(buf, "-"); f = ~f + 1;}
+	int zhenshu = (int) (f & 0x7fff0000) >> 16;
+	int xiaoshu = (long double) (f & 0xffff) / 0x10000 * 1000000  ;
+	len += sprintf(buf + len, "%d.%06d", zhenshu, xiaoshu);
 	return __stdio_fwrite(buf, len, stream);
 }
 
@@ -36,18 +35,18 @@ static void modify_vfprintf() {
 	 * is the code section in _vfprintf_internal() relative to the
 	 * hijack.
 	 */
-	*(int *)(&_vfprintf_internal + 0x80081d - 0x800517 + 1) = (int)&format_FLOAT - (int)&_fpmaxtostr;
+	*(int *)(&_vfprintf_internal + 0x80081d - 0x800517 + 1) += (int)&format_FLOAT - (int)&_fpmaxtostr;
 	char *ptr = (char *)(&_vfprintf_internal + 0x8007f1 - 0x800517);
 	const char instr[] = {0xff, 0x32, 0xff, 0xb4, 0x24, 0x74, 0x01, 0x00, 0x00, 
 						  0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
 						  0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
 						  0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
 						  0x90, 0x90, 0x90, 0x90, 0x90};
-	strncpy(ptr, instr, sizeof(instr));
+	memcpy(ptr, instr, sizeof(instr));
 
 	char *ptr2 = (char *)(&_vfprintf_internal + 0x800822 - 0x800517);
-	const char instr2[] = {0x83, 0xc4, 0x08, 0x90, 0x90};
-	strncpy(ptr2, instr2, sizeof(instr));
+	const char instr2[] = {0x83, 0xc4, 0x08};
+	memcpy(ptr2, instr2, sizeof(instr2));
 	
 #if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
