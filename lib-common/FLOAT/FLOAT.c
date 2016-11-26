@@ -34,15 +34,16 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 
 FLOAT f2F(float s) {
 	myfloat a = * (myfloat *) &s;
-	unsigned int x = (a.exp) ? a.frac + (1 << 23) : a.exp;
+	unsigned int x = (a.exp) ? a.frac + (1 << 23) : 0;
 	int exp = a.exp - (127 + 7);
-	if (exp < 0) x >>= - exp;
+	if (exp < 0) x >>= - exp; 
 	if (exp > 0) x <<= exp ;
-	return a.sign? -x :x;
+	// Negative integers on right-hand side is undefined behavior in the C language.
+	return a.sign ? -x :x;
 }
 
 FLOAT Fabs(FLOAT a) {
-	return (a >= 0) ? a: -a;
+	return (a >= 0) ? a : -a;
 }
 
 FLOAT sqrt(FLOAT x) {
