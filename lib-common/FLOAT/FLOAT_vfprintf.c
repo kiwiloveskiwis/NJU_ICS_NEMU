@@ -19,11 +19,10 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 */
 	char buf[80];
 	int p = 0, len = 0;
-	myfloat mf;
 	/* unsigned usf = f & (~0x80000000);
 	while(usf >> p) p++; // if p == 5 then usf = 0x1*. */
-	mf.sign = (f & 0x80000000) >> 31;
-	if(mf.sign) {len += sprintf(buf, "-"); f = ~f + 1;}
+	unsigned sign = (f & 0x80000000) >> 31;
+	if(sign) {len += sprintf(buf, "-"); f = ~f + 1;}
 	int zhenshu = (int) (f & 0x7fff0000) >> 16;
 	int xiaoshu = (long double) (f & 0xffff) / 0x10000 * 1000000  ;
 	len += sprintf(buf + len, "%d.%06d", zhenshu, xiaoshu);

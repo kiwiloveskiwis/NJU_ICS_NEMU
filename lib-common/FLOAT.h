@@ -6,13 +6,6 @@
 typedef int FLOAT;
 typedef unsigned int uint32_t;
 
-typedef union{ // little-endian!!
-	struct{
-		uint32_t frac   :   23 ;
-		uint32_t exp    :   8 ;
-		uint32_t sign   :   1 ;
-	};
-}myfloat;
 
 static inline int F2int(FLOAT a) {
 	return a / (1 << 16);
