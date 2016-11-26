@@ -34,7 +34,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 
 FLOAT f2F(float s) {
 	myfloat a = * (myfloat *) &s;
-	unsigned int x = (a.exp) ? a.frac + (1 << 23) : 0;
+	unsigned int x = (a.exp) ? a.frac + (1 << 23) : a.frac;
 	int exp = a.exp - (127 + 7);
 	if (exp < 0) x >>= - exp; 
 	if (exp > 0) x <<= exp ;

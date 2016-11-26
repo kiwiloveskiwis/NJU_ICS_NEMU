@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "FLOAT.h"
+#include <sys/mman.h>
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
 extern int __stdio_fwrite(char *buf, int len, FILE *stream);
+
 
 __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	/* TODO: Format a FLOAT argument `f' and write the formating
@@ -14,9 +16,17 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 *         0x00010000    "1.000000"
 	 *         0x00013333    "1.199996"
 	 */
-
 	char buf[80];
-	int len = sprintf(buf, "0x%08x", f);
+	int p = 0;
+	myfloat mf = 0;
+	unsigned usf = f & (~0x80000000);
+	while(usf >> p) p++; // if p == 5 then usf = 0x1*.
+	mf.sign = f & 0x80000000;
+	mf.exp = 0x7f + (p - 17);
+	mf.frac = f & ~(0x80000000 >> (32 - p));
+	float realf = *(float *) & mf;
+	
+	int len = sprintf(buf, "%.6f", f);
 	return __stdio_fwrite(buf, len, stream);
 }
 
@@ -26,7 +36,19 @@ static void modify_vfprintf() {
 	 * is the code section in _vfprintf_internal() relative to the
 	 * hijack.
 	 */
+	*(int *)(&_vfprintf_internal + 0x80081d - 0x800517 + 1) = (int)&format_FLOAT - (int)&_fpmaxtostr;
+	char *ptr = (char *)(&_vfprintf_internal + 0x8007f1 - 0x800517);
+	const char instr[] = {0xff, 0x32, 0xff, 0xb4, 0x24, 0x74, 0x01, 0x00, 0x00, \
+						  0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,\
+						  0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,\
+						  0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,\
+						  0x90, 0x90, 0x90, 0x90, 0x90};
+	strncpy(ptr, instr, sizeof(instr));
 
+	char *ptr2 = (char *)(&_vfprintf_internal + 0x800822 - 0x800517);
+	const char instr2[] = {0x83, 0xc4, 0x08, 0x90, 0x90};
+	strncpy(ptr2, instr2, sizeof(instr));
+	
 #if 0
 	else if (ppfs->conv_num <= CONV_A) {  /* floating point */
 		ssize_t nf;
@@ -168,6 +190,7 @@ static void modify_ppfs_setargs() {
 }
 
 void init_FLOAT_vfprintf() {
+	// mprotect((void *)(((&_vfprintf_internal + 0x80081d - 0x800517 + 1)) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 	modify_vfprintf();
 	modify_ppfs_setargs();
 }
