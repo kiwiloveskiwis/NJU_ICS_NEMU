@@ -12,8 +12,8 @@ $(FLOAT): $(FLOAT_A_OBJ)
 
 $(FLOAT_O): 
 	mkdir -p $(OBJ_LIB_COMMON)
-	gcc -c -m33 $(LIB_COMMON_DIR)/FLOAT.c -fno-builtin -I $(LIB_COMMON_DIR) -o $(OBJ_LIB_COMMON)/FLOAT.o
+	gcc -c -m32 $(LIB_COMMON_DIR)/FLOAT/FLOAT.c -fno-builtin -I $(LIB_COMMON_DIR) -o $(OBJ_LIB_COMMON)/FLOAT.o
 
 $(FLOAT_VFPRINTF_O):
-	gcc -c -m33 $(LIB_COMMON_DIR)/FLOAT_vfprintf.c -fno-builtin -I $(LIB_COMMON_DIR) -o $(OBJ_LIB_COMMON)/FLOAT_vfprintf.o
+	gcc -c -m32 $(LIB_COMMON_DIR)/FLOAT/FLOAT_vfprintf.c -fno-builtin -I $(LIB_COMMON_DIR) -o $(OBJ_LIB_COMMON)/FLOAT_vfprintf.o
 
