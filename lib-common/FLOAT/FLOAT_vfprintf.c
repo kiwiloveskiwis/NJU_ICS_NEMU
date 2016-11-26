@@ -5,6 +5,7 @@
 
 extern char _vfprintf_internal;
 extern char _fpmaxtostr;
+extern char _ppfs_setargs;
 extern int __stdio_fwrite(char *buf, int len, FILE *stream);
 
 
@@ -93,6 +94,10 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
+	char *ptr = (char *)(&_ppfs_setargs + 0x080492c1 - 0x08049250);
+	char *ptr = (char *)(&_ppfs_setargs + 0x080492dd - 0x08049250);
+	memcpy(ptr, instr2, 5);
+
 
 #if 0
 	enum {                          /* C type: */
