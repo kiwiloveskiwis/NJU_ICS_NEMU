@@ -1,13 +1,4 @@
 #include "FLOAT.h" 
-typedef unsigned int uint32_t;
-
-typedef union{ // little-endian!!
-	struct{
-		uint32_t frac   :   23 ;
-		uint32_t exp    :   8 ;
-		uint32_t sign   :   1 ;
-	};
-}myfloat;
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
 	return ((unsigned long long)a * b ) >> 16;
@@ -34,7 +25,7 @@ FLOAT F_div_F(FLOAT a, FLOAT b) {
 
 FLOAT f2F(float s) {
 	myfloat a = * (myfloat *) &s;
-	unsigned int x = (a.exp) ? a.frac + (1 << 23) : a.frac;
+	unsigned int x = (a.exp) ? a.frac + (1 << 23) : 0;
 	int exp = a.exp - (127 + 7);
 	if (exp < 0) x >>= - exp; 
 	if (exp > 0) x <<= exp ;

@@ -18,7 +18,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	 */
 	char buf[80];
 	int p = 0;
-	myfloat mf = 0;
+	myfloat mf;
 	unsigned usf = f & (~0x80000000);
 	while(usf >> p) p++; // if p == 5 then usf = 0x1*.
 	mf.sign = f & 0x80000000;

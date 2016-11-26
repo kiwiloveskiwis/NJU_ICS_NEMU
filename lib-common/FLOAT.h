@@ -4,6 +4,8 @@
 #include "trap.h"
 
 typedef int FLOAT;
+typedef unsigned int uint32_t;
+
 typedef union{ // little-endian!!
 	struct{
 		uint32_t frac   :   23 ;
