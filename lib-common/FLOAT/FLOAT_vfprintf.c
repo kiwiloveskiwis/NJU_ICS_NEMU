@@ -190,7 +190,7 @@ static void modify_ppfs_setargs() {
 }
 
 void init_FLOAT_vfprintf() {
-	mprotect((void *)(((&_vfprintf_internal + 0x80081d - 0x800517 + 1)) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
+	mprotect((void *)((((int)&_vfprintf_internal + 0x80081d - 0x800517 + 1)) & 0xfffff000), 4096*2, PROT_READ | PROT_WRITE | PROT_EXEC);
 	modify_vfprintf();
 	modify_ppfs_setargs();
 }
