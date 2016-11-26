@@ -94,8 +94,8 @@ static void modify_ppfs_setargs() {
 	 * Below is the code section in _vfprintf_internal() relative to
 	 * the modification.
 	 */
-	char *ptr = (char *)(&_ppfs_setargs + 0x080492c1 - 0x08049250);
-	*ptr = "0x909030eb";
+	int *ptr = (char *)(&_ppfs_setargs + 0x080492c1 - 0x08049250);
+	*ptr = 0x909030eb;
 
 
 #if 0
