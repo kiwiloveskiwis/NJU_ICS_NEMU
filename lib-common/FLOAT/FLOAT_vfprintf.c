@@ -24,7 +24,7 @@ __attribute__((used)) static int format_FLOAT(FILE *stream, FLOAT f) {
 	unsigned sign = (f & 0x80000000) >> 31;
 	if(sign) {len += sprintf(buf, "-"); f = ~f + 1;}
 	int zhenshu = (int) (f & 0x7fff0000) >> 16;
-	int xiaoshu = (long double) (f & 0xffff) / 0x10000 * 1000000  ;
+	int xiaoshu = (long long) (f & 0xffff) * 1000000 / 0x10000 ;
 	len += sprintf(buf + len, "%d.%06d", zhenshu, xiaoshu);
 	return __stdio_fwrite(buf, len, stream);
 }
