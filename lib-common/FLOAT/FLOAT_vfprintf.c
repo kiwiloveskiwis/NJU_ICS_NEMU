@@ -95,8 +95,7 @@ static void modify_ppfs_setargs() {
 	 * the modification.
 	 */
 	char *ptr = (char *)(&_ppfs_setargs + 0x080492c1 - 0x08049250);
-	char *ptr2 = (char *)(&_ppfs_setargs + 0x080492dd - 0x08049250);
-	memcpy(ptr, ptr2, 5);
+	*ptr = "0x909030eb";
 
 
 #if 0
