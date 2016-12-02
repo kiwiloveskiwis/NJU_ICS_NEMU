@@ -32,8 +32,44 @@
 
 #define OPERAND_W(op, src) concat(write_operand_, SUFFIX) (op, src)
 
+
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
+#define BIT_MASK(bytes) ((0x100 << (8 * (bytes - 1))) - 1)
+
+#define update_adc(len, num1, num2, cf, result) do { \
+	num1 &= BIT_MASK(len), num2 &= BIT_MASK(len);\
+	result = update_COPZS(len, (int64_t) (DATA_TYPE_S) num1 + (DATA_TYPE_S) num2 + cf, \
+			(uint64_t) num1 + num2 + cf); } while (0)
+
+
+#define update_sbb(len, num1, num2, cf, result)  do { \
+	num1 &= BIT_MASK(len), num2 &= BIT_MASK(len);\
+	result =  update_COPZS(len, (int64_t) (DATA_TYPE_S) num1 - (DATA_TYPE_S) num2 - cf, \
+			(uint64_t) num1 - num2 - cf); } while(0)
+
+#define update_sub(len, num1, num2, result) update_sbb(len, num1, num2, 0, result);
+#define update_add(len, num1, num2, result) update_adc(len, num1, num2, 0, result);
+
 #define update_PZS(result) int eventest = (DATA_TYPE) result & 0xff, count = 0; \
 			 do{ count += eventest & 1; } while(eventest >>= 1);  \
-			cpu.PF = !(count % 2); cpu.ZF = (result == 0); \
+			cpu.PF = !(count & 1); cpu.ZF = (result == 0); \
 			cpu.SF = MSB(result);
+
+#ifndef EFLAGS_FUNC
+#define EFLAGS_FUNC
+static inline void update_PSZ(size_t len, uint32_t result) {
+	int i = result ^ (result >> 4); 
+	i ^= i >> 2;
+	cpu.PF = ~(i ^ (i >> 1));
+	cpu.SF = MSB(result);
+	cpu.ZF = !(result & BIT_MASK(len));
+}
+
+static inline uint32_t update_COPZS(size_t len, int64_t result, uint64_t uresult) {
+	cpu.CF = uresult >> (len * 8);
+	cpu.OF = result >> (len * 8 - 1) && !(result >> (len * 8 - 1));
+	uint32_t data = (uint32_t)result & BIT_MASK(len);
+	update_PSZ(len, data);
+	return data;
+}
+#endif
