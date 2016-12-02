@@ -3,14 +3,9 @@
 #define instr sbb
 
 static void do_execute() {
-	DATA_TYPE result = op_dest->val - op_src->val - cpu.CF;
+	uint32_t result;
+	update_sbb(DATA_BYTE, op_dest->val, op_src->val, cpu.CF, result);
 	OPERAND_W(op_dest, result);
-
-	cpu.CF = ((uint64_t)op_dest->val < ((uint64_t)op_src->val + cpu.CF) ); 
-	cpu.OF = (MSB(op_dest->val) ^ MSB(op_src->val)) && (MSB(op_src->val) == MSB(result));
-	if(cpu.CF && result == -1) cpu.OF = !cpu.OF;
-	update_PZS(result)
-	
 	print_asm_template2();
 }
 
