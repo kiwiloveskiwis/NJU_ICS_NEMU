@@ -57,7 +57,7 @@ static inline void update_PSZ(size_t len, uint32_t result) {
 	int i = result ^ (result >> 4); 
 	i ^= i >> 2;
 	cpu.PF = ~(i ^ (i >> 1));
-	cpu.SF = MSB(result);
+	cpu.SF = result >> ((len << 3) - 1);
 	cpu.ZF = !(result & BIT_MASK(len));
 }
 
