@@ -1,4 +1,4 @@
-#ifndef __REG_H__
+
 #define __REG_H__
 
 #include "common.h"
@@ -90,5 +90,3 @@ static inline uint32_t update_COPZS(size_t len, int64_t result, uint64_t uresult
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
-
-#endif
