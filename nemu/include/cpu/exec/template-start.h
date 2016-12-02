@@ -36,19 +36,15 @@
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
 #define BIT_MASK(bytes) ((0x100 << (8 * (bytes - 1))) - 1)
 
-#define update_adc(len, num1, num2, cf, result) do { \
-	num1 &= BIT_MASK(len), num2 &= BIT_MASK(len);\
-	result = update_COPZS(len, (int64_t) (DATA_TYPE_S) num1 + (DATA_TYPE_S) num2 + cf, \
-			(uint64_t) num1 + num2 + cf); } while (0)
+#define update_adc(num1, num2, cf)\
+	update_COPZS(DATA_BYTE, (int64_t) (DATA_TYPE_S) num1 + (DATA_TYPE_S) num2 + cf, \
+			(uint64_t) num1 + num2 + cf)
 
-
-#define update_sbb(len, num1, num2, cf, result)  do { \
-	num1 &= BIT_MASK(len), num2 &= BIT_MASK(len);\
-	result =  update_COPZS(len, (int64_t) (DATA_TYPE_S) num1 - (DATA_TYPE_S) num2 - cf, \
-			(uint64_t) num1 - num2 - cf); } while(0)
-
-#define update_sub(len, num1, num2, result) update_sbb(len, num1, num2, 0, result);
-#define update_add(len, num1, num2, result) update_adc(len, num1, num2, 0, result);
+#define update_sbb(num1, num2, cf) \
+	update_COPZS(DATA_BYTE, (int64_t) (DATA_TYPE_S) num1 - (DATA_TYPE_S) num2 - cf, \
+			(uint64_t) num1 - num2 - cf)
+#define update_sub(num1, num2) update_sbb(num1, num2, 0)
+#define update_add(num1, num2) update_adc(num1, num2, 0)
 
 #define update_PZS(result) int eventest = (DATA_TYPE) result & 0xff, count = 0; \
 			 do{ count += eventest & 1; } while(eventest >>= 1);  \

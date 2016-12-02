@@ -3,9 +3,7 @@
 #define instr cmp
 
 static void do_execute() {
-	uint32_t result;
-	update_sub(4, op_dest->val, op_src->val, result);
-	(void) result; // not used;
+	update_sub(op_dest->val, op_src->val);
 	/*
 	DATA_TYPE result = op_dest->val - op_src->val;
 	cpu.CF = (((unsigned long long)op_dest->val - (unsigned long long)op_src->val ) >> 32) & 1;

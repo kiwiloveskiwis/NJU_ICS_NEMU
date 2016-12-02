@@ -3,9 +3,7 @@
 #define instr add
 
 static void do_execute() {
-	uint32_t result;
-	update_add(DATA_BYTE, op_dest->val, op_src->val, result);
-	OPERAND_W(op_dest, result);
+	OPERAND_W(op_dest, update_add(op_dest->val, op_src->val));
 	print_asm_template2();
 }
 
