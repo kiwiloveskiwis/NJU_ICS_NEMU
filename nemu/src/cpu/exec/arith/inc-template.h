@@ -3,12 +3,7 @@
 #define instr inc
 
 static void do_execute () {
-	DATA_TYPE result = op_src->val + 1;
-	OPERAND_W(op_src, result);
-	cpu.CF = (op_src->val == -1);
-	cpu.OF = (MSB(op_dest->val) ==  MSB(op_src->val)) && (MSB(op_src->val) != MSB(result));
-	update_PZS(result)
-
+	OPERAND_W(op_src, update_add(op_src->val, 1));
 	print_asm_template1();
 }
 

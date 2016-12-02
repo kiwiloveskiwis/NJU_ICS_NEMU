@@ -1,4 +1,4 @@
-#ifndef __REG_H__
+
 #define __REG_H__
 
 #include "common.h"
@@ -71,7 +71,7 @@ static inline int check_reg_index(int index) {
 
 #define BIT_MASK(bytes) ((0x100 << (8 * (bytes - 1))) - 1)
 
-static inline void update_PSZ(size_t len, uint32_t result) {
+static inline void update_PZS(size_t len, uint32_t result) {
 	int i = result ^ (result >> 4); 
 	i ^= i >> 2;
 	cpu.PF = ~(i ^ (i >> 1));
@@ -83,12 +83,10 @@ static inline uint32_t update_COPZS(size_t len, int64_t result, uint64_t uresult
 	cpu.CF = uresult >> (len * 8);
 	cpu.OF = (result >> (len * 8 - 1)) && ~(result >> (len * 8 - 1));
 	uint32_t data = (uint32_t)result & BIT_MASK(len);
-	update_PSZ(len, data);
+	update_PZS(len, data);
 	return data;
 }
 
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
-
-#endif
