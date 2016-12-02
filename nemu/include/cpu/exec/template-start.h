@@ -59,12 +59,11 @@ static inline void update_PSZ(size_t len, uint32_t result) {
 	cpu.PF = ~(i ^ (i >> 1));
 	cpu.SF = result >> ((len << 3) - 1);
 	cpu.ZF = !(result & BIT_MASK(len));
-	//Log("0x%x %u %d", result, len, cpu.SF);
 }
 
 static inline uint32_t update_COPZS(size_t len, int64_t result, uint64_t uresult) {
 	cpu.CF = uresult >> (len * 8);
-	cpu.OF = result >> (len * 8 - 1) && !(result >> (len * 8 - 1));
+	cpu.OF = (result >> (len * 8 - 1)) && !(result >> (len * 8 - 1));
 	uint32_t data = (uint32_t)result & BIT_MASK(len);
 	update_PSZ(len, data);
 	return data;
