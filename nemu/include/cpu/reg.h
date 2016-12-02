@@ -69,6 +69,24 @@ static inline int check_reg_index(int index) {
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
 
+#define BIT_MASK(bytes) ((0x100 << (8 * (bytes - 1))) - 1)
+
+static inline void update_PSZ(size_t len, uint32_t result) {
+	int i = result ^ (result >> 4); 
+	i ^= i >> 2;
+	cpu.PF = ~(i ^ (i >> 1));
+	cpu.SF = result >> ((len << 3) - 1);
+	cpu.ZF = !(result & BIT_MASK(len));
+}
+
+static inline uint32_t update_COPZS(size_t len, int64_t result, uint64_t uresult) {
+	cpu.CF = uresult >> (len * 8);
+	cpu.OF = (result >> (len * 8 - 1)) && ~(result >> (len * 8 - 1));
+	uint32_t data = (uint32_t)result & BIT_MASK(len);
+	update_PSZ(len, data);
+	return data;
+}
+
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
