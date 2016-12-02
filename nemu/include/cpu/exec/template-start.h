@@ -45,8 +45,8 @@
 #define update_sub(num1, num2) update_sbb(num1, num2, 0)
 #define update_add(num1, num2) update_adc(num1, num2, 0)
 
- #define update_PZS(result) int eventest = (DATA_TYPE) result & 0xff, count = 0; \
+ /* #define update_PZS(result) int eventest = (DATA_TYPE) result & 0xff, count = 0; \
 			  do{ count += eventest & 1; } while(eventest >>= 1);  \
 				cpu.PF = !(count & 1); cpu.ZF = (result == 0); \
 				cpu.SF = MSB(result);
-				
+*/				
