@@ -63,7 +63,7 @@ static inline void update_PSZ(size_t len, uint32_t result) {
 
 static inline uint32_t update_COPZS(size_t len, int64_t result, uint64_t uresult) {
 	cpu.CF = uresult >> (len * 8);
-	cpu.OF = (result >> (len * 8 - 1)) && !(result >> (len * 8 - 1));
+	cpu.OF = (result >> (len * 8 - 1)) && ~(result >> (len * 8 - 1));
 	uint32_t data = (uint32_t)result & BIT_MASK(len);
 	update_PSZ(len, data);
 	return data;
