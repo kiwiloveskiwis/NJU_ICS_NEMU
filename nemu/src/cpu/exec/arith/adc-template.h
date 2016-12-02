@@ -3,13 +3,7 @@
 #define instr adc
 
 static void do_execute() {
-	DATA_TYPE result = op_dest->val + op_src->val + cpu.CF;
-	OPERAND_W(op_dest, result);
-	cpu.CF = (((unsigned long long)op_dest->val + (unsigned long long)op_src->val + cpu.CF ) >> 32) & 1;
-	cpu.OF = (MSB(op_dest->val) ==  MSB(op_src->val)) && (MSB(op_src->val) != MSB(result));
-	if(cpu.CF && result == 0) cpu.OF = !cpu.OF;
-	update_PZS(result)
-
+	OPERAND_W(op_dest, update_adc(op_dest->val, op_src->val, cpu.CF));
 	print_asm_template2();
 }
 
