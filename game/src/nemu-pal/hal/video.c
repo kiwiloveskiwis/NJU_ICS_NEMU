@@ -9,7 +9,7 @@ int get_fps();
 static inline int min(int a, int b) {
 	return a < b ? a : b;
 }
-void DL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect, 
+void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
 	assert(dst && src);
 
