@@ -53,7 +53,7 @@ clean: clean-cpp
 ##### some convinient rules #####
 
 # USERPROG := $(game_BIN)
-USERPROG := obj/testcase/max
+USERPROG := obj/testcase/hello-str
 ENTRY = $(kernel_BIN)
 
 entry: $(ENTRY)
