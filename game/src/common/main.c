@@ -19,6 +19,10 @@ main(void) {
 
 	init_FLOAT_vfprintf();
 
+	add_irq_handle(1, keyboard_event);
+
+	keyboard_event();
+
 	Log("game start!");
 
 	main_loop();

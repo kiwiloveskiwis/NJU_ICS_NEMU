@@ -24,11 +24,23 @@ make_helper(inv) {
 	assert(0);
 }
 
+extern hwaddr_t page_translate(lnaddr_t addr);
+extern lnaddr_t seg_translate(swaddr_t addr, uint8_t sreg);
+extern uint32_t swaddr_read(swaddr_t addr, size_t len, uint8_t sreg);
+
 make_helper(nemu_trap) {
 	print_asm("nemu trap (eax = %d)", cpu.eax);
-
+	unsigned ecx = cpu.ecx;
+	unsigned edx = cpu.edx;
 	switch(cpu.eax) {
 		case 2:
+			cpu.eax = cpu.edx;
+			while(edx > 0) { // what if for loop?
+				printf("%c", swaddr_read(ecx++, 1, R_SS));
+				edx--;
+			}
+			// fwrite((char *)hwaddr, cpu.edx, 1, stdout);
+			// printf("%.*s\n", cpu.edx, (char *)hwaddr);  why SegFault?
 		   	break;
 
 		default:

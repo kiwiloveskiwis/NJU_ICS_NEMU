@@ -6,6 +6,9 @@
 #include <stdlib.h>
 
 int get_fps();
+static inline int min(int a, int b) {
+	return a < b ? a : b;
+}
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
 		SDL_Surface *dst, SDL_Rect *dstrect) {
@@ -29,21 +32,64 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 	 * `dst' surface.
 	 */
 
-	assert(0);
+	int width = min(dw,sw);
+	int height = min(dh,sh);
+
+	int i,j;
+	for(i = 0; i < height; i++)	{
+		for(j = 0; j < width; j++)	{
+			dst->pixels[(dy+i)*dst->w+dx+j] = src->pixels[(sy+i)*src->w+sx+j];
+		}
+	}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	assert(dst);
 	assert(color <= 0xff);
+	int x=(dstrect == NULL ? 0 : dstrect->x);
+	int y=(dstrect == NULL ? 0 : dstrect->y);
+	int w=(dstrect == NULL ? dst->w : dstrect->w);
+	int h=(dstrect == NULL ? dst->h : dstrect->h);
+	int i,j;
+	for(i = y;i < y + h; i++) {
+		for(j = x; j < x + w; j++) {
+			dst->pixels[i * dst->w + j] = color;
+		}
+	}
 
 	/* TODO: Fill the rectangle area described by `dstrect'
 	 * in surface `dst' with color `color'. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
-
-	assert(0);
+	Log("%s", __func__);
 }
 
+<<<<<<< HEAD
+=======
+void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
+	assert(screen);
+	assert(screen->pitch == 320);
+	if(screen->flags & SDL_HWSURFACE) {
+		if(x == 0 && y == 0) {
+			/* Draw FPS */
+			vmem = VMEM_ADDR;
+			char buf[80];
+			sprintf(buf, "%dFPS", get_fps());
+			draw_string(buf, 0, 0, 10);
+		} else {
+			vmem = VMEM_ADDR;
+			int i, j;
+			for(i = y; i < (y + h); i++) {
+				for(j = x; j < (x + w); j++)
+					vmem[i * screen->w + j] = screen->pixels[i * screen->w + j];
+			}
+		}
+		return;
+	}
+
+}
+
+>>>>>>> master
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
 		int firstcolor, int ncolors) {
 	assert(s);
@@ -70,7 +116,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 
 	if(s->flags & SDL_HWSURFACE) {
 		/* TODO: Set the VGA palette by calling write_palette(). */
-		assert(0);
+		write_palette(colors, ncolors); 
 	}
 }
 

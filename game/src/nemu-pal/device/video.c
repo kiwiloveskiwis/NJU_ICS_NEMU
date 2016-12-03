@@ -629,6 +629,7 @@ VIDEO_SetPalette(
       static UINT32 time = 0;
       if (SDL_GetTicks() - time > 50)
       {
+		  
 	      SDL_UpdateRect(gpScreenReal, 0, 0, gpScreenReal->w, gpScreenReal->h);
 	      time = SDL_GetTicks();
       }

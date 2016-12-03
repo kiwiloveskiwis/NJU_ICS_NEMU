@@ -49,12 +49,12 @@ hwaddr_t tlb_read(lnaddr_t addr) {
 	// 4 bytes per dir
 	PDE page_directory;
 	page_directory.val = (uint32_t)hwaddr_read(page_directory_addr, 4);
-	Assert(page_directory.present, "%x\n", cpu.eip);
+	Assert(page_directory.present, "cpu.eip == 0x%x\n", cpu.eip);
 
 	hwaddr_t page_table_addr = (page_directory.page_frame << 12) + (page << 2);
 	PTE  page_table;
 	page_table.val = (uint32_t)hwaddr_read(page_table_addr, 4);
-	Assert(page_table.present,  "%x\n", cpu.eip);
+	Assert(page_table.present,  "cpu.eip == %x\n", cpu.eip);
 
 	tlb[i].page_addr = page_table.page_frame ;
 	return (tlb[i].page_addr << 12) + offset;

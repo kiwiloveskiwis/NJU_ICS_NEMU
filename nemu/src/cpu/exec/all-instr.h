@@ -1,6 +1,11 @@
 #include "prefix/prefix.h"
 
 #include "system/lgdt.h"
+#include "system/iret.h"
+#include "system/cli.h"
+#include "system/in.h"
+#include "system/out.h"
+#include "system/hlt.h"
 
 #include "data-mov/mov.h"
 #include "data-mov/xchg.h"
@@ -31,6 +36,7 @@
 #include "arith/add.h"
 #include "arith/adc.h"
 #include "arith/cld.h"
+#include "arith/bt.h"
 
 
 

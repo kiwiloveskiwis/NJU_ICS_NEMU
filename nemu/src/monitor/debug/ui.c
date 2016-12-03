@@ -205,7 +205,7 @@ static int cmd_help(char *args) {
 }
 
 void ui_mainloop() {
-	printsh();
+	// printsh();
 	while(1) {
 		char *str = rl_gets();
 		char *str_end = str + strlen(str);

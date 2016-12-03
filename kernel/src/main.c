@@ -57,9 +57,9 @@ void init_cond() {
 
 	/* Initialize the IDE driver. */
 	init_ide();
-
 	/* Enable interrupts. */
 	sti();
+
 #endif
 
 #ifdef IA32_PAGE
@@ -75,7 +75,7 @@ void init_cond() {
 
 #if defined(IA32_PAGE) && defined(HAS_DEVICE)
 	/* Write some test data to the video memory. */
-	video_mapping_write_test();
+	// video_mapping_write_test(); //passed
 #endif
 
 	/* Load the program. */
@@ -85,10 +85,10 @@ void init_cond() {
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
 	 */
-	video_mapping_read_test();
+	// video_mapping_read_test();  // passed
 
 	/* Clear the test data we just written in the video memory. */
-	video_mapping_clear();
+	// video_mapping_clear(); // passed
 #endif
 
 #ifdef IA32_PAGE

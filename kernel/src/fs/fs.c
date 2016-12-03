@@ -1,5 +1,6 @@
 #include "common.h"
 #include <sys/ioctl.h>
+#include "string.h"
 
 typedef struct {
 	char *name;
@@ -8,6 +9,7 @@ typedef struct {
 } file_info;
 
 enum {SEEK_SET, SEEK_CUR, SEEK_END};
+void serial_printc(char);
 
 /* This is the information about all files in disk. */
 static const file_info file_table[] __attribute__((used)) = {
@@ -37,4 +39,101 @@ void ide_read(uint8_t *, uint32_t, uint32_t);
 void ide_write(uint8_t *, uint32_t, uint32_t);
 
 /* TODO: implement a simplified file system here. */
+
+typedef struct {
+	bool opened;
+	uint32_t offset;
+} Fstate;
+
+Fstate files[NR_FILES + 3];
+
+static inline int min(int a, int b) {
+	return a < b ? a : b;
+}
+
+int fs_open(const char *pathname, int flags) {	// flags don't matter
+	// Log("%s", __func__);
+	int i;
+	for(i = 3; i < NR_FILES + 3; i++) {
+		if (!strcmp(file_table[i - 3].name, pathname)) { // found
+				files[i].opened = true;
+				files[i].offset = 0;
+				return i;
+		}
+	}
+	Log("File not found");
+	nemu_assert(0);
+	return 0;
+}
+
+int fs_read(int fd, void *buf, int len){
+	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
+		Log("fs_read failed! fd = %d", fd);
+		nemu_assert(0);
+		return -1;
+	}
+	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
+	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
+	files[fd].offset += readlen;
+	ide_read(buf, start, readlen);
+	return readlen;
+}
+
+int fs_write(int fd, void *buf, int len){
+	// Log("%s", __func__);
+	int i;
+	assert(len > 0);
+	if (fd == 1 || fd == 2) {
+		for(i = 0; i < len; i++) {
+			serial_printc(((char *)buf)[i]);
+		}
+		return len;
+	}
+	if(fd == 0 || fd >= NR_FILES + 3 || !files[fd].opened) {
+		Log("fs_write failed! fd = %d", fd);
+		nemu_assert(0);
+		return -1;
+	}
+	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
+	int writelen = min(len, file_table[fd - 3].size - files[fd].offset);
+	files[fd].offset += writelen;
+	ide_write(buf, start, writelen);
+	return writelen;
+}
+
+int fs_lseek(int fd, int offset, int whence) {
+	// Log("%s", __func__);
+	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
+		Log("fs_lseek failed! fd = %d", fd);
+		nemu_assert(0);
+		return -1;
+	}
+	int temp = 0;
+	switch(whence) {
+		case SEEK_SET : temp = offset; break;
+		case SEEK_CUR : temp = files[fd].offset + offset; break;
+		case SEEK_END : temp = file_table[fd - 3].size + offset;
+						break;
+		default		: Log("whence invalid");
+	}
+	assert(temp >= 0);
+	files[fd].offset = min(file_table[fd - 3].size, temp);
+	return files[fd].offset;
+
+}
+
+int fs_close(int fd){
+	Log("%s", __func__);
+	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
+		Log("fs_close failed! fd = %d", fd);
+		nemu_assert(0);
+		return -1;
+	}
+	files[fd].opened = false;
+	return 0;
+}
+
+
+
+
 
