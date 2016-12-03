@@ -21,7 +21,7 @@ make_helper(concat3(instr, _, SUFFIX)) {
 	DATA_TYPE result = src - dest;
 	cpu.CF = ((unsigned int)src < (unsigned int)dest ); 
 	cpu.OF = (MSB(dest) ^ MSB(src)) && (MSB(dest) == MSB(result));
-	update_PZS(result)
+	update_PZS(DATA_BYTE, result);
 
 	// when data_byte = 8?
 	return 1;
