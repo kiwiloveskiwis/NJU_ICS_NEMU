@@ -7,7 +7,7 @@ static void do_execute () {
 	OPERAND_W(op_dest, result);
 	cpu.CF = 0;
 	cpu.OF = 0;
-	update_PZS(result)
+	update_PZS(DATA_BYTE, result);
 	print_asm_template2();
 }
 
