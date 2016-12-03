@@ -1,4 +1,4 @@
-
+#include "irq.h"
 
 #define NR_IRQ_HANDLE 32
 
