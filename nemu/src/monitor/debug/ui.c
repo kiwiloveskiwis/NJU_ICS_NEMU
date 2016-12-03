@@ -11,6 +11,8 @@
 
 void cpu_exec(uint32_t);
 extern void printsh();
+extern bool print_cache(hwaddr_t addr);
+extern hwaddr_t page_translate(lnaddr_t addr, bool *succ);
 
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -35,13 +37,13 @@ static int cmd_bt(char *args) {
 	int current_ebp = cpu.ebp;
 	printf("#%d\t 0x%x (current eip) \n", index++, cpu.eip);
 
-#define readoff(off) swaddr_read(current_ebp + off, 4)
+#define readoff(off) swaddr_read(current_ebp + off, 4, R_SS)
 	while(current_ebp) {
 		if(current_ebp + 20 < 0x8000000) {
 			printf("#%d\t 0x%x\t ", index++, readoff(4));
 			printf("Stored: %x %x %x %x \n", readoff(8), readoff(12), readoff(16), readoff(20));
 		}
-		current_ebp = swaddr_read(current_ebp, 4);
+		current_ebp = swaddr_read(current_ebp, 4, R_SS);
 		if(index >= 10) {
 			Log("BackTrace overflow!");
 			break;
@@ -55,12 +57,30 @@ static int cmd_c(char *args) {
 	cpu_exec(-1);
 	return 0;
 }
+static int cmd_cache(char *args) {	
+	int addr;
+	sscanf(args, "%x", &addr);
+	bool succ = print_cache(addr);
+	if(!succ) Log("Cache Not found!");
+	return 0;
+}
 
 static int cmd_si(char *args) {
 	char *arg = strtok(NULL, " ");
 	if(arg == NULL)	cpu_exec(1);
 	else cpu_exec(atoi(arg));
 	return 0;
+}
+static int cmd_page(char *args) {
+	int addr;
+	sscanf(args, "%x", &addr);
+	bool succ = true;
+	hwaddr_t hwaddr = page_translate(addr, &succ);
+	if(!succ) Log("Not found!");
+	else Log("hwaddr = 0x%x", hwaddr);
+	
+	return 0;
+
 }
 
 static int cmd_info(char *args) {
@@ -84,12 +104,20 @@ static int cmd_info(char *args) {
 static int cmd_x(char *args) {
 	char *arg1 = strtok(NULL, " ");
 	char *arg2 = strtok(NULL, " ");
+	if(!arg1 || !arg2) {
+		Log("Invalid arguments!");
+		return 0;
+	}
 	int length = atoi(arg1);
-	int addr;
+	unsigned addr;
 	sscanf(arg2, "%x", &addr); 
 	int i = 0;
 	for(i = 0; i < length; i++){
-		printf("0x%x:\t%08x\n", addr + 4 * i, swaddr_read(addr + 4 * i, 4 ));
+		if(addr + 4 * i >= HW_MEM_SIZE) {
+			Log("physical address %x is outside of the physical memory!", addr + 4 * i);
+			return 0;
+		}
+		printf("0x%x:\t%08x\n", addr + 4 * i, hwaddr_read(addr + 4 * i, 4));
 	}
 	return 0;
 }
@@ -136,6 +164,8 @@ static struct {
 	int (*handler) (char *);
 } cmd_table [] = {
 	{ "help", "Display informations about all supported commands", cmd_help },
+	{ "cache", "Display the cache's concents which contains ADDR", cmd_cache},
+	{ "page", "Display whether the address has been paged", cmd_page},
 	{ "info", "Print information(r/w)", cmd_info}, 
 	{ "si", "Execute one machine instruction", cmd_si},
 	{ "bt", "Print backtrace of all stack frames", cmd_bt},

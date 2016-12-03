@@ -101,7 +101,6 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
 	uint8_t temp[2 * BURST_LEN];
 	
 	ddr3_read(addr, temp);
-
 	if(offset + len > BURST_LEN) {
 		/* data cross the burst boundary */
 		ddr3_read(addr + BURST_LEN, temp + BURST_LEN);

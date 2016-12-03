@@ -9,12 +9,12 @@
 static void do_execute() {
 	if(DATA_BYTE == 1) {
 		cpu.esp -= 4;
-		swaddr_write(cpu.esp, 4, (int32_t) op_src->val);		
+		swaddr_write(cpu.esp, 4, (int32_t) op_src->val, R_SS);
 	}
 	// WATCH OUT!
 	else {
 		cpu.esp -= DATA_BYTE;
-		swaddr_write(cpu.esp, DATA_BYTE, op_src->val);
+		swaddr_write(cpu.esp, DATA_BYTE, op_src->val, R_SS);
 	}
 	print_asm_template1();
 }

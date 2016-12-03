@@ -6,14 +6,14 @@ make_helper(concat3(instr, _, SUFFIX)) {
 	DATA_TYPE src;
 	inc = cpu.DF ? -DATA_BYTE : DATA_BYTE;
 	if(DATA_BYTE == 2 ){ // 8 or 16 // when data_byte = 8?
-		src = MEM_R(cpu.gpr[R_SI]._16);
-		MEM_W(cpu.gpr[R_DI]._16, src);
+		src = MEM_R(cpu.gpr[R_SI]._16, R_DS);
+		MEM_W(cpu.gpr[R_DI]._16, src, R_ES);
 		cpu.gpr[R_SI]._16 += inc;
 		cpu.gpr[R_DI]._16 += inc;
 	}
 	else  {
-		src = MEM_R(cpu.gpr[R_ESI]._32);
-		MEM_W(cpu.gpr[R_DI]._32, src);
+		src = MEM_R(cpu.gpr[R_ESI]._32, R_DS); 
+		MEM_W(cpu.gpr[R_DI]._32, src, R_ES);
 		cpu.gpr[R_SI]._32 += inc;
 		cpu.gpr[R_DI]._32 += inc;
 	}

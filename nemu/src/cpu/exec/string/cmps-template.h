@@ -6,8 +6,7 @@ make_helper(concat3(instr, _, SUFFIX)) {
 	inc = cpu.DF ? -DATA_BYTE : DATA_BYTE;
 	cpu.esi += inc; 
 	cpu.edi += inc;
-	update_sub(MEM_R(cpu.esi), MEM_R(cpu.edi));
-	
+	update_sub(MEM_R(cpu.esi, R_DS), MEM_R(cpu.edi, R_ES));
 
 	// when data_byte = 8?
 	return 1;

@@ -10,6 +10,9 @@ void load_elf_tables(int, char *[]);
 void init_regex();
 void init_wp_pool();
 void init_ddr3();
+void init_cache();
+void init_cache_2();
+void init_tlb();
 
 FILE *log_fp = NULL;
 
@@ -87,7 +90,15 @@ void restart() {
 	/* Set the initial instruction pointer. */
 	cpu.eip = ENTRY_START;
 	cpu.EFLAGS = 0x00000002;
+	cpu.cr0.protect_enable = 0;
+	cpu.cr0.paging = 0;
+	cpu.sr[R_CS].base = 0;
+	cpu.sr[R_CS].limit = 0xffffffff;
+	cpu.sr[R_CS].cached = true;
 
 	/* Initialize DRAM. */
 	init_ddr3();
+	init_cache();
+	init_cache_2();
+	init_tlb();
 }

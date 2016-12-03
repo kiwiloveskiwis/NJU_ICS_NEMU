@@ -2,7 +2,7 @@
 #define instr scas
 
 make_helper(concat3(instr, _, SUFFIX)) {
-	update_sub(cpu.eax, MEM_R(cpu.edi));
+	update_sub(cpu.eax, MEM_R(cpu.edi, R_ES));
 
 	int inc = cpu.DF ? -DATA_BYTE : DATA_BYTE;
 	cpu.edi += inc;
