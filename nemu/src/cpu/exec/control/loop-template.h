@@ -5,7 +5,7 @@
 	int new_eip = cpu.eip + (DATA_TYPE_S)op_src->val; \
 	if(cond) cpu.edi = new_eip; \
 	print_asm("%s\t$0x%x",str(instr), new_eip + DATA_BYTE + 1);  \
-	return 1;} 
+	return 2;} 
 
 // int len = concat(decode_i_, SUFFIX)(eip + 1); 
 	 
