@@ -44,7 +44,7 @@ make_helper(rep) {
 
 make_helper(repnz) {
 	int count = 0;
-	while(cpu.ecx && !cpu.ZF) {
+	while(cpu.ecx) {
 		exec(eip + 1);
 		count ++;
 		cpu.ecx --;
