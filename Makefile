@@ -52,8 +52,8 @@ clean: clean-cpp
 
 ##### some convinient rules #####
 
-USERPROG := $(game_BIN)
-# USERPROG := obj/testcase/max
+# USERPROG := $(game_BIN)
+USERPROG := obj/testcase/max
 ENTRY = $(kernel_BIN)
 
 entry: $(ENTRY)
