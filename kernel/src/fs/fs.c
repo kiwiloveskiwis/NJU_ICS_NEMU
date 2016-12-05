@@ -61,7 +61,7 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
 				files[i].opened = true;
 				files[i].offset = 0;
-				Log("Returning fd: %d", i);
+				Log("Returning fd: %d size 0x%x", i, file_table[i - 3].size);
 				return i;
 		}
 	}
@@ -80,6 +80,7 @@ int fs_read(int fd, void *buf, int len){
 	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
 	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
 	files[fd].offset += readlen;
+	Log("Read 0x%x bytes, offset: 0x%x", len, files[fd].offset);
 	ide_read(buf, start, readlen);
 	return readlen;
 }
