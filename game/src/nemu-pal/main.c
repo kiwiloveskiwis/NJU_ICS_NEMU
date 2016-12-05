@@ -114,37 +114,37 @@ PAL_Init(
 
    Log("VIDEO_Init success");
    SDL_WM_SetCaption("Loading...", NULL);
-  //  e = PAL_InitGlobals();
+   e = PAL_InitGlobals();
    if (e != 0)
    {
       TerminateOnError("Could not initialize global data: %d.\n", e);
    }
    Log("PAL_InitGolbals success");
 
-//   e = PAL_InitFont();
+   e = PAL_InitFont();
    if (e != 0)
    {
       TerminateOnError("Could not load fonts: %d.\n", e);
    }
    Log("PAL_InitFont success");
 
- //  e = PAL_InitUI();
+   e = PAL_InitUI();
    if (e != 0)
    {
       TerminateOnError("Could not initialize UI subsystem: %d.\n", e);
    }
    Log("PAL_InitUI success");
 
-  // e = PAL_InitText();
-   if (e != 0) // wrong
+   e = PAL_InitText();
+   if (e != 0)
    {
       TerminateOnError("Could not initialize text subsystem: %d.\n", e);
    }
    Log("PAL_InitText success");
 
-//   PAL_InitInput();
+   PAL_InitInput();
    Log("PAL_InitInput success");
- //  PAL_InitResources();
+   PAL_InitResources();
    Log("PAL_InitResources success");
    SOUND_OpenAudio();
 
