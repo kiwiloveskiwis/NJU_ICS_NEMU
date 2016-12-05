@@ -116,7 +116,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	 * in surface `dst' with color `color'. If dstrect is
 	 * NULL, fill the whole surface.
 	 */
-	Log("%s", __func__);
+	// Log("%s", __func__);
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
