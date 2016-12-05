@@ -80,13 +80,26 @@ static void block_read_2(hwaddr_t addr, void *data) {
 			return;
 		}
 	}
+ 	for(i = 0; i < NR_WAY;i++) {
+		if(!caches2[set][i].valid) break;
+	}
 	if(i >= NR_WAY) {	// no empty slots
 #ifdef DISABLE_CACHE_RAND
 		i = 0;
 #else
 		i = rand() % NR_WAY;
 #endif
-	}
+		if (caches2[set][i].valid && caches2[set][i].dirty) {
+			int j;
+			Cache_Addr_2 replace;
+			replace.value = 0;
+			replace.tag = caches2[set][i].tag;
+			replace.setidx = set;
+
+			for(j = 0; j < (BLOCK_SIZE >> 2); j++)
+				dram_write(replace.value, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
+		}
+	} 
 	caches2[set][i].valid = true;
 	caches2[set][i].dirty = false;
 	caches2[set][i].tag = caddr.tag;
@@ -109,7 +122,6 @@ uint32_t cache_read_2(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	if(offset + len > BLOCK_SIZE) {
 		block_read_2(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
 	}
-
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
 

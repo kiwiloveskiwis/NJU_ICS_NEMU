@@ -42,7 +42,6 @@ typedef union {
 
 Cache_Block caches[NR_SET][NR_WAY];
 
-
 void init_cache() {
 	int i = 0, j = 0;
 	for(; i < NR_SET; i++) 
@@ -90,7 +89,6 @@ static void block_read(hwaddr_t addr, void *data) {
 #ifdef DISABLE_CACHE_RAND
 		i = 0;
 #else
-		srand(time(0));
 		i = rand() % NR_WAY;
 #endif
 	}
@@ -101,7 +99,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	int j;
 	uint32_t loading_temp[BLOCK_SIZE >> 2];
 	for(j = 0; j < (BLOCK_SIZE >> 2); j++) {
-		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
+		loading_temp[j] = cache_read_2(caddr.value + 4 * j, 4);
 	}
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content , BLOCK_SIZE);
@@ -154,7 +152,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 		block_write(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
 
-	dram_write(addr, len, data);
+	cache_write_2(addr, len, data);
 }
 
 
