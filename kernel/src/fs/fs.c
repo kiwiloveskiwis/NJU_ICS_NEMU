@@ -13,6 +13,8 @@ void serial_printc(char);
 
 /* This is the information about all files in disk. */
 static const file_info file_table[] __attribute__((used)) = {
+#include "fs-template.h"
+	/*
 	{"1.rpg", 188864, 1048576}, {"2.rpg", 188864, 1237440},
 	{"3.rpg", 188864, 1426304}, {"4.rpg", 188864, 1615168},
 	{"5.rpg", 188864, 1804032}, {"abc.mkf", 1022564, 1992896},
@@ -26,6 +28,7 @@ static const file_info file_table[] __attribute__((used)) = {
 	{"sss.mkf", 557004, 25513989}, {"voc.mkf", 1997044, 26070993},
 	{"wor16.asc", 5374, 28068037}, {"wor16.fon", 82306, 28073411},
 	{"word.dat", 5650, 28155717},
+	*/
 };
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
