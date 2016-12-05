@@ -117,7 +117,6 @@ PAL_InitResources(
 --*/
 {
    gpResources = (LPRESOURCES)UTIL_calloc(1, sizeof(RESOURCES));
-   Log("aaaa");
 }
 
 VOID
