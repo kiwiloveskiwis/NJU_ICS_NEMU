@@ -86,6 +86,8 @@ static void block_read(hwaddr_t addr, void *data) {
 		if(!caches[set][i].valid) break;
 	}
 	if(i >= NR_WAY) {	// no empty slots
+
+
 		srand(time(0));
 		i = rand() % NR_WAY;
 	}

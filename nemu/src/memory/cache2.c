@@ -81,8 +81,12 @@ static void block_read_2(hwaddr_t addr, void *data) {
 		}
 	}
 	if(i >= NR_WAY) {	// no empty slots
+#ifdef DISABLE_CACHE_RAND
+		i = 0;
+#else
 		srand(time(0));
 		i = rand() % NR_WAY;
+#endif
 	}
 	caches2[set][i].valid = true;
 	caches2[set][i].dirty = false;
@@ -130,8 +134,12 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 		if(!caches2[set][i].valid) break;
 	}
 	if(i >= NR_WAY) {	// no empty slots
+#ifdef DISABLE_CACHE_RAND
+		i = 0;
+#else
 		srand(time(0));
 		i = rand() % NR_WAY;
+#endif
 		if (caches2[set][i].valid && caches2[set][i].dirty) {
 			int j;
 			Cache_Addr_2 replace;
