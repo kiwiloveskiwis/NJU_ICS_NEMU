@@ -122,8 +122,9 @@ int fs_lseek(int fd, int offset, int whence) {
 						break;
 		default		: Log("whence invalid");
 	}
-	assert(temp >= 0);
-	files[fd].offset = min(file_table[fd - 3].size, temp);
+	assert(temp >= 0 && temp <= file_table[fd - 3].size);
+	files[fd].offset = temp;
+	Log("Now at: 0x%x", offset);
 	return files[fd].offset;
 
 }
