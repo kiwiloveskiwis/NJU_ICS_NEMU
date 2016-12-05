@@ -12,6 +12,7 @@
 #include "data-mov/push.h"
 #include "data-mov/pop.h"
 #include "data-mov/cltd.h"
+#include "data-mov/cbw.h"
 #include "data-mov/movsx.h"
 #include "data-mov/movzx.h"
 #include "data-mov/cmovcc.h"
