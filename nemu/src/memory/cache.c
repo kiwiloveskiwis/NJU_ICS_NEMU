@@ -86,10 +86,12 @@ static void block_read(hwaddr_t addr, void *data) {
 		if(!caches[set][i].valid) break;
 	}
 	if(i >= NR_WAY) {	// no empty slots
-
-
+#ifdef DISABLE_CACHE_RAND
+		i = 0;
+#else
 		srand(time(0));
 		i = rand() % NR_WAY;
+#endif
 	}
 	caches[set][i].valid = true;
 	caches[set][i].tag = caddr.tag;
