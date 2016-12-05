@@ -84,7 +84,6 @@ static void block_read_2(hwaddr_t addr, void *data) {
 #ifdef DISABLE_CACHE_RAND
 		i = 0;
 #else
-		srand(time(0));
 		i = rand() % NR_WAY;
 #endif
 	}
@@ -137,7 +136,6 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 #ifdef DISABLE_CACHE_RAND
 		i = 0;
 #else
-		srand(time(0));
 		i = rand() % NR_WAY;
 #endif
 		if (caches2[set][i].valid && caches2[set][i].dirty) {
@@ -169,7 +167,6 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 }
 
 void cache_write_2(hwaddr_t addr, size_t len, uint32_t data) {
-
 	uint32_t offset = addr & CACHE_MASK;  // 0 	~ 111111
 	uint8_t temp[2 * BLOCK_SIZE];
 	uint8_t mask[2 * BLOCK_SIZE];
