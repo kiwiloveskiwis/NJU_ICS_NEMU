@@ -580,8 +580,8 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
-//   PAL_TrademarkScreen();
-//    PAL_SplashScreen(); // wrong
+   PAL_TrademarkScreen();
+   PAL_SplashScreen(); // wrong
 
    //
    // Run the main game routine
