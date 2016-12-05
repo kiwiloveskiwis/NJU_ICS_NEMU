@@ -9,7 +9,7 @@
 static void do_execute() {
 	if(DATA_BYTE == 1) {
 		cpu.esp -= 4;
-		swaddr_write(cpu.esp, 4, (int32_t) op_src->val, R_SS);
+		swaddr_write(cpu.esp, 4, (int32_t) (int8_t) op_src->val, R_SS);
 	}
 	// WATCH OUT!
 	else {
