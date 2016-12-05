@@ -61,7 +61,7 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
 				files[i].opened = true;
 				files[i].offset = 0;
-				Log("Returning fd: %d size 0x%x", i, file_table[i - 3].size);
+				//Log("Returning fd: %d size 0x%x", i, file_table[i - 3].size);
 				return i;
 		}
 	}
@@ -71,7 +71,7 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 }
 
 int fs_read(int fd, void *buf, int len){
-	Log("%s: %d", __func__, fd);
+	//Log("%s: %d", __func__, fd);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_read failed! fd = %d", fd);
 		nemu_assert(0);
@@ -80,13 +80,13 @@ int fs_read(int fd, void *buf, int len){
 	uint32_t start = file_table[fd - 3].disk_offset + files[fd].offset;
 	int readlen = min(len, file_table[fd - 3].size - files[fd].offset);
 	files[fd].offset += readlen;
-	Log("Read 0x%x bytes, offset: 0x%x", len, files[fd].offset);
+	//Log("Read 0x%x bytes, offset: 0x%x", len, files[fd].offset);
 	ide_read(buf, start, readlen);
 	return readlen;
 }
 
 int fs_write(int fd, void *buf, int len){
-	Log("%s: %d", __func__, fd);
+	//Log("%s: %d", __func__, fd);
 	int i;
 	assert(len > 0);
 	if (fd == 1 || fd == 2) {
@@ -108,7 +108,7 @@ int fs_write(int fd, void *buf, int len){
 }
 
 int fs_lseek(int fd, int offset, int whence) {
-	Log("%s: %d", __func__, fd);
+	//Log("%s: %d", __func__, fd);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_lseek failed! fd = %d", fd);
 		nemu_assert(0);
@@ -124,13 +124,13 @@ int fs_lseek(int fd, int offset, int whence) {
 	}
 	assert(temp >= 0 && temp <= file_table[fd - 3].size);
 	files[fd].offset = temp;
-	Log("Now at: 0x%x", offset);
+	//Log("Now at: 0x%x", offset);
 	return files[fd].offset;
 
 }
 
 int fs_close(int fd){
-	Log("%s: %d", __func__, fd);
+	//Log("%s: %d", __func__, fd);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_close failed! fd = %d", fd);
 		nemu_assert(0);
