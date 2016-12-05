@@ -14,28 +14,19 @@ static const int keycode_array[] = {
 
 static int key_state[NR_KEYS];
 
-void
-keyboard_event(void) {
-	/* TODO: Fetch the scancode and update the key states. */
+void keyboard_event(void) {
 	uint8_t key_code = in_byte(0x60);
-	bool release = key_code > 0x80;
 	int i;
 	for (i = 0; i < NR_KEYS; i++) {
-		if(key_state[i] == KEY_STATE_RELEASE) key_state[i] = KEY_STATE_EMPTY;
-		if (!release && keycode_array[i] == key_code) {
+		if (keycode_array[i] == key_code) {
 			switch(key_state[i]){
 				case KEY_STATE_EMPTY : 
-				case KEY_STATE_RELEASE:
 					key_state[i] = KEY_STATE_PRESS;
 					break;
-				case KEY_STATE_PRESS :
-					key_state[i] = KEY_STATE_WAIT_RELEASE;
-					break;
-				case KEY_STATE_WAIT_RELEASE:
 				default: // do nothing
 					break;
 			}
-		} else if (release && keycode_array[i] == key_code - 0x80) {
+		} else if ((keycode_array[i] | 0x80) == key_code && key_state[i] == KEY_STATE_WAIT_RELEASE) {
 			key_state[i] = KEY_STATE_RELEASE;
 		}
 	}// for loop ends
@@ -68,22 +59,17 @@ clear_key(int index) {
 
 bool 
 process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int)) {
-	cli();
-	/* TODO: Traverse the key states. Find a key just pressed or released.
-	 * If a pressed key is found, call `key_press_callback' with the keycode.
-	 * If a released key is found, call `key_release_callback' with the keycode.
-	 * If any such key is found, the function return true.
-	 * If no such key is found, the function return false.
-	 * Remember to enable interrupts before returning from the function.
-	 */
 	int i;
+	cli();
 	bool found = false;
 	for(i = 0; i < NR_KEYS; i++) {
 		if(key_state[i] == KEY_STATE_PRESS) {
 			key_press_callback(get_keycode(i));
+			key_state[i] = KEY_STATE_WAIT_RELEASE;
 			found = true;
 		} else if (key_state[i] == KEY_STATE_RELEASE) {
 			key_release_callback(get_keycode(i));
+			key_state[i] = KEY_STATE_EMPTY;
 			found = true;
 		}
 	}
