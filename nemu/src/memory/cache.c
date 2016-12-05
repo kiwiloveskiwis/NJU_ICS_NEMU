@@ -17,6 +17,7 @@
 #define CACHE_MASK (CACHE_LEN - 1)// 111111
 
 extern uint32_t dram_read(hwaddr_t addr,size_t len);
+extern void dram_write(hwaddr_t addr,size_t len, uint32_t data);
 
 extern uint32_t cache_read_2(hwaddr_t addr, size_t len);
 extern void cache_write_2(hwaddr_t addr, size_t len, uint32_t data);
@@ -100,7 +101,7 @@ static void block_read(hwaddr_t addr, void *data) {
 	int j;
 	uint32_t loading_temp[BLOCK_SIZE >> 2];
 	for(j = 0; j < (BLOCK_SIZE >> 2); j++) {
-		loading_temp[j] = cache_read_2(caddr.value + 4 * j, 4);
+		loading_temp[j] = dram_read(caddr.value + 4 * j, 4);
 	}
 	memcpy(caches[set][i].content, loading_temp, BLOCK_SIZE);
 	memcpy(data, caches[set][i].content , BLOCK_SIZE);
@@ -113,11 +114,11 @@ uint32_t cache_read(hwaddr_t addr, size_t len) { // len is handled in memory.c
 	if(offset + len > BLOCK_SIZE) {
 		block_read(addr + BLOCK_SIZE, temp + BLOCK_SIZE);
 	}
-
+	/*
 	uint32_t result = dram_read(addr, len) &  (~0u >> ((4 - len) << 3));
 	uint32_t mine = unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 	assert(mine == result);
-
+	*/
 	return unalign_rw(temp + offset, 4) & (~0u >> ((4 - len) << 3));
 }
 
@@ -153,7 +154,7 @@ void cache_write(hwaddr_t addr, size_t len, uint32_t data) {
 		block_write(addr + BLOCK_SIZE, temp + BLOCK_SIZE, mask + BLOCK_SIZE);
 	}
 
-	cache_write_2(addr, len, data);
+	dram_write(addr, len, data);
 }
 
 
