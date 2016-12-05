@@ -37,8 +37,9 @@ hwaddr_t tlb_read(lnaddr_t addr) {
 		if(!tlb[i].valid) break;
 	}
 	if (i >= NR_TLB) { // No empty
-		srand(time(0));
-		i = rand() % NR_TLB;
+		//srand(time(0));
+		//i = rand() % NR_TLB;
+		i = 0;
 	}	
 	tlb[i].valid = true;
 	tlb[i].tag = tag;
