@@ -55,12 +55,13 @@ static inline int min(int a, int b) {
 }
 
 int fs_open(const char *pathname, int flags) {	// flags don't matter
-	// Log("%s", __func__);
+	Log("%s: %s", __func__, pathname);
 	int i;
 	for(i = 3; i < NR_FILES + 3; i++) {
 		if (!strcmp(file_table[i - 3].name, pathname)) { // found
 				files[i].opened = true;
 				files[i].offset = 0;
+				Log("Returning fd: %d", i);
 				return i;
 		}
 	}
@@ -70,6 +71,7 @@ int fs_open(const char *pathname, int flags) {	// flags don't matter
 }
 
 int fs_read(int fd, void *buf, int len){
+	Log("%s: %d", __func__, fd);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_read failed! fd = %d", fd);
 		nemu_assert(0);
@@ -83,7 +85,7 @@ int fs_read(int fd, void *buf, int len){
 }
 
 int fs_write(int fd, void *buf, int len){
-	// Log("%s", __func__);
+	Log("%s: %d", __func__, fd);
 	int i;
 	assert(len > 0);
 	if (fd == 1 || fd == 2) {
@@ -105,7 +107,7 @@ int fs_write(int fd, void *buf, int len){
 }
 
 int fs_lseek(int fd, int offset, int whence) {
-	// Log("%s", __func__);
+	Log("%s: %d", __func__, fd);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_lseek failed! fd = %d", fd);
 		nemu_assert(0);
@@ -126,7 +128,7 @@ int fs_lseek(int fd, int offset, int whence) {
 }
 
 int fs_close(int fd){
-	Log("%s", __func__);
+	Log("%s: %d", __func__, fd);
 	if(fd < 3 || fd >= NR_FILES + 3 || !files[fd].opened) {
 		Log("fs_close failed! fd = %d", fd);
 		nemu_assert(0);
