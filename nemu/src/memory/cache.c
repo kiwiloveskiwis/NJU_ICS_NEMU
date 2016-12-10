@@ -16,8 +16,8 @@
 #define CACHE_LEN BLOCK_SIZE
 #define CACHE_MASK (CACHE_LEN - 1)// 111111
 
-extern uint32_t dram_read(hwaddr_t addr,size_t len);
-extern void dram_write(hwaddr_t addr,size_t len, uint32_t data);
+// extern uint32_t dram_read(hwaddr_t addr,size_t len);
+// extern void dram_write(hwaddr_t addr,size_t len, uint32_t data);
 
 extern uint32_t cache_read_2(hwaddr_t addr, size_t len);
 extern void cache_write_2(hwaddr_t addr, size_t len, uint32_t data);

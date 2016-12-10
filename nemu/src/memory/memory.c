@@ -23,15 +23,21 @@ hwaddr_t page_translate(lnaddr_t addr) {
 int32_t hwaddr_read(hwaddr_t addr, size_t len) {
 	int mm = is_mmio(addr);
 	if(mm != -1) return mmio_read(addr, len, mm);
+#ifdef DISABLE_CACHE
 	else return dram_read(addr, len) & (~0u >> ((4 - len) << 3));
-	// else return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+#else
+	else return cache_read(addr, len) & (~0u >> ((4 - len) << 3));
+#endif
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 	int mm = is_mmio(addr);
 	if(mm != -1) mmio_write(addr, len, data, mm);
+#ifdef DISABLE_CACHE
 	else dram_write(addr, len, data);
-	// else cache_write(addr, len, data);
+#else
+	else cache_write(addr, len, data);
+#endif
 }
 
 uint32_t lnaddr_read(lnaddr_t addr, size_t len) {

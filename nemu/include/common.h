@@ -6,7 +6,8 @@
 /* You will define this macro in PA4 */
 #define HAS_DEVICE
 
-#define DISABLE_CACHE_RAND
+// #define DISABLE_CACHE_RAND
+// #define DISABLE_CACHE
 
 //#define DEBUG
 //#define LOG_FILE
