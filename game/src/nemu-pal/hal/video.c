@@ -9,95 +9,38 @@ int get_fps();
 static inline int min(int a, int b) {
 	return a < b ? a : b;
 }
-void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *scrrect, 
-		SDL_Surface *dst, SDL_Rect *dstrect) {
-	assert(dst && src);
 
-	/* TODO: Performs a fast blit from the source surface to the 
-	 * destination surface. Only the position is used in the
-	 * ``dstrect'' (the width and height are ignored). If either
-	 * ``srcrect'' or ``dstrect'' are NULL, the entire surface 
-	 * (``src'' or ``dst'') is copied. The final blit rectangle 
-	 * is saved in ``dstrect'' after all clipping is performed
-	 * (``srcrect'' is not modified).
-	 */
-	int sx, sy, dx, dy, sw, dw, w, sh, dh, h; 
-
-	if(scrrect) {
-		sx = scrrect->x;
-		sy = scrrect->y;
-		sw = min(scrrect->w, src->w - sx);
-		sh = min(scrrect->h, src->h - sy);
-	}
-	else {
-		sx = 0;
-		sy = 0;
-		sw = src->w;
-		sh = src->h;
-	}
-
-	if(dstrect) {
-		dx = dstrect->x;
-		dy = dstrect->y;
-		dw = min(dstrect->w, dst->w - dx);
-		dh = min(dstrect->h, dst->h - dy);
-	}
-	else {
-		dx = 0;
-		dy = 0;
-		dw = dst->w;
-		dh = dst->h;
-	}
-
-	w = min(dw, sw);
-	h = min(dh, sh);
-
-	/*if(sx < 0 || sx > src->w || sy < 0 || sy > src->h
-			|| dx < 0 || dx > dst->w || dy < 0 || dy > dst->h)
-		return;*/
-
-	assert(src->pixels && dst->pixels);
-
-	int i, j;
-	for(i = 0; i < h; i++)
-		for(j = 0; j < w; j++)
-			dst->pixels[(dy + i)* dst->w + dx + j] = src->pixels[(sy + i) * src->w + sx + j];
-
-}
-
-// void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
-// 		SDL_Surface *dst, SDL_Rect *dstrect) {
-// 	assert(dst && src);
-// 
-// 	int sx = (srcrect == NULL ? 0 : srcrect->x);
-// 	int sy = (srcrect == NULL ? 0 : srcrect->y);
-// 	int dx = (dstrect == NULL ? 0 : dstrect->x);
-// 	int dy = (dstrect == NULL ? 0 : dstrect->y);
-// 	int w = (srcrect == NULL ? src->w : srcrect->w);
-// 	int h = (srcrect == NULL ? src->h : srcrect->h);
-// 	if(dst->w - dx < w) { w = dst->w - dx; }
-// 	if(dst->h - dy < h) { h = dst->h - dy; }
-// 	if(dstrect != NULL) {
-// 		dstrect->w = w;
-// 		dstrect->h = h;
-// 	}
-// 
-// 	/* TODO: copy pixels from position (`sx', `sy') with size
-// 	 * `w' X `h' of `src' surface to position (`dx', `dy') of
-// 	 * `dst' surface.
-// 	 */
-// 
-// 	int width = min(dw,sw);
-// 	int height = min(dh,sh);
-// 
-// 	int i,j;
-// 	for(i = 0; i < height; i++)	{
-// 		for(j = 0; j < width; j++)	{
-// 			dst->pixels[(dy+i)*dst->w+dx+j] = src->pixels[(sy+i)*src->w+sx+j];
-// 		}
-// 	}
-// }
-// 
+void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
+ 		SDL_Surface *dst, SDL_Rect *dstrect) {
+ 	assert(dst && src);
+ 
+ 	int sx = (srcrect == NULL ? 0 : srcrect->x);
+ 	int sy = (srcrect == NULL ? 0 : srcrect->y);
+ 	int dx = (dstrect == NULL ? 0 : dstrect->x);
+ 	int dy = (dstrect == NULL ? 0 : dstrect->y);
+ 	int w = (srcrect == NULL ? src->w : srcrect->w);
+ 	int h = (srcrect == NULL ? src->h : srcrect->h);
+ 	if(dst->w - dx < w) { w = dst->w - dx; }
+ 	if(dst->h - dy < h) { h = dst->h - dy; }
+ 	if(dstrect != NULL) {
+ 		dstrect->w = w;
+ 		dstrect->h = h;
+ 	}
+ 
+ 	/* TODO: copy pixels from position (`sx', `sy') with size
+ 	 * `w' X `h' of `src' surface to position (`dx', `dy') of
+ 	 * `dst' surface.
+ 	 */
+ 
+ 
+ 	int i,j;
+ 	for(i = 0; i < h; i++)	{
+ 		for(j = 0; j < w; j++)	{
+ 			dst->pixels[(dy + i) * dst->w + dx + j] = src->pixels[(sy + i) * src->w + sx + j];
+ 		}
+ 	}
+ }
+ 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	assert(dst);
 	assert(color <= 0xff);
