@@ -97,7 +97,7 @@ static void block_read_2(hwaddr_t addr, void *data) {
 			replace.setidx = set;
 
 			for(j = 0; j < (BLOCK_SIZE >> 2); j++)
-				dram_write(replace.value, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
+				dram_write(replace.value + 4 * j, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
 		}
 	} 
 	caches2[set][i].valid = true;
@@ -158,7 +158,7 @@ static void block_write_2(hwaddr_t addr, void *data, uint8_t *mask) {
 			replace.setidx = set;
 
 			for(j = 0; j < (BLOCK_SIZE >> 2); j++)
-				dram_write(replace.value, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
+				dram_write(replace.value + 4 * j, 4, *(uint32_t *)(caches2[set][i].content + 4 * j));
 		}
 	} 
 
